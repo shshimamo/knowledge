@@ -1,5 +1,5 @@
 pkgname = "db"
-output  = "db"
+output  = "db/sqlboiler"
 
 [psql]
   dbname  = "knowledge"
