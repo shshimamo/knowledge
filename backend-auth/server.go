@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -39,11 +40,21 @@ func main() {
 	defer db.Close()
 
 	h := handler.New(db)
-	http.HandleFunc("/signup", h.Signup)
-	http.HandleFunc("/signin", h.Signin)
-	http.HandleFunc("/signout", h.Signout)
 
-	log.Fatal(http.ListenAndServe(":80", nil))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/signup", withContext(h.Signup))
+	mux.HandleFunc("/signin", withContext(h.Signin))
+	mux.HandleFunc("/signout", withContext(h.Signout))
+
+	log.Fatal(http.ListenAndServe(":80", mux))
+}
+
+func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.Background()
+		// set context using context.WithTimeout, context.WithDeadline, context.WithCancel
+		fn(ctx, w, r)
+	}
 }
 
 func setupDatabase(env AppEnv) (*sql.DB, error) {
