@@ -1,4 +1,4 @@
-package usecase
+package service
 
 import (
 	"context"
@@ -8,21 +8,21 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthUsecase interface {
+type AuthService interface {
 	Signup(ctx context.Context, email string, password string) (*model.Token, error)
 	Signin(ctx context.Context, email string, password string) (*model.Token, error)
 	Signout(ctx context.Context, tokenStr string) error
 }
 
-type authUsecase struct {
+type authService struct {
 	db *sql.DB
 }
 
-func NewAuthUsecase(db *sql.DB) AuthUsecase {
-	return &authUsecase{db: db}
+func NewAuthService(db *sql.DB) AuthService {
+	return &authService{db: db}
 }
 
-func (u *authUsecase) Signup(ctx context.Context, email string, password string) (*model.Token, error) {
+func (u *authService) Signup(ctx context.Context, email string, password string) (*model.Token, error) {
 	auser := model.NewAuthUser(email)
 	err := auser.CreatePasswordDigest(password)
 	if err != nil {
@@ -54,7 +54,7 @@ func (u *authUsecase) Signup(ctx context.Context, email string, password string)
 	return token, nil
 }
 
-func (u *authUsecase) Signin(ctx context.Context, email string, password string) (*model.Token, error) {
+func (u *authService) Signin(ctx context.Context, email string, password string) (*model.Token, error) {
 	aurepo := repository.NewAuthUserRepository(u.db)
 	auser, err := aurepo.FindByEmail(ctx, email)
 	if err != nil {
@@ -77,7 +77,7 @@ func (u *authUsecase) Signin(ctx context.Context, email string, password string)
 	return token, nil
 }
 
-func (u *authUsecase) Signout(ctx context.Context, tokenStr string) error {
+func (u *authService) Signout(ctx context.Context, tokenStr string) error {
 	_, err := u.db.Query("UPDATE tokens SET active=$1 WHERE token=$2", false, tokenStr)
 	if err != nil {
 		return err

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"github.com/shshimamo/knowledge-auth/usecase"
+	"github.com/shshimamo/knowledge-auth/service"
 	"net/http"
 )
 
@@ -30,7 +30,7 @@ func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http
 		return
 	}
 
-	u := usecase.NewAuthUsecase(h.db)
+	u := service.NewAuthService(h.db)
 	token, err := u.Signup(ctx, req.Email, req.Password)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http
 		return
 	}
 
-	u := usecase.NewAuthUsecase(h.db)
+	u := service.NewAuthService(h.db)
 	token, err := u.Signin(ctx, req.Email, req.Password)
 	if err != nil {
 		http.Error(w, "Unable to sign in", http.StatusInternalServerError)
@@ -73,7 +73,7 @@ func (h *authHandler) Signout(ctx context.Context, w http.ResponseWriter, r *htt
 		return
 	}
 
-	u := usecase.NewAuthUsecase(h.db)
+	u := service.NewAuthService(h.db)
 	err = u.Signout(ctx, req.Token)
 	if err != nil {
 		http.Error(w, "Unable to sign out", http.StatusBadRequest)
