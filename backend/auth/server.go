@@ -73,7 +73,7 @@ func setupDatabase(env AppEnv) (*sql.DB, error) {
 			port:     "5432",
 			user:     "postgres",
 			password: "password",
-			dbname:   "knowledge",
+			dbname:   "knowledge-auth",
 		}
 	}
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbCfg.host, dbCfg.port, dbCfg.user, dbCfg.password, dbCfg.dbname)
