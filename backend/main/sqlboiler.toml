@@ -1,0 +1,11 @@
+pkgname = "db"
+output  = "db"
+
+[psql]
+  dbname  = "knowledge-main"
+  host    = "localhost"
+  port    = 5432
+  user    = "postgres"
+  pass    = "password"
+  sslmode = "disable"
+  blacklist = ["goose_db_version"]
