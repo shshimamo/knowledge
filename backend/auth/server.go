@@ -26,14 +26,12 @@ const (
 	Production AppEnv = "production"
 )
 
-var db *sql.DB
-
 func main() {
 	var err error
 
 	appEnv := AppEnv(os.Getenv("APP_ENV"))
 
-	db, err = setupDatabase(appEnv)
+	db, err := setupDatabase(appEnv)
 	if err != nil {
 		log.Fatal(err)
 	}
