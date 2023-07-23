@@ -28,7 +28,6 @@ func (u *authService) Signup(ctx context.Context, email string, password string)
 	if err != nil {
 		return nil, err
 	}
-	token := model.NewToken(auser)
 
 	tx, err := u.db.Begin()
 	if err != nil {
@@ -41,6 +40,7 @@ func (u *authService) Signup(ctx context.Context, email string, password string)
 		return nil, err
 	}
 
+	token := model.NewToken(auser)
 	token, err = repository.NewTokenRepository(tx).Create(ctx, token)
 	if err != nil {
 		return nil, err
