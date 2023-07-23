@@ -14,7 +14,7 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	r.AllService.CreateUser(ctx, &input)
+	return r.AllService.CreateUser(ctx, &input)
 }
 
 // GetUser is the resolver for the getUser field.

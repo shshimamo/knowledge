@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/shshimamo/knowledge-main/db"
@@ -9,22 +10,14 @@ import (
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"net/http"
-	"strconv"
 )
 
 type CurrentUserKey struct{}
+type CurrentTokenKey struct{}
 
 type claims struct {
 	AuthUserID string `json:"authUserId"`
 	jwt.StandardClaims
-}
-
-func (c *claims) authUserIDInt() (int64, error) {
-	num, err := strconv.ParseInt(c.AuthUserID, 10, 64)
-	if err != nil {
-		return 0, err
-	}
-	return num, nil
 }
 
 func getClaims(tokenStr string) (*claims, error) {
@@ -62,22 +55,43 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				return
 			}
 
-			auserID, err := claims.authUserIDInt()
+			token, err := model.NewToken(claims.AuthUserID)
 			if err != nil {
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}
+			ctx := context.WithValue(r.Context(), CurrentTokenKey{}, token)
 
-			dbUser, err := db.Users(db.UserWhere.AuthUserID.EQ(null.Int64From(auserID))).One(r.Context(), exec)
+			dbUser, err := db.Users(db.UserWhere.AuthUserID.EQ(null.Int64From(int64(token.AuthUserID)))).One(r.Context(), exec)
 			if err != nil {
-				http.Error(w, "Forbidden", http.StatusForbidden)
-				return
+				if err != sql.ErrNoRows {
+					http.Error(w, "Forbidden", http.StatusForbidden)
+					return
+				}
+			} else {
+				user := model.MapUserDBToModel(dbUser)
+				ctx = context.WithValue(r.Context(), CurrentUserKey{}, user)
 			}
 
-			user := model.ConvertUserFromDB(dbUser)
-
-			ctx := context.WithValue(r.Context(), CurrentUserKey{}, user)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
+	}
+}
+
+func GetCurrentUser(ctx context.Context) (*model.User, bool) {
+	switch v := ctx.Value(CurrentUserKey{}).(type) {
+	case *model.User:
+		return v, true
+	default:
+		return nil, false
+	}
+}
+
+func GetCurrentToken(ctx context.Context) (*model.Token, bool) {
+	switch v := ctx.Value(CurrentTokenKey{}).(type) {
+	case *model.Token:
+		return v, true
+	default:
+		return nil, false
 	}
 }

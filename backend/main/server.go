@@ -12,6 +12,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	_ "github.com/lib/pq"
 	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge-main/graph"
 	"github.com/shshimamo/knowledge-main/graph/generated"
@@ -70,7 +71,7 @@ func setupDatabase(env AppEnv) (*sql.DB, error) {
 			port:     "5432",
 			user:     "postgres",
 			password: "password",
-			dbname:   "todo-app-next-go",
+			dbname:   "knowledge-main",
 		}
 	}
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbCfg.host, dbCfg.port, dbCfg.user, dbCfg.password, dbCfg.dbname)
