@@ -2,8 +2,6 @@ type User {
     id: ID!
     authUserId: ID!
     name: String
-    createdAt: String!
-    updatedAt: String!
 }
 
 type Query {
