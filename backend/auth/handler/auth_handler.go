@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"github.com/shshimamo/knowledge-auth/model"
 	"github.com/shshimamo/knowledge-auth/service"
 	"net/http"
 )
@@ -15,11 +16,12 @@ type AuthHandler interface {
 }
 
 type authHandler struct {
-	db *sql.DB
+	db     *sql.DB
+	appEnv model.AppEnv
 }
 
-func New(db *sql.DB) AuthHandler {
-	return &authHandler{db: db}
+func New(db *sql.DB, appEnv model.AppEnv) AuthHandler {
+	return &authHandler{db: db, appEnv: appEnv}
 }
 
 func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http.Request) {
@@ -41,7 +43,24 @@ func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http
 	res := &SignupResponse{
 		Token: token.Token,
 	}
-	json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		http.Error(w, "Unable to sign up", http.StatusInternalServerError)
+		return
+	}
+
+	secure := true
+	if h.appEnv != model.Production {
+		secure = false
+	}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Value:    string(token.Token),
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   secure,
+	})
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http.Request) {
@@ -59,10 +78,27 @@ func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http
 		return
 	}
 
-	res := &SigninResponse{
+	res := &SignupResponse{
 		Token: token.Token,
 	}
-	json.NewEncoder(w).Encode(res)
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		http.Error(w, "Unable to sign up", http.StatusInternalServerError)
+		return
+	}
+
+	secure := true
+	if h.appEnv != model.Production {
+		secure = false
+	}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Value:    string(token.Token),
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   secure,
+	})
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *authHandler) Signout(ctx context.Context, w http.ResponseWriter, r *http.Request) {

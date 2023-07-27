@@ -10,6 +10,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/shshimamo/knowledge-auth/handler"
+	"github.com/shshimamo/knowledge-auth/model"
 )
 
 type databaseConfig struct {
@@ -20,16 +21,10 @@ type databaseConfig struct {
 	dbname   string
 }
 
-type AppEnv string
-
-const (
-	Production AppEnv = "production"
-)
-
 func main() {
 	var err error
 
-	appEnv := AppEnv(os.Getenv("APP_ENV"))
+	appEnv := model.AppEnv(os.Getenv("APP_ENV"))
 
 	db, err := setupDatabase(appEnv)
 	if err != nil {
@@ -37,7 +32,7 @@ func main() {
 	}
 	defer db.Close()
 
-	h := handler.New(db)
+	h := handler.New(db, appEnv)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/signup", withContext(h.Signup))
@@ -55,9 +50,9 @@ func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) h
 	}
 }
 
-func setupDatabase(env AppEnv) (*sql.DB, error) {
+func setupDatabase(env model.AppEnv) (*sql.DB, error) {
 	var dbCfg databaseConfig
-	if env == Production {
+	if env == model.Production {
 		dbCfg = databaseConfig{
 			host:     os.Getenv("DB_HOST"),
 			port:     os.Getenv("DB_PORT"),
