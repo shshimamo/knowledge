@@ -20,12 +20,13 @@ type authHandler struct {
 	appEnv model.AppEnv
 }
 
-func New(db *sql.DB, appEnv model.AppEnv) AuthHandler {
+func NewAuthHandler(db *sql.DB, appEnv model.AppEnv) AuthHandler {
 	return &authHandler{db: db, appEnv: appEnv}
 }
 
 func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	var req SignupRequest
+	// TODO: r.Body が空みたい
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, "Unable to sign up", http.StatusInternalServerError)

@@ -9,6 +9,7 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge-auth/handler"
 	"github.com/shshimamo/knowledge-auth/model"
 )
@@ -32,14 +33,8 @@ func main() {
 	}
 	defer db.Close()
 
-	h := handler.New(db, appEnv)
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/signup", withContext(h.Signup))
-	mux.HandleFunc("/signin", withContext(h.Signin))
-	mux.HandleFunc("/signout", withContext(h.Signout))
-
-	log.Fatal(http.ListenAndServe(":80", mux))
+	h := setupHandler(db, appEnv)
+	log.Fatal(http.ListenAndServe(":80", h))
 }
 
 func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
@@ -77,4 +72,23 @@ func setupDatabase(env model.AppEnv) (*sql.DB, error) {
 	}
 
 	return db, err
+}
+
+func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
+	auth := handler.NewAuthHandler(db, appEnv)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/signup", withContext(auth.Signup))
+	mux.HandleFunc("/signin", withContext(auth.Signin))
+	mux.HandleFunc("/signout", withContext(auth.Signout))
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3001"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "HEAD", "POST", "PUT", "OPTIONS"},
+		AllowedHeaders:   []string{"*"}, // Allow All HTTP Headers
+	})
+	h := c.Handler(mux)
+
+	return h
 }
