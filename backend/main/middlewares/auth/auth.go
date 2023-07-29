@@ -11,6 +11,7 @@ import (
 func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
 			tokenStr := r.Header.Get("Authorization")
 
 			if tokenStr == "" {
@@ -29,7 +30,7 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}
-			ctx := context.WithValue(r.Context(), model.CurrentTokenKey{}, token)
+			ctx = context.WithValue(ctx, model.CurrentTokenKey{}, token)
 
 			repo := repository.NewUserRepository(exec)
 			user, err := repo.GetUserByToken(ctx, token)
@@ -39,7 +40,7 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				return
 			}
 
-			ctx = context.WithValue(r.Context(), model.CurrentUserKey{}, user)
+			ctx = context.WithValue(ctx, model.CurrentUserKey{}, user)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
