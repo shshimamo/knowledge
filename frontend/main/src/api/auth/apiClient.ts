@@ -1,5 +1,5 @@
 import React from 'react';
-import { authClient } from '../axios';
+import { httpClient } from './axios';
 
 export type SignupReqData = {
   email: string;
@@ -18,8 +18,8 @@ export const useApiClient = () => {
 };
 
 export class ApiClient {
-  async signup({ email, password }: SignupReqData) {
-    const response = await authClient.post('/signup', {
+  async signup({ email, password }: SignupReqData): Promise<SignupResData> {
+    const response = await httpClient.post('/signup', {
       email,
       password,
     });

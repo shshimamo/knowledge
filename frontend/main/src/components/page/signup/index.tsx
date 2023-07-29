@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { useUserRepository } from './path/to/your/useUserRepository';
 import { useAuthUsecase } from '@/usecase/auth/usecase'
+import { useCreateUserMutation } from '@/api/main/mutation/__generated__/createUser.mutation'
 
 export const Signup = () => {
-  const { signup } = useAuthUsecase();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [createUser, { loading, error }] = useCreateUserMutation();
+  const { signup } = useAuthUsecase(createUser);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const { user } = await signup({ email, password });
-      // TODO: Signup at backend main. send name.
+      await signup({ email, password }, name);
     } catch (error) {
       console.error(error);
     }

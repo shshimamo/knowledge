@@ -2,8 +2,8 @@ import React from 'react'
 import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
 
 type CurrentUserState = {
-  id: string;
-  name: string;
+  id: string | null;
+  name: string | null;
 }
 
 const currentUserRecoilState = atom<CurrentUserState>({
@@ -19,9 +19,10 @@ export const useCurrentUserMutators = () => {
   const setState = useSetRecoilState(currentUserRecoilState);
 
   const setCurrentUser = React.useCallback(
-    (id: string, name: string) => setState({ id, name }),
+    (id: string, name: string | null) => setState({ id, name }),
     [setState]
   )
 
   return { setCurrentUser }
 }
+export type SetCurrentUser = ReturnType<typeof useCurrentUserMutators>["setCurrentUser"];

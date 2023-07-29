@@ -6,12 +6,23 @@ const config: CodegenConfig = {
     'graphql/__generated__/graphql-schema-types.ts': {
       plugins: ['typescript'],
     },
-    'components/': {
-      documents: 'components/**/index.tsx',
+    // 'src/components/': {
+    //   documents: 'src/components/**/*.tsx',
+    //   preset: 'near-operation-file',
+    //   plugins: ['typescript-operations', 'typescript-react-apollo'],
+    //   presetConfig: {
+    //     baseTypesPath: '../graphql/__generated__/graphql-schema-types.ts',
+    //     folder: '__generated__',
+    //     extension: '.ts',
+    //     importTypesNamespace: 'SchemaTypes',
+    //   },
+    // },
+    'src/api/': {
+      documents: 'src/api/main/mutation/*.mutation.ts',
       preset: 'near-operation-file',
       plugins: ['typescript-operations', 'typescript-react-apollo'],
       presetConfig: {
-        baseTypesPath: '../graphql/__generated__/graphql-schema-types.ts',
+        baseTypesPath: '../../graphql/__generated__/graphql-schema-types.ts',
         folder: '__generated__',
         extension: '.ts',
         importTypesNamespace: 'SchemaTypes',
