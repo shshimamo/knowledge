@@ -8,7 +8,6 @@ import (
 	"github.com/shshimamo/knowledge-main/repository"
 
 	graphModel "github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/middlewares/auth"
 )
 
 type UserService interface {
@@ -24,11 +23,11 @@ func NewUserService(db *sql.DB) *userService {
 }
 
 func (s *userService) CreateUser(ctx context.Context, input *graphModel.NewUser) (*graphModel.User, error) {
-	token, ok := auth.GetCurrentToken(ctx)
+	token, ok := model.GetCurrentToken(ctx)
 	if !ok {
 		return nil, errors.New("not authenticated")
 	}
-	_, ok = auth.GetCurrentUser(ctx)
+	_, ok = model.GetCurrentUser(ctx)
 	if ok {
 		return nil, errors.New("Already registered")
 	}

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"github.com/shshimamo/knowledge-main/db"
 	gqlModel "github.com/shshimamo/knowledge-main/graph/model"
 	"github.com/volatiletech/null/v8"
@@ -54,4 +55,15 @@ func MapUserModelToGraph(user *User) *gqlModel.User {
 		Name:       name,
 	}
 	return gqluser
+}
+
+type CurrentUserKey struct{}
+
+func GetCurrentUser(ctx context.Context) (*User, bool) {
+	switch v := ctx.Value(CurrentUserKey{}).(type) {
+	case *User:
+		return v, true
+	default:
+		return nil, false
+	}
 }

@@ -2,21 +2,22 @@ package auth
 
 import (
 	"context"
-	"database/sql"
-	"github.com/shshimamo/knowledge-main/db"
 	"github.com/shshimamo/knowledge-main/model"
-	"github.com/volatiletech/null/v8"
+	"github.com/shshimamo/knowledge-main/repository"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"net/http"
 )
-
-type CurrentUserKey struct{}
-type CurrentTokenKey struct{}
 
 func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenStr := r.Header.Get("Authorization")
+
+			if tokenStr == "" {
+				if cookie, err := r.Cookie("token"); err == nil {
+					tokenStr = cookie.Value
+				}
+			}
 
 			if tokenStr == "" {
 				next.ServeHTTP(w, r)
@@ -28,38 +29,19 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}
-			ctx := context.WithValue(r.Context(), CurrentTokenKey{}, token)
+			ctx := context.WithValue(r.Context(), model.CurrentTokenKey{}, token)
 
-			dbUser, err := db.Users(db.UserWhere.AuthUserID.EQ(null.Int64From(int64(token.AuthUserID)))).One(r.Context(), exec)
+			repo := repository.NewUserRepository(exec)
+			user, err := repo.GetUserByToken(ctx, token)
+
 			if err != nil {
-				if err != sql.ErrNoRows {
-					http.Error(w, "Forbidden", http.StatusForbidden)
-					return
-				}
-			} else {
-				user := model.MapUserDBToModel(dbUser)
-				ctx = context.WithValue(r.Context(), CurrentUserKey{}, user)
+				http.Error(w, "Forbidden", http.StatusForbidden)
+				return
 			}
+
+			ctx = context.WithValue(r.Context(), model.CurrentUserKey{}, user)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
-	}
-}
-
-func GetCurrentUser(ctx context.Context) (*model.User, bool) {
-	switch v := ctx.Value(CurrentUserKey{}).(type) {
-	case *model.User:
-		return v, true
-	default:
-		return nil, false
-	}
-}
-
-func GetCurrentToken(ctx context.Context) (*model.Token, bool) {
-	switch v := ctx.Value(CurrentTokenKey{}).(type) {
-	case *model.Token:
-		return v, true
-	default:
-		return nil, false
 	}
 }
