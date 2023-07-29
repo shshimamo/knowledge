@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/shshimamo/knowledge-main/model"
 	"log"
 	"net/http"
 	"os"
@@ -16,12 +17,12 @@ import (
 	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge-main/graph"
 	"github.com/shshimamo/knowledge-main/graph/generated"
+	hand "github.com/shshimamo/knowledge-main/handler"
 	"github.com/shshimamo/knowledge-main/middlewares/auth"
 	"github.com/shshimamo/knowledge-main/service"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
-type AppEnv string
 type databaseConfig struct {
 	host     string
 	port     string
@@ -30,12 +31,8 @@ type databaseConfig struct {
 	dbname   string
 }
 
-const (
-	Production AppEnv = "production"
-)
-
 func main() {
-	appEnv := AppEnv(os.Getenv("APP_ENV"))
+	appEnv := model.AppEnv(os.Getenv("APP_ENV"))
 
 	db, err := setupDatabase(appEnv)
 	if err != nil {
@@ -49,15 +46,15 @@ func main() {
 		boil.DebugMode = true
 	}
 
-	h := setupHandler(db)
+	h := setupHandler(db, appEnv)
 	port := getPort()
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, h))
 }
 
-func setupDatabase(env AppEnv) (*sql.DB, error) {
+func setupDatabase(env model.AppEnv) (*sql.DB, error) {
 	var dbCfg databaseConfig
-	if env == Production {
+	if env == model.Production {
 		dbCfg = databaseConfig{
 			host:     os.Getenv("DB_HOST"),
 			port:     os.Getenv("DB_PORT"),
@@ -93,7 +90,7 @@ func getPort() string {
 	}
 }
 
-func setupHandler(db *sql.DB) http.Handler {
+func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	mux := http.NewServeMux()
 
 	allService := service.NewAllService(db)
@@ -108,6 +105,9 @@ func setupHandler(db *sql.DB) http.Handler {
 
 	mux.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	mux.Handle("/query", auth.NewAuthMiddleware(db)(srv))
+
+	th := hand.NewTokenHandler(appEnv)
+	mux.HandleFunc("/set_token", withContext(th.SetToken))
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:3000"},
@@ -149,4 +149,12 @@ func gqlMiddleware(srv *handler.Server) {
 		defer log.Println("after Resolver", res)
 		return
 	})
+}
+
+func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.Background()
+		// set context using context.WithTimeout, context.WithDeadline, context.WithCancel
+		fn(ctx, w, r)
+	}
 }

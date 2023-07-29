@@ -83,7 +83,7 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	mux.HandleFunc("/signout", withContext(auth.Signout))
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3001"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"GET", "HEAD", "POST", "PUT", "OPTIONS"},
 		AllowedHeaders:   []string{"*"}, // Allow All HTTP Headers

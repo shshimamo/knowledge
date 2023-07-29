@@ -62,6 +62,9 @@ type CurrentUserKey struct{}
 func GetCurrentUser(ctx context.Context) (*User, bool) {
 	switch v := ctx.Value(CurrentUserKey{}).(type) {
 	case *User:
+		if v == nil {
+			return nil, false
+		}
 		return v, true
 	default:
 		return nil, false

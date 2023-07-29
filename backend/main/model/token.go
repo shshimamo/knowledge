@@ -63,6 +63,9 @@ type CurrentTokenKey struct{}
 func GetCurrentToken(ctx context.Context) (*Token, bool) {
 	switch v := ctx.Value(CurrentTokenKey{}).(type) {
 	case *Token:
+		if v == nil {
+			return nil, false
+		}
 		return v, true
 	default:
 		return nil, false

@@ -25,8 +25,12 @@ func NewAuthHandler(db *sql.DB, appEnv model.AppEnv) AuthHandler {
 }
 
 func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var req SignupRequest
-	// TODO: r.Body が空みたい
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http.Error(w, "Unable to sign up", http.StatusInternalServerError)
@@ -50,21 +54,15 @@ func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http
 		return
 	}
 
-	secure := true
-	if h.appEnv != model.Production {
-		secure = false
-	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    string(token.Token),
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   secure,
-	})
 	w.WriteHeader(http.StatusOK)
 }
 
 func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var req SigninRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -88,21 +86,15 @@ func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http
 		return
 	}
 
-	secure := true
-	if h.appEnv != model.Production {
-		secure = false
-	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     "token",
-		Value:    string(token.Token),
-		Path:     "/",
-		HttpOnly: true,
-		Secure:   secure,
-	})
 	w.WriteHeader(http.StatusOK)
 }
 
 func (h *authHandler) Signout(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var req SignoutRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
