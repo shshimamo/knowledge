@@ -6,10 +6,12 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/shshimamo/knowledge-main/graph/generated"
 	"github.com/shshimamo/knowledge-main/graph/model"
+	m "github.com/shshimamo/knowledge-main/model"
 )
 
 // CreateUser is the resolver for the createUser field.
@@ -20,6 +22,17 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 // GetUser is the resolver for the getUser field.
 func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+}
+
+// CurrentUser is the resolver for the currentUser field.
+func (r *queryResolver) CurrentUser(ctx context.Context) (*model.User, error) {
+	user, ok := m.GetCurrentUser(ctx)
+
+	if !ok {
+		return nil, errors.New("not authenticated")
+	}
+
+	return m.MapUserModelToGraph(user), nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

@@ -99,7 +99,7 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 			AllService: allService,
 			//Loaders: loader.NewLoaders(service),
 		},
-		//Directives: graph.Directive,
+		Directives: graph.Directive,
 	}))
 	//gqlMiddleware(srv)
 

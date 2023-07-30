@@ -3,7 +3,7 @@ package model
 import (
 	"context"
 	"github.com/shshimamo/knowledge-main/db"
-	gqlModel "github.com/shshimamo/knowledge-main/graph/model"
+	gqlmodel "github.com/shshimamo/knowledge-main/graph/model"
 	"github.com/volatiletech/null/v8"
 	"strconv"
 )
@@ -37,19 +37,19 @@ func MapUserModelToDB(user *User) *db.User {
 	return dbuser
 }
 
-func MapNewUserGraphToModel(newuser *gqlModel.NewUser) *User {
+func MapNewUserGraphToModel(newuser *gqlmodel.NewUser) *User {
 	user := &User{}
 	user.Name = newuser.Name
 	return user
 }
 
-func MapUserModelToGraph(user *User) *gqlModel.User {
+func MapUserModelToGraph(user *User) *gqlmodel.User {
 	var name *string
 	if user.Name != "" {
 		temp := user.Name
 		name = &temp
 	}
-	gqluser := &gqlModel.User{
+	gqluser := &gqlmodel.User{
 		ID:         strconv.Itoa(user.ID),
 		AuthUserID: strconv.Itoa(user.AuthUserID),
 		Name:       name,
