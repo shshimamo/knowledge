@@ -1,7 +1,12 @@
 import React from 'react';
-import { useApiClient, ApiClient } from '@/api/auth/apiClient';
-import { convertSignupResDataToToken, convertSignupSeedToReqData } from './converter';
-import { SignupSeed, Token } from '@/components/model/auth/type'
+import { CreateApiClientReturn, useApiClient } from '@/api/auth/apiClient';
+import {
+  convertSigninResDataToToken,
+  convertSigninSeedToReqData,
+  convertSignupResDataToToken,
+  convertSignupSeedToReqData
+} from './converter';
+import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
 
 export type AuthRepository = ReturnType<typeof createAuthRepository>
 
@@ -13,10 +18,16 @@ export const useAuthRepository = () => {
 }
 
 // factory関数
-export const createAuthRepository = (apiClient: ApiClient) => ({
+export const createAuthRepository = (apiClient: CreateApiClientReturn) => ({
   async signup(seed: SignupSeed): Promise<Token> {
     const reqData = convertSignupSeedToReqData(seed)
     const resData = await apiClient.signup(reqData);
     return convertSignupResDataToToken(resData);
+  },
+
+  async signin(seed: SigninSeed): Promise<Token> {
+    const reqData = convertSigninSeedToReqData(seed)
+    const resData = await apiClient.signin(reqData);
+    return convertSigninResDataToToken(resData);
   },
 });

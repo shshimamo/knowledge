@@ -42,6 +42,7 @@ export type NewUser = {
 
 export type Query = {
   __typename?: "Query";
+  currentUser: User;
   getUser: User;
 };
 

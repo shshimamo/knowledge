@@ -7,7 +7,7 @@ type CurrentUserState = {
 }
 
 const currentUserRecoilState = atom<CurrentUserState>({
-  key: 'userState',
+  key: 'currentUserState',
   default: { id: null, name: null },
 });
 
