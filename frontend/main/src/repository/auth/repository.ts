@@ -8,7 +8,7 @@ import {
 } from './converter';
 import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
 
-export type AuthRepository = ReturnType<typeof createAuthRepository>
+export type AuthRepositoryType = ReturnType<typeof createAuthRepository>
 
 // hooks
 // 必要なhooksを呼び出してその値を repository factory関数に渡す

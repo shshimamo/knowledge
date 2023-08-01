@@ -3,7 +3,7 @@ import { useApiClient, ApiClient, SetTokenReqData } from '@/api/main/apiClient'
 import { convertTokenToReqData } from '@/repository/token/converter'
 import { Token } from '@/components/model/auth/type'
 
-export type TokenRepository = ReturnType<typeof createTokenRepository>
+export type TokenRepositoryType = ReturnType<typeof createTokenRepository>
 
 export const useTokenRepository = () => {
   const apiClient = useApiClient();

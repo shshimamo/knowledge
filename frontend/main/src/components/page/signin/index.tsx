@@ -1,27 +1,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-import { gql } from '@apollo/client';
 import { useAuthUsecase } from '@/usecase/auth/usecase'
-import {
-  CurrentUserQueryHookResult,
-  useCurrentUserLazyQuery,
-  useCurrentUserQuery
-} from '@/components/page/signin/__generated__/index.generated'
-
-gql`
-    query CurrentUser {
-        currentUser {
-            id
-            name
-        }
-    }
-`;
 
 export const Signin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loadUser, { called, loading, data, error }] = useCurrentUserLazyQuery();
   const { signin } = useAuthUsecase();
   const router = useRouter();
 
@@ -29,7 +13,7 @@ export const Signin = () => {
     e.preventDefault();
 
     try {
-      await signin({ email, password }, loadUser);
+      await signin({ email, password });
       await router.push('/');
     } catch (error) {
       console.error(error);
@@ -64,12 +48,9 @@ export const Signin = () => {
         />
       </div>
 
-      {error && <p className="text-red-500 mt-2">Error: {error.message}</p>}
-
       <div className="flex items-center justify-between">
-        <button type="submit" disabled={loading}
-                className="py-2 px-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">
-          {loading ? 'Loading...' : 'Login'}
+        <button type="submit" className="py-2 px-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">
+          'Login'
         </button>
         <Link href="/signup" className="text-blue-500 hover:text-blue-600">
           Sign Up

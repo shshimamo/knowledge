@@ -25,4 +25,4 @@ export const useCurrentUserMutators = () => {
 
   return { setCurrentUser }
 }
-export type SetCurrentUser = ReturnType<typeof useCurrentUserMutators>["setCurrentUser"];
+export type SetCurrentUserType = ReturnType<typeof useCurrentUserMutators>["setCurrentUser"];

@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client';
-import { useCreateUserMutation } from '@/api/main/mutation/__generated__/createUser.mutation'
+import gql from 'graphql-tag'
 
 gql`
     mutation CreateUser($name: String!) {
@@ -10,6 +9,3 @@ gql`
         }
     }
 `
-
-type UseCreateUserMutationReturn = ReturnType<typeof useCreateUserMutation>;
-export type CreateUserMutation = UseCreateUserMutationReturn[0];
