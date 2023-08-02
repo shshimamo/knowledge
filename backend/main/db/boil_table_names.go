@@ -4,7 +4,9 @@
 package db
 
 var TableNames = struct {
-	Users string
+	Knowledges string
+	Users      string
 }{
-	Users: "users",
+	Knowledges: "knowledges",
+	Users:      "users",
 }

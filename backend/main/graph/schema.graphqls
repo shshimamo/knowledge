@@ -1,20 +1,49 @@
 directive @isAuthenticated on FIELD_DEFINITION
 
+### Models ###
 type User {
     id: ID!
     authUserId: ID!
     name: String
 }
 
-type Query {
-    getUser(id: ID!): User!
-    currentUser: User! @isAuthenticated
+type Knowledge {
+    id: ID!
+    userId: ID!
+    title: String!
+    text: String!
+    isPublic: Boolean!
+    publishedAt: String!
 }
 
+### Results ###
+type DeleteKnowledgeResult {
+    id: ID!
+    success: Boolean!
+}
+
+### Queries ###
+type Query {
+    currentUser: User! @isAuthenticated
+    getUser(id: ID!): User!
+    getKnowledge(id: ID!): Knowledge!
+}
+
+### Input types ###
 input NewUser {
   name: String!
 }
 
+input NewKnowledge {
+  title: String!
+  text: String!
+  isPublic: Boolean!
+}
+
+### Mutations ###
 type Mutation {
-  createUser(input: NewUser!): User!
+    createUser(input: NewUser!): User!
+    createKnowledge(input: NewKnowledge): Knowledge!
+    updateKnowledge(id: ID!, input: NewKnowledge): Knowledge!
+    deleteKnowledge(id: ID!): DeleteKnowledgeResult!
 }

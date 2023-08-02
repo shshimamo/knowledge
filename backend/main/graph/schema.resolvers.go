@@ -19,9 +19,19 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 	return r.AllService.CreateUser(ctx, &input)
 }
 
-// GetUser is the resolver for the getUser field.
-func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+// CreateKnowledge is the resolver for the createKnowledge field.
+func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.NewKnowledge) (*model.Knowledge, error) {
+	panic(fmt.Errorf("not implemented: CreateKnowledge - createKnowledge"))
+}
+
+// UpdateKnowledge is the resolver for the updateKnowledge field.
+func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.NewKnowledge) (*model.Knowledge, error) {
+	panic(fmt.Errorf("not implemented: UpdateKnowledge - updateKnowledge"))
+}
+
+// DeleteKnowledge is the resolver for the deleteKnowledge field.
+func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*model.DeleteKnowledgeResult, error) {
+	panic(fmt.Errorf("not implemented: DeleteKnowledge - deleteKnowledge"))
 }
 
 // CurrentUser is the resolver for the currentUser field.
@@ -33,6 +43,16 @@ func (r *queryResolver) CurrentUser(ctx context.Context) (*model.User, error) {
 	}
 
 	return m.MapUserModelToGraph(user), nil
+}
+
+// GetUser is the resolver for the getUser field.
+func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+}
+
+// GetKnowledge is the resolver for the getKnowledge field.
+func (r *queryResolver) GetKnowledge(ctx context.Context, id string) (*model.Knowledge, error) {
+	panic(fmt.Errorf("not implemented: GetKnowledge - getKnowledge"))
 }
 
 // Mutation returns generated.MutationResolver implementation.
