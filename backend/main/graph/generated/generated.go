@@ -63,7 +63,7 @@ type ComplexityRoot struct {
 		CreateKnowledge func(childComplexity int, input *model.NewKnowledge) int
 		CreateUser      func(childComplexity int, input model.NewUser) int
 		DeleteKnowledge func(childComplexity int, id string) int
-		UpdateKnowledge func(childComplexity int, id string, input *model.NewKnowledge) int
+		UpdateKnowledge func(childComplexity int, id string, input *model.UpdateKnowledge) int
 	}
 
 	Query struct {
@@ -82,7 +82,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
 	CreateKnowledge(ctx context.Context, input *model.NewKnowledge) (*model.Knowledge, error)
-	UpdateKnowledge(ctx context.Context, id string, input *model.NewKnowledge) (*model.Knowledge, error)
+	UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledge) (*model.Knowledge, error)
 	DeleteKnowledge(ctx context.Context, id string) (*model.DeleteKnowledgeResult, error)
 }
 type QueryResolver interface {
@@ -208,7 +208,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateKnowledge(childComplexity, args["id"].(string), args["input"].(*model.NewKnowledge)), true
+		return e.complexity.Mutation.UpdateKnowledge(childComplexity, args["id"].(string), args["input"].(*model.UpdateKnowledge)), true
 
 	case "Query.currentUser":
 		if e.complexity.Query.CurrentUser == nil {
@@ -272,6 +272,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputNewKnowledge,
 		ec.unmarshalInputNewUser,
+		ec.unmarshalInputUpdateKnowledge,
 	)
 	first := true
 
@@ -371,6 +372,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	{Name: "../schema.graphqls", Input: `directive @isAuthenticated on FIELD_DEFINITION
 
+### Models ###
 type User {
     id: ID!
     authUserId: ID!
@@ -386,17 +388,20 @@ type Knowledge {
     publishedAt: String!
 }
 
+### Results ###
 type DeleteKnowledgeResult {
     id: ID!
     success: Boolean!
 }
 
+### Queries ###
 type Query {
     currentUser: User! @isAuthenticated
     getUser(id: ID!): User!
     getKnowledge(id: ID!): Knowledge!
 }
 
+### Input types ###
 input NewUser {
   name: String!
 }
@@ -407,10 +412,17 @@ input NewKnowledge {
   isPublic: Boolean!
 }
 
+input UpdateKnowledge {
+  title: String!
+  text: String!
+  isPublic: Boolean!
+}
+
+### Mutations ###
 type Mutation {
     createUser(input: NewUser!): User!
     createKnowledge(input: NewKnowledge): Knowledge!
-    updateKnowledge(id: ID!, input: NewKnowledge): Knowledge!
+    updateKnowledge(id: ID!, input: UpdateKnowledge): Knowledge!
     deleteKnowledge(id: ID!): DeleteKnowledgeResult!
 }
 `, BuiltIn: false},
@@ -478,10 +490,10 @@ func (ec *executionContext) field_Mutation_updateKnowledge_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
-	var arg1 *model.NewKnowledge
+	var arg1 *model.UpdateKnowledge
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalONewKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐNewKnowledge(ctx, tmp)
+		arg1, err = ec.unmarshalOUpdateKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledge(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1071,7 +1083,7 @@ func (ec *executionContext) _Mutation_updateKnowledge(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateKnowledge(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.NewKnowledge))
+		return ec.resolvers.Mutation().UpdateKnowledge(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.UpdateKnowledge))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3498,6 +3510,53 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateKnowledge(ctx context.Context, obj interface{}) (model.UpdateKnowledge, error) {
+	var it model.UpdateKnowledge
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"title", "text", "isPublic"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "title":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "text":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("text"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Text = data
+		case "isPublic":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isPublic"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsPublic = data
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -4565,6 +4624,14 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOUpdateKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledge(ctx context.Context, v interface{}) (*model.UpdateKnowledge, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateKnowledge(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

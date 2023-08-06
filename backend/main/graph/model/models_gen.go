@@ -25,3 +25,9 @@ type NewKnowledge struct {
 type NewUser struct {
 	Name string `json:"name"`
 }
+
+type UpdateKnowledge struct {
+	Title    string `json:"title"`
+	Text     string `json:"text"`
+	IsPublic bool   `json:"isPublic"`
+}

@@ -1,9 +1,8 @@
 package model
 
 import (
-	"context"
 	"github.com/shshimamo/knowledge-main/db"
-	gqlmodel "github.com/shshimamo/knowledge-main/graph/model"
+	gql "github.com/shshimamo/knowledge-main/graph/model"
 	"github.com/volatiletech/null/v8"
 	"strconv"
 )
@@ -27,46 +26,32 @@ func MapUserDBToModel(dbuser *db.User) *User {
 	return user
 }
 
-func MapUserModelToDB(user *User) *db.User {
-	dbuser := &db.User{
-		AuthUserID: null.Int64From(int64(user.AuthUserID)),
-	}
-	if user.Name != "" {
-		dbuser.Name = null.StringFrom(user.Name)
-	}
-	return dbuser
+func MapUserGqlNewToModel(gqlnew *gql.NewUser) *User {
+	u := &User{}
+	u.Name = gqlnew.Name
+	return u
 }
 
-func MapNewUserGraphToModel(newuser *gqlmodel.NewUser) *User {
-	user := &User{}
-	user.Name = newuser.Name
-	return user
+func MapUserModelToDB(u *User) *db.User {
+	db := &db.User{
+		AuthUserID: null.Int64From(int64(u.AuthUserID)),
+	}
+	if u.Name != "" {
+		db.Name = null.StringFrom(u.Name)
+	}
+	return db
 }
 
-func MapUserModelToGraph(user *User) *gqlmodel.User {
+func MapUserModelToGql(u *User) *gql.User {
 	var name *string
-	if user.Name != "" {
-		temp := user.Name
+	if u.Name != "" {
+		temp := u.Name
 		name = &temp
 	}
-	gqluser := &gqlmodel.User{
-		ID:         strconv.Itoa(user.ID),
-		AuthUserID: strconv.Itoa(user.AuthUserID),
+	gql := &gql.User{
+		ID:         strconv.Itoa(u.ID),
+		AuthUserID: strconv.Itoa(u.AuthUserID),
 		Name:       name,
 	}
-	return gqluser
-}
-
-type CurrentUserKey struct{}
-
-func GetCurrentUser(ctx context.Context) (*User, bool) {
-	switch v := ctx.Value(CurrentUserKey{}).(type) {
-	case *User:
-		if v == nil {
-			return nil, false
-		}
-		return v, true
-	default:
-		return nil, false
-	}
+	return gql
 }

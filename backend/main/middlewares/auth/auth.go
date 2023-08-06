@@ -8,6 +8,8 @@ import (
 	"net/http"
 )
 
+type currentUserKey struct{}
+
 func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -40,9 +42,21 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				return
 			}
 
-			ctx = context.WithValue(ctx, model.CurrentUserKey{}, user)
+			ctx = context.WithValue(ctx, currentUserKey{}, user)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
+	}
+}
+
+func GetCurrentUser(ctx context.Context) (*model.User, bool) {
+	switch v := ctx.Value(currentUserKey{}).(type) {
+	case *model.User:
+		if v == nil {
+			return nil, false
+		}
+		return v, true
+	default:
+		return nil, false
 	}
 }

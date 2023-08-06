@@ -3,10 +3,10 @@ package graph
 import (
 	"context"
 	"errors"
-	"github.com/shshimamo/knowledge-main/model"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/shshimamo/knowledge-main/graph/generated"
+	"github.com/shshimamo/knowledge-main/middlewares/auth"
 )
 
 var Directive generated.DirectiveRoot = generated.DirectiveRoot{
@@ -15,7 +15,7 @@ var Directive generated.DirectiveRoot = generated.DirectiveRoot{
 
 func IsAuthenticated(ctx context.Context, obj interface{}, next graphql.Resolver) (
 	res interface{}, err error) {
-	if _, ok := model.GetCurrentUser(ctx); !ok {
+	if _, ok := auth.GetCurrentUser(ctx); !ok {
 		return nil, errors.New("not authenticated")
 	}
 	return next(ctx)

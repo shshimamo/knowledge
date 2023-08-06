@@ -8,9 +8,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/shshimamo/knowledge-main/graph/generated"
 	"github.com/shshimamo/knowledge-main/graph/model"
+	"github.com/shshimamo/knowledge-main/middlewares/auth"
 	m "github.com/shshimamo/knowledge-main/model"
 )
 
@@ -21,28 +23,36 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 
 // CreateKnowledge is the resolver for the createKnowledge field.
 func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.NewKnowledge) (*model.Knowledge, error) {
-	panic(fmt.Errorf("not implemented: CreateKnowledge - createKnowledge"))
+	return r.AllService.CreateKnowledge(ctx, input)
 }
 
 // UpdateKnowledge is the resolver for the updateKnowledge field.
-func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.NewKnowledge) (*model.Knowledge, error) {
-	panic(fmt.Errorf("not implemented: UpdateKnowledge - updateKnowledge"))
+func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledge) (*model.Knowledge, error) {
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	return r.AllService.UpdateKnowledge(ctx, i, input)
 }
 
 // DeleteKnowledge is the resolver for the deleteKnowledge field.
 func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*model.DeleteKnowledgeResult, error) {
-	panic(fmt.Errorf("not implemented: DeleteKnowledge - deleteKnowledge"))
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	return r.AllService.DeleteKnowledge(ctx, i)
 }
 
 // CurrentUser is the resolver for the currentUser field.
 func (r *queryResolver) CurrentUser(ctx context.Context) (*model.User, error) {
-	user, ok := m.GetCurrentUser(ctx)
+	user, ok := auth.GetCurrentUser(ctx)
 
 	if !ok {
 		return nil, errors.New("not authenticated")
 	}
 
-	return m.MapUserModelToGraph(user), nil
+	return m.MapUserModelToGql(user), nil
 }
 
 // GetUser is the resolver for the getUser field.
@@ -52,7 +62,11 @@ func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, er
 
 // GetKnowledge is the resolver for the getKnowledge field.
 func (r *queryResolver) GetKnowledge(ctx context.Context, id string) (*model.Knowledge, error) {
-	panic(fmt.Errorf("not implemented: GetKnowledge - getKnowledge"))
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	return r.AllService.GetKnowledge(ctx, i)
 }
 
 // Mutation returns generated.MutationResolver implementation.

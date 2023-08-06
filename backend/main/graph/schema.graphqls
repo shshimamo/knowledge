@@ -40,10 +40,16 @@ input NewKnowledge {
   isPublic: Boolean!
 }
 
+input UpdateKnowledge {
+  title: String!
+  text: String!
+  isPublic: Boolean!
+}
+
 ### Mutations ###
 type Mutation {
     createUser(input: NewUser!): User!
     createKnowledge(input: NewKnowledge): Knowledge!
-    updateKnowledge(id: ID!, input: NewKnowledge): Knowledge!
+    updateKnowledge(id: ID!, input: UpdateKnowledge): Knowledge!
     deleteKnowledge(id: ID!): DeleteKnowledgeResult!
 }
