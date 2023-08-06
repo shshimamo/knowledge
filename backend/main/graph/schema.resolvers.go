@@ -45,28 +45,24 @@ func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*mod
 }
 
 // CurrentUser is the resolver for the currentUser field.
-func (r *queryResolver) CurrentUser(ctx context.Context) (*model.User, error) {
+func (r *queryResolver) CurrentUser(ctx context.Context) (*model.CurrentUser, error) {
 	user, ok := auth.GetCurrentUser(ctx)
 
 	if !ok {
 		return nil, errors.New("not authenticated")
 	}
 
-	return m.MapUserModelToGql(user), nil
+	return m.MapUserModelToGqlCurrent(user), nil
 }
 
-// GetUser is the resolver for the getUser field.
-func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: GetUser - getUser"))
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
-// GetKnowledge is the resolver for the getKnowledge field.
-func (r *queryResolver) GetKnowledge(ctx context.Context, id string) (*model.Knowledge, error) {
-	i, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
-	return r.AllService.GetKnowledge(ctx, i)
+// Knowledge is the resolver for the knowledge field.
+func (r *queryResolver) Knowledge(ctx context.Context, id string) (*model.Knowledge, error) {
+	panic(fmt.Errorf("not implemented: Knowledge - knowledge"))
 }
 
 // Mutation returns generated.MutationResolver implementation.

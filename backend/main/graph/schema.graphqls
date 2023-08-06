@@ -1,21 +1,5 @@
 directive @isAuthenticated on FIELD_DEFINITION
 
-### Models ###
-type User {
-    id: ID!
-    authUserId: ID!
-    name: String
-}
-
-type Knowledge {
-    id: ID!
-    userId: ID!
-    title: String!
-    text: String!
-    isPublic: Boolean!
-    publishedAt: String!
-}
-
 ### Results ###
 type DeleteKnowledgeResult {
     id: ID!
@@ -24,9 +8,9 @@ type DeleteKnowledgeResult {
 
 ### Queries ###
 type Query {
-    currentUser: User! @isAuthenticated
-    getUser(id: ID!): User!
-    getKnowledge(id: ID!): Knowledge!
+    currentUser: CurrentUser! @isAuthenticated
+    user(id: ID!): User!
+    knowledge(id: ID!): Knowledge!
 }
 
 ### Input types ###

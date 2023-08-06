@@ -55,3 +55,17 @@ func MapUserModelToGql(u *User) *gql.User {
 	}
 	return gql
 }
+
+func MapUserModelToGqlCurrent(u *User) *gql.CurrentUser {
+	var name *string
+	if u.Name != "" {
+		temp := u.Name
+		name = &temp
+	}
+	gql := &gql.CurrentUser{
+		ID:         strconv.Itoa(u.ID),
+		AuthUserID: strconv.Itoa(u.AuthUserID),
+		Name:       name,
+	}
+	return gql
+}

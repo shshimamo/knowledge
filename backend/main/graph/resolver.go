@@ -1,6 +1,9 @@
 package graph
 
-import "github.com/shshimamo/knowledge-main/service"
+import (
+	"github.com/shshimamo/knowledge-main/graph/loader"
+	"github.com/shshimamo/knowledge-main/service"
+)
 
 // This file will not be regenerated automatically.
 //
@@ -8,4 +11,5 @@ import "github.com/shshimamo/knowledge-main/service"
 
 type Resolver struct {
 	AllService service.AllService
+	Loaders    *loader.Loaders
 }

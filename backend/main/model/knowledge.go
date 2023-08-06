@@ -14,26 +14,26 @@ type Knowledge struct {
 	IsPublic bool
 }
 
-func MapKnowledgeDBToModel(db *db.Knowledge) *Knowledge {
+func MapKnowledgeDBToModel(dbk *db.Knowledge) *Knowledge {
 	k := &Knowledge{
-		ID:       int(db.ID),
-		UserID:   int(db.UserID),
-		Title:    db.Title,
-		Text:     db.Text,
-		IsPublic: db.IsPublic,
+		ID:       int(dbk.ID),
+		UserID:   int(dbk.UserID),
+		Title:    dbk.Title,
+		Text:     dbk.Text,
+		IsPublic: dbk.IsPublic,
 	}
 	return k
 }
 
-func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledge) *Knowledge {
-	k := &Knowledge{}
-	k.Title = gqlnew.Title
-	k.Text = gqlnew.Text
-	k.IsPublic = gqlnew.IsPublic
-	return k
+func MapKnowledgeListDBToModel(dblist []*db.Knowledge) []*Knowledge {
+	klist := make([]*Knowledge, len(dblist))
+	for i, dbk := range dblist {
+		klist[i] = MapKnowledgeDBToModel(dbk)
+	}
+	return klist
 }
 
-func MapKnowledgeGqlUpdateToModel(gqlnew *gql.UpdateKnowledge) *Knowledge {
+func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledge) *Knowledge {
 	k := &Knowledge{}
 	k.Title = gqlnew.Title
 	k.Text = gqlnew.Text
@@ -60,4 +60,12 @@ func MapKnowledgeModelToGql(k *Knowledge) *gql.Knowledge {
 		IsPublic: k.IsPublic,
 	}
 	return gql
+}
+
+func MapKnowledgeListModelToGql(klist []*Knowledge) []*gql.Knowledge {
+	gqllist := make([]*gql.Knowledge, len(klist))
+	for i, k := range klist {
+		gqllist[i] = MapKnowledgeModelToGql(k)
+	}
+	return gqllist
 }

@@ -1,0 +1,22 @@
+type CurrentUser {
+    id: ID!
+    authUserId: ID!
+    name: String
+    knowledge(id: ID!): Knowledge!
+    knowledgeList(first: Int!): [Knowledge!]!
+}
+
+type User {
+    id: ID!
+    authUserId: ID!
+    name: String
+}
+
+type Knowledge {
+    id: ID!
+    userId: ID!
+    title: String!
+    text: String!
+    isPublic: Boolean!
+    publishedAt: String!
+}

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"github.com/shshimamo/knowledge-main/utils"
 
 	"github.com/shshimamo/knowledge-main/db"
 	"github.com/shshimamo/knowledge-main/model"
@@ -13,6 +14,7 @@ import (
 
 type KnowledgeRepository interface {
 	GetKnowledge(ctx context.Context, cmd *GetKnowledgeCommand) (*model.Knowledge, error)
+	GetKnowledgeList(ctx context.Context, cmd *GetKnowledgeListCommand) ([]*model.Knowledge, error)
 	CreateKnowledge(ctx context.Context, k *model.Knowledge) (*model.Knowledge, error)
 	UpdateKnowledge(ctx context.Context, k *model.Knowledge) (*model.Knowledge, error)
 	DeleteKnowledge(ctx context.Context, k *model.Knowledge) error
@@ -57,6 +59,36 @@ func (r *knowledgeRepository) GetKnowledge(ctx context.Context, cmd *GetKnowledg
 	k := model.MapKnowledgeDBToModel(dbk)
 
 	return k, nil
+}
+
+type GetKnowledgeListCommand struct {
+	IDs     []int
+	UserIDs []int
+}
+
+func (r *knowledgeRepository) GetKnowledgeList(ctx context.Context, cmd *GetKnowledgeListCommand) ([]*model.Knowledge, error) {
+	if len(cmd.IDs) == 0 && len(cmd.UserIDs) == 0 {
+		return nil, errors.New("invalid command")
+	}
+
+	queryMods := make([]qm.QueryMod, 0)
+
+	if len(cmd.IDs) > 0 {
+		ids := utils.IntSliceToInt64Slice(cmd.IDs)
+		queryMods = append(queryMods, db.KnowledgeWhere.ID.IN(ids))
+	}
+
+	if len(cmd.UserIDs) > 0 {
+		uids := utils.IntSliceToInt64Slice(cmd.UserIDs)
+		queryMods = append(queryMods, db.KnowledgeWhere.UserID.IN(uids))
+	}
+
+	dblist, err := db.Knowledges(queryMods...).All(ctx, r.exec)
+	if err != nil {
+		return nil, errs.ConvertSqlError(err)
+	}
+
+	return model.MapKnowledgeListDBToModel(dblist), nil
 }
 
 func (r *knowledgeRepository) CreateKnowledge(ctx context.Context, k *model.Knowledge) (*model.Knowledge, error) {

@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.35
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/friendsofgo/errors v0.9.2
+	github.com/graph-gophers/dataloader/v7 v7.1.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
 	github.com/lib/pq v1.10.6
 	github.com/rs/cors v1.9.0

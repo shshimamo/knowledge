@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/shshimamo/knowledge-main/graph/loader"
 	"github.com/shshimamo/knowledge-main/model"
 	"log"
 	"net/http"
@@ -97,7 +98,7 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
 			AllService: allService,
-			//Loaders: loader.NewLoaders(service),
+			Loaders:    loader.NewLoaders(allService),
 		},
 		Directives: graph.Directive,
 	}))

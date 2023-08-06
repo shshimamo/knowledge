@@ -13,6 +13,7 @@ import (
 type KnowledgeService interface {
 	CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledge) (*gql.Knowledge, error)
 	GetKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
+	GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error)
 	GetMyKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
 	UpdateKnowledge(ctx context.Context, id int, gqlupdate *gql.UpdateKnowledge) (*gql.Knowledge, error)
 	DeleteKnowledge(ctx context.Context, id int) (*gql.DeleteKnowledgeResult, error)
@@ -36,6 +37,18 @@ func (s *knowledgeService) GetKnowledge(ctx context.Context, id int) (*gql.Knowl
 	gqlk := model.MapKnowledgeModelToGql(k)
 
 	return gqlk, nil
+}
+
+func (s *knowledgeService) GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error) {
+	repo := repository.NewKnowledgeRepository(s.db)
+	klist, err := repo.GetKnowledgeList(ctx, &repository.GetKnowledgeListCommand{IDs: ids, UserIDs: uids})
+	if err != nil {
+		return nil, err
+	}
+
+	gqllist := model.MapKnowledgeListModelToGql(klist)
+
+	return gqllist, nil
 }
 
 func (s *knowledgeService) GetMyKnowledge(ctx context.Context, id int) (*gql.Knowledge, error) {
