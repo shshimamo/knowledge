@@ -27,13 +27,68 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
+export type CurrentUser = {
+  __typename?: "CurrentUser";
+  authUserId: Scalars["ID"]["output"];
+  id: Scalars["ID"]["output"];
+  knowledge: Knowledge;
+  knowledgeList: Array<Knowledge>;
+  name: Maybe<Scalars["String"]["output"]>;
+};
+
+export type CurrentUserKnowledgeArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type CurrentUserKnowledgeListArgs = {
+  first: Scalars["Int"]["input"];
+};
+
+export type DeleteKnowledgeResult = {
+  __typename?: "DeleteKnowledgeResult";
+  id: Scalars["ID"]["output"];
+  success: Scalars["Boolean"]["output"];
+};
+
+export type Knowledge = {
+  __typename?: "Knowledge";
+  id: Scalars["ID"]["output"];
+  isPublic: Scalars["Boolean"]["output"];
+  publishedAt: Scalars["String"]["output"];
+  text: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+  userId: Scalars["ID"]["output"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
+  createKnowledge: Knowledge;
   createUser: User;
+  deleteKnowledge: DeleteKnowledgeResult;
+  updateKnowledge: Knowledge;
+};
+
+export type MutationCreateKnowledgeArgs = {
+  input: InputMaybe<NewKnowledge>;
 };
 
 export type MutationCreateUserArgs = {
   input: NewUser;
+};
+
+export type MutationDeleteKnowledgeArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type MutationUpdateKnowledgeArgs = {
+  id: Scalars["ID"]["input"];
+  input: InputMaybe<UpdateKnowledge>;
+};
+
+export type NewKnowledge = {
+  isPublic: Scalars["Boolean"]["input"];
+  text: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
 };
 
 export type NewUser = {
@@ -42,12 +97,23 @@ export type NewUser = {
 
 export type Query = {
   __typename?: "Query";
-  currentUser: User;
-  getUser: User;
+  currentUser: CurrentUser;
+  knowledge: Knowledge;
+  user: User;
 };
 
-export type QueryGetUserArgs = {
+export type QueryKnowledgeArgs = {
   id: Scalars["ID"]["input"];
+};
+
+export type QueryUserArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type UpdateKnowledge = {
+  isPublic: Scalars["Boolean"]["input"];
+  text: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
 };
 
 export type User = {

@@ -3,22 +3,27 @@ import * as SchemaTypes from "../../../../../graphql/__generated__/graphql-schem
 import { GraphQLClient } from "graphql-request";
 import { GraphQLClientRequestHeaders } from "graphql-request/build/cjs/types";
 import gql from "graphql-tag";
-export type CurrentUserQueryVariables = SchemaTypes.Exact<{
+export type MyKnowledgeListQueryVariables = SchemaTypes.Exact<{
   [key: string]: never;
 }>;
 
-export type CurrentUserQuery = {
+export type MyKnowledgeListQuery = {
   __typename?: "Query";
-  currentUser: { __typename?: "CurrentUser"; id: string; name: string | null };
+  currentUser: {
+    __typename?: "CurrentUser";
+    knowledgeList: Array<{ __typename?: "Knowledge" }>;
+  };
 };
 
-export const CurrentUserDocument = gql`
-  query CurrentUser {
+export const MyKnowledgeListDocument = gql`
+  query MyKnowledgeList {
     currentUser {
-      id
-      name
+      knowledgeList(first: 20) {
+        ...KnowledgeItem
+      }
     }
   }
+  ${KnowledgeItemFragmentDoc}
 `;
 
 export type SdkFunctionWrapper = <T>(
@@ -38,17 +43,18 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
-    CurrentUser(
-      variables?: CurrentUserQueryVariables,
+    MyKnowledgeList(
+      variables?: MyKnowledgeListQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<CurrentUserQuery> {
+    ): Promise<MyKnowledgeListQuery> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<CurrentUserQuery>(CurrentUserDocument, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        "CurrentUser",
+          client.request<MyKnowledgeListQuery>(
+            MyKnowledgeListDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        "MyKnowledgeList",
         "query",
       );
     },

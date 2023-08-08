@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAuthRepository, AuthRepositoryType } from '@/repository/auth/repository';
 import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
-import { CreateUserMutation } from '@/api/main/mutation/createUser.mutation'
 import { useCurrentUserMutators, SetCurrentUserType } from '@/globalStates/currentUserState'
 import { TokenRepositoryType, useTokenRepository } from '@/repository/token/repository'
 import { getSdk as getCurrentUserSdk, Sdk as CurrentUserSdk } from '@/api/main/query/__generated__/currentUser.query.generated'
