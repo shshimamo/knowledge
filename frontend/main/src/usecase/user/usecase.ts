@@ -3,44 +3,56 @@ import { useAuthRepository, AuthRepositoryType } from '@/repository/auth/reposit
 import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
 import { useCurrentUserMutators, SetCurrentUserType } from '@/globalStates/currentUserState'
 import { TokenRepositoryType, useTokenRepository } from '@/repository/token/repository'
-import { getSdk as getCurrentUserSdk, Sdk as CurrentUserSdk } from '@/api/main/query/__generated__/currentUser.query.generated'
-import { getSdk as getCreateUserSdk, Sdk as CreateUserSdk } from '@/api/main/mutation/__generated__/createUser.mutation.generated'
+import { graphql } from '@/gql/__generated__'
 import { gqlClient } from '@/api/main/gqlClient'
+
+const createUser = graphql(/* GraphQL */`
+    mutation createUser($name: String!) {
+        createUser(input: { name: $name }) {
+            id
+            authUserId
+            name
+        }
+    }
+`);
+
+const currentUserToSignIn = graphql(/* GraphQL */ `
+    query CurrentUserToSignIn {
+        currentUser {
+            id
+            name
+        }
+    }
+`);
 
 export const useAuthUsecase = () => {
   const authRepository = useAuthRepository()
   const tokenRepository = useTokenRepository()
   const { setCurrentUser } = useCurrentUserMutators();
-  const currentUserSdk = getCurrentUserSdk(gqlClient);
-  const createUserSdk = getCreateUserSdk(gqlClient);
 
   return React.useMemo(
     () => createAuthUsecase({
       authRepository,
       tokenRepository,
       setCurrentUser,
-      currentUserSdk,
-      createUserSdk,
     }),
-    [authRepository, tokenRepository, setCurrentUser, currentUserSdk, createUserSdk],
+    [authRepository, tokenRepository, setCurrentUser],
   )
 }
 
-export const createAuthUsecase = ({ authRepository, tokenRepository, setCurrentUser, currentUserSdk, createUserSdk }: {
+export const createAuthUsecase = ({ authRepository, tokenRepository, setCurrentUser }: {
   authRepository: AuthRepositoryType
   tokenRepository: TokenRepositoryType
   setCurrentUser: SetCurrentUserType
-  currentUserSdk: CurrentUserSdk
-  createUserSdk: CreateUserSdk
 }) => ({
   async signup(seed: SignupSeed, name: string) {
     try {
       // get token
       const token: Token = await authRepository.signup(seed)
-      // set cookie
+      // set cookie to main
       await tokenRepository.setToken(token)
       // create user
-      const data = await createUserSdk.CreateUser({ name })
+      const data = await gqlClient.request(createUser, { name })
       // set state
       setCurrentUser(data.createUser.id, data.createUser.name)
     } catch (error) {
@@ -53,10 +65,10 @@ export const createAuthUsecase = ({ authRepository, tokenRepository, setCurrentU
     try {
       // get token
       const token: Token = await authRepository.signin(seed)
-      // set cookie
+      // set cookie to main
       await tokenRepository.setToken(token)
       // get current user
-      const data = await currentUserSdk.CurrentUser()
+      const data = await gqlClient.request(currentUserToSignIn)
       // set state
       setCurrentUser(data.currentUser.id, data.currentUser.name)
     } catch (error) {

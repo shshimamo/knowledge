@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateApiClientReturn, useApiClient } from '@/api/auth/apiClient';
+import { ApiClient, useApiClient } from '@/api/auth/apiClient';
 import {
   convertSigninResDataToToken,
   convertSigninSeedToReqData,
@@ -18,7 +18,7 @@ export const useAuthRepository = () => {
 }
 
 // factory関数
-export const createAuthRepository = (apiClient: CreateApiClientReturn) => ({
+export const createAuthRepository = (apiClient: ApiClient) => ({
   async signup(seed: SignupSeed): Promise<Token> {
     const reqData = convertSignupSeedToReqData(seed)
     const resData = await apiClient.signup(reqData);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-import { useAuthUsecase } from '@/usecase/auth/usecase'
+import { useAuthUsecase } from '@/usecase/user/usecase'
 
 export const Signin = () => {
   const [email, setEmail] = useState('');
@@ -50,7 +50,7 @@ export const Signin = () => {
 
       <div className="flex items-center justify-between">
         <button type="submit" className="py-2 px-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-600">
-          'Login'
+          Login
         </button>
         <Link href="/signup" className="text-blue-500 hover:text-blue-600">
           Sign Up

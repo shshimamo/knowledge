@@ -2,48 +2,36 @@ import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   schema: 'http://localhost:8080/query',
+  documents: ['src/**/*.tsx', 'src/**/*.ts'],
+  ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
-    'graphql/__generated__/graphql-schema-types.ts': {
-      plugins: ['typescript'],
-    },
-    'src/components/model/': {
-      documents: 'src/components/model/**/!(*.generated).tsx',
-      preset: 'near-operation-file',
-      plugins: ['typescript-operations', 'typescript-graphql-request'],
-      presetConfig: {
-        baseTypesPath: '../../../graphql/__generated__/graphql-schema-types.ts',
-        folder: '__generated__',
-        extension: '.generated.ts',
-        importTypesNamespace: 'SchemaTypes',
-      },
-    },
-    'src/components/page/': {
-      documents: 'src/components/page/**/!(*.generated).tsx',
-      preset: 'near-operation-file',
-      plugins: ['typescript-operations', 'typescript-graphql-request'],
-      presetConfig: {
-        baseTypesPath: '../../../graphql/__generated__/graphql-schema-types.ts',
-        folder: '__generated__',
-        extension: '.generated.ts',
-        importTypesNamespace: 'SchemaTypes',
-      },
-    },
-    'src/api/': {
-      documents: [
-        'src/api/main/mutation/*.mutation.ts',
-        'src/api/main/query/*.query.ts',
+    "./src/gql/__generated__/": {
+      preset: "client",
+      plugins: [
+        {
+          // Custom Scalar の branded type 定義
+          add: {
+            content: `export type DateString = string & { readonly __brand: unique symbol }`,
+          },
+        },
       ],
-      preset: 'near-operation-file',
-      plugins: ['typescript-operations', 'typescript-graphql-request'],
-      presetConfig: {
-        baseTypesPath: '../../graphql/__generated__/graphql-schema-types.ts',
-        folder: '__generated__',
-        extension: '.generated.ts',
-        importTypesNamespace: 'SchemaTypes',
+      config: {
+        strictScalars: true,
+        useTypeImports: true,
+        skipTypename: true,
+        arrayInputCoercion: true,
+        avoidOptionals: {
+          field: true,
+          inputValue: false,
+          object: true,
+          defaultValue: false,
+        },
+        scalars: {
+          Date: "DateString",
+        },
+        enumsAsTypes: true,
       },
     },
   },
-  config: { avoidOptionals: true },
-  hooks: { afterAllFileWrite: ['prettier --write'] },
 }
 export default config

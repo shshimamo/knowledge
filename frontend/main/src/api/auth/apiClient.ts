@@ -21,12 +21,10 @@ export type SigninResData = {
 
 
 export const useApiClient = () => {
-  const apiClient = React.useMemo(() => createApiClient(), []);
-
-  return apiClient;
+  return React.useMemo(() => createApiClient(), []);
 };
 
-export const createApiClient  = () => ({
+const createApiClient  = () => ({
   async signup({ email, password }: SignupReqData): Promise<SignupResData> {
     const response = await httpClient.post('/signup', {
       email,
@@ -46,4 +44,4 @@ export const createApiClient  = () => ({
   }
 });
 
-export type CreateApiClientReturn = ReturnType<typeof createApiClient>;
+export type ApiClient = ReturnType<typeof createApiClient>;

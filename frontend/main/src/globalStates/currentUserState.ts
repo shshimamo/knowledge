@@ -1,5 +1,6 @@
 import React from 'react'
 import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
+import { graphql } from '@/gql/__generated__'
 
 type CurrentUserState = {
   id: string | null;

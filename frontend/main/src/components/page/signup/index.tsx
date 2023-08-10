@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-import { useAuthUsecase } from '@/usecase/auth/usecase'
+import { useAuthUsecase } from '@/usecase/user/usecase'
 
 export const Signup = () => {
   const [name, setName] = useState('');
