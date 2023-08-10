@@ -1,3 +1,3 @@
-import { SignupPage } from '@/components/page/signup/index.page'
+import { SignupPage } from '@/components/page/Signup/index.page'
 
 export default SignupPage

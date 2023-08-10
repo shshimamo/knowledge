@@ -1,5 +1,5 @@
 import { RecoilRoot } from 'recoil'
-import { Signup } from '@/components/page/signup/index'
+import { Signup } from '@/components/page/Signup/index'
 import { Header } from '@/components/page/global/header'
 
 export const SignupPage = () => {
