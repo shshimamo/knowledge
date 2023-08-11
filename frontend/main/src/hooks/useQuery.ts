@@ -1,6 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
-import { ASTNode, ExecutionResult, Kind, OperationDefinitionNode } from 'graphql';
+import { ASTNode, Kind, OperationDefinitionNode } from 'graphql';
 import useSWR from 'swr';
 import { gqlClient } from '@/api/main/gqlClient'
 
@@ -12,14 +11,13 @@ export function useGraphQL<TResult, TVariables>(
 ) {
   return useSWR(
     [
-      // This logic can be customized as desired
-      document.definitions.find(isOperationDefinition)?.name,
+      document.definitions.find(isOperationDefinition)?.name?.value,
       variables,
-    ] as const,
-    async (_key: any, variables: any) =>
+    ],
+    async ([_key, variables]) =>
       await gqlClient.request({
         document: document,
-        variables: variables,
-      }) as Promise<ExecutionResult<TResult>>
+        variables: variables as any,
+      }) as Promise<TResult>
   );
 }

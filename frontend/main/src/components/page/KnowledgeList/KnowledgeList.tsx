@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { gqlClient } from '@/api/main/gqlClient'
+import React from 'react';
 import { useMyKnowledgeList } from '@/usecase/knowledge/reader'
 import { KnowledgeList } from '@/components/model/knowledge/KnowledgeList/KnowledgeList'
 
 export const KnowledgeListTop = () => {
-  const { data } = useMyKnowledgeList({ first: 10})
-  const knowledgeList = data && data.data?.currentUser?.knowledgeList
+  const { data, error, isLoading } = useMyKnowledgeList({ first: 10})
+
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
 
   return (
     <div>
-      {knowledgeList && (
-        <KnowledgeList knowledgeList={knowledgeList} />
+      {data && data.currentUser.knowledgeList && (
+        <KnowledgeList knowledgeList={data.currentUser.knowledgeList} />
       )}
     </div>
   );
