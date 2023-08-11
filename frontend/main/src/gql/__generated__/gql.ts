@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n": types.KnowledgeItemFragmentDoc,
-    "\n    query MyKnowledgeList {\n        currentUser {\n            knowledgeList(first: 20) {\n                ...KnowledgeItem\n            }\n        }\n    }\n    \n": types.MyKnowledgeListDocument,
+    "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n": types.MyKnowledgeListDocument,
     "\n    query CurrentUser {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserDocument,
     "\n    mutation createUser($name: String!) {\n        createUser(input: { name: $name }) {\n            id\n            authUserId\n            name\n        }\n    }\n": types.CreateUserDocument,
     "\n    query CurrentUserToSignIn {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserToSignInDocument,
@@ -41,7 +41,7 @@ export function graphql(source: "\n    fragment KnowledgeItem on Knowledge {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query MyKnowledgeList {\n        currentUser {\n            knowledgeList(first: 20) {\n                ...KnowledgeItem\n            }\n        }\n    }\n    \n"): (typeof documents)["\n    query MyKnowledgeList {\n        currentUser {\n            knowledgeList(first: 20) {\n                ...KnowledgeItem\n            }\n        }\n    }\n    \n"];
+export function graphql(source: "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"): (typeof documents)["\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

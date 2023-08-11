@@ -1,22 +1,24 @@
-// import gql from 'graphql-tag'
-// import React from 'react'
-//
-// gql`
-//     fragment KnowledgeItem on Knowledge {
-//         title
-//         text
-//     }
-// `;
-//
-// type KnowledgeItemProps = {
-//     knowledge: KnowledgeItemFragment;
-// };
-//
-// export const KnowledgeItem: React.FC<KnowledgeItemProps> = ({ knowledge }) => {
-//     return (
-//       <div>
-//           <h3>{knowledge.title}</h3>
-//           <p>{knowledge.text}</p>
-//       </div>
-//     );
-// };
+import React from 'react'
+import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
+
+export const knowledgeItemFragment = graphql(/* GraphQL */ `
+    fragment KnowledgeItem on Knowledge {
+        title
+        text
+    }
+`);
+
+type KnowledgeItemProps = {
+  knowledge: FragmentType<typeof knowledgeItemFragment>
+};
+
+export const KnowledgeItem: React.FC<KnowledgeItemProps> = (props) => {
+  const knowledge = useFragment(knowledgeItemFragment, props.knowledge)
+
+  return (
+      <div>
+          <h3>{knowledge.title}</h3>
+          <p>{knowledge.text}</p>
+      </div>
+    );
+};
