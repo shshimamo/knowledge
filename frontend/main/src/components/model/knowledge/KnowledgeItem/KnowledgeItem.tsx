@@ -1,5 +1,6 @@
 import React from 'react'
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
+import styles from './KnowledgeItem.module.css';
 
 export const knowledgeItemFragment = graphql(/* GraphQL */ `
     fragment KnowledgeItem on Knowledge {
@@ -16,9 +17,9 @@ export const KnowledgeItem: React.FC<KnowledgeItemProps> = (props) => {
   const knowledge = useFragment(knowledgeItemFragment, props.knowledge)
 
   return (
-      <div>
-          <h3>{knowledge.title}</h3>
-          <p>{knowledge.text}</p>
+      <div className={styles.knowledgeItem}>
+        <h3 className={styles.knowledgeTitle}>{knowledge.title}</h3>
+        <p className={styles.knowledgeText}>{knowledge.text}</p>
       </div>
     );
 };
