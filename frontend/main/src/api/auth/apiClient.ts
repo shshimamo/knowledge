@@ -1,21 +1,21 @@
 import React from 'react';
 import { httpClient } from './axios';
 
-export type SignupReqData = {
+export type SignupAPIReqParams = {
   email: string;
   password: string;
 }
 
-export type SignupResData = {
+export type SignupAPIResponse = {
   token: string;
 }
 
-export type SigninReqData = {
+export type SigninAPIReqParams = {
   email: string;
   password: string;
 }
 
-export type SigninResData = {
+export type SigninAPIResponse = {
   token: string;
 }
 
@@ -25,22 +25,22 @@ export const useApiClient = () => {
 };
 
 const createApiClient  = () => ({
-  async signup({ email, password }: SignupReqData): Promise<SignupResData> {
+  async signup({ email, password }: SignupAPIReqParams): Promise<SignupAPIResponse> {
     const response = await httpClient.post('/signup', {
       email,
       password,
     });
 
-    return response.data as SignupResData;
+    return response.data as SignupAPIResponse;
   },
 
-  async signin({ email, password }: SigninReqData): Promise<SigninResData> {
+  async signin({ email, password }: SigninAPIReqParams): Promise<SigninAPIResponse> {
     const response = await httpClient.post('/signin', {
       email,
       password
     });
 
-    return response.data as SigninResData;
+    return response.data as SigninAPIResponse;
   }
 });
 

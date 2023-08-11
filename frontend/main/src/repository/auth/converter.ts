@@ -1,18 +1,18 @@
-import { SigninReqData, SigninResData, SignupReqData, SignupResData } from '@/api/auth/apiClient'
+import { SigninAPIReqParams, SigninAPIResponse, SignupAPIReqParams, SignupAPIResponse } from '@/api/auth/apiClient'
 import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
 
-export const convertSignupSeedToReqData = ({ email, password }: SignupSeed): SignupReqData => {
+export const convertSignupSeedToReqParams = ({ email, password }: SignupSeed): SignupAPIReqParams => {
   return { email, password }
 }
 
-export const convertSignupResDataToToken = (resData: SignupResData): Token => {
+export const convertSignupResponseToToken = (resData: SignupAPIResponse): Token => {
   return resData.token
 }
 
-export const convertSigninSeedToReqData = ({ email, password }: SigninSeed): SigninReqData => {
+export const convertSigninSeedToReqParams = ({ email, password }: SigninSeed): SigninAPIReqParams => {
   return { email, password }
 }
 
-export const convertSigninResDataToToken = (resData: SigninResData): Token => {
+export const convertSigninResponseToToken = (resData: SigninAPIResponse): Token => {
   return resData.token
 }

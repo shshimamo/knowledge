@@ -1,6 +1,6 @@
-import { SetTokenReqData } from '@/api/main/apiClient'
+import { SetTokenAPIReqParams } from '@/api/main/apiClient'
 import { Token } from '@/components/model/auth/type'
 
-export const convertTokenToReqData = (token: Token): SetTokenReqData => {
+export const convertTokenToReqParams = (token: Token): SetTokenAPIReqParams => {
   return { token }
 }

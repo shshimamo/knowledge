@@ -2,7 +2,7 @@ import React from 'react';
 import { httpClient } from './axios';
 import { Token } from '@/components/model/auth/type'
 
-export type SetTokenReqData = {
+export type SetTokenAPIReqParams = {
   token: Token;
 }
 
@@ -11,7 +11,7 @@ export const useApiClient = () => {
 };
 
 const createApiClient = () => ({
-  async setToken({ token }: SetTokenReqData): Promise<void> {
+  async setToken({ token }: SetTokenAPIReqParams): Promise<void> {
     const response = await httpClient.post('/set_token', { token });
   }
 });

@@ -1,5 +1,5 @@
 import { graphql } from '@/gql/__generated__'
-import { useGraphQL } from '@/hooks/useQuery'
+import { useGraphQL } from '@/api/main/useGraphQL'
 
 const currentUser = graphql(/* GraphQL */ `
     query CurrentUser {
