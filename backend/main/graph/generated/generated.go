@@ -69,10 +69,10 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateKnowledge func(childComplexity int, input *model.NewKnowledge) int
+		CreateKnowledge func(childComplexity int, input *model.NewKnowledgeInput) int
 		CreateUser      func(childComplexity int, input model.NewUser) int
 		DeleteKnowledge func(childComplexity int, id string) int
-		UpdateKnowledge func(childComplexity int, id string, input *model.UpdateKnowledge) int
+		UpdateKnowledge func(childComplexity int, id string, input *model.UpdateKnowledgeInput) int
 	}
 
 	Query struct {
@@ -93,8 +93,8 @@ type CurrentUserResolver interface {
 }
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input model.NewUser) (*model.User, error)
-	CreateKnowledge(ctx context.Context, input *model.NewKnowledge) (*model.Knowledge, error)
-	UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledge) (*model.Knowledge, error)
+	CreateKnowledge(ctx context.Context, input *model.NewKnowledgeInput) (*model.Knowledge, error)
+	UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledgeInput) (*model.Knowledge, error)
 	DeleteKnowledge(ctx context.Context, id string) (*model.DeleteKnowledgeResult, error)
 }
 type QueryResolver interface {
@@ -229,7 +229,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateKnowledge(childComplexity, args["input"].(*model.NewKnowledge)), true
+		return e.complexity.Mutation.CreateKnowledge(childComplexity, args["input"].(*model.NewKnowledgeInput)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -265,7 +265,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateKnowledge(childComplexity, args["id"].(string), args["input"].(*model.UpdateKnowledge)), true
+		return e.complexity.Mutation.UpdateKnowledge(childComplexity, args["id"].(string), args["input"].(*model.UpdateKnowledgeInput)), true
 
 	case "Query.currentUser":
 		if e.complexity.Query.CurrentUser == nil {
@@ -327,9 +327,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputNewKnowledge,
+		ec.unmarshalInputNewKnowledgeInput,
 		ec.unmarshalInputNewUser,
-		ec.unmarshalInputUpdateKnowledge,
+		ec.unmarshalInputUpdateKnowledgeInput,
 	)
 	first := true
 
@@ -470,13 +470,13 @@ input NewUser {
   name: String!
 }
 
-input NewKnowledge {
+input NewKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
 }
 
-input UpdateKnowledge {
+input UpdateKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
@@ -485,8 +485,8 @@ input UpdateKnowledge {
 ### Mutations ###
 type Mutation {
     createUser(input: NewUser!): User!
-    createKnowledge(input: NewKnowledge): Knowledge!
-    updateKnowledge(id: ID!, input: UpdateKnowledge): Knowledge!
+    createKnowledge(input: NewKnowledgeInput): Knowledge!
+    updateKnowledge(id: ID!, input: UpdateKnowledgeInput): Knowledge!
     deleteKnowledge(id: ID!): DeleteKnowledgeResult!
 }
 `, BuiltIn: false},
@@ -530,10 +530,10 @@ func (ec *executionContext) field_CurrentUser_knowledge_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createKnowledge_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.NewKnowledge
+	var arg0 *model.NewKnowledgeInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalONewKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐNewKnowledge(ctx, tmp)
+		arg0, err = ec.unmarshalONewKnowledgeInput2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐNewKnowledgeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -584,10 +584,10 @@ func (ec *executionContext) field_Mutation_updateKnowledge_args(ctx context.Cont
 		}
 	}
 	args["id"] = arg0
-	var arg1 *model.UpdateKnowledge
+	var arg1 *model.UpdateKnowledgeInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg1, err = ec.unmarshalOUpdateKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledge(ctx, tmp)
+		arg1, err = ec.unmarshalOUpdateKnowledgeInput2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledgeInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1375,7 +1375,7 @@ func (ec *executionContext) _Mutation_createKnowledge(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateKnowledge(rctx, fc.Args["input"].(*model.NewKnowledge))
+		return ec.resolvers.Mutation().CreateKnowledge(rctx, fc.Args["input"].(*model.NewKnowledgeInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1444,7 +1444,7 @@ func (ec *executionContext) _Mutation_updateKnowledge(ctx context.Context, field
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateKnowledge(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.UpdateKnowledge))
+		return ec.resolvers.Mutation().UpdateKnowledge(rctx, fc.Args["id"].(string), fc.Args["input"].(*model.UpdateKnowledgeInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3799,8 +3799,8 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputNewKnowledge(ctx context.Context, obj interface{}) (model.NewKnowledge, error) {
-	var it model.NewKnowledge
+func (ec *executionContext) unmarshalInputNewKnowledgeInput(ctx context.Context, obj interface{}) (model.NewKnowledgeInput, error) {
+	var it model.NewKnowledgeInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -3875,8 +3875,8 @@ func (ec *executionContext) unmarshalInputNewUser(ctx context.Context, obj inter
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUpdateKnowledge(ctx context.Context, obj interface{}) (model.UpdateKnowledge, error) {
-	var it model.UpdateKnowledge
+func (ec *executionContext) unmarshalInputUpdateKnowledgeInput(ctx context.Context, obj interface{}) (model.UpdateKnowledgeInput, error) {
+	var it model.UpdateKnowledgeInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -5127,11 +5127,11 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalONewKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐNewKnowledge(ctx context.Context, v interface{}) (*model.NewKnowledge, error) {
+func (ec *executionContext) unmarshalONewKnowledgeInput2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐNewKnowledgeInput(ctx context.Context, v interface{}) (*model.NewKnowledgeInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalInputNewKnowledge(ctx, v)
+	res, err := ec.unmarshalInputNewKnowledgeInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -5151,11 +5151,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalOUpdateKnowledge2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledge(ctx context.Context, v interface{}) (*model.UpdateKnowledge, error) {
+func (ec *executionContext) unmarshalOUpdateKnowledgeInput2ᚖgithubᚗcomᚋshshimamoᚋknowledgeᚑmainᚋgraphᚋmodelᚐUpdateKnowledgeInput(ctx context.Context, v interface{}) (*model.UpdateKnowledgeInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalInputUpdateKnowledge(ctx, v)
+	res, err := ec.unmarshalInputUpdateKnowledgeInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

@@ -11,11 +11,11 @@ import (
 )
 
 type KnowledgeService interface {
-	CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledge) (*gql.Knowledge, error)
+	CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledgeInput) (*gql.Knowledge, error)
 	GetKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
 	GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error)
 	GetMyKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
-	UpdateKnowledge(ctx context.Context, id int, gqlupdate *gql.UpdateKnowledge) (*gql.Knowledge, error)
+	UpdateKnowledge(ctx context.Context, id int, gqlupdate *gql.UpdateKnowledgeInput) (*gql.Knowledge, error)
 	DeleteKnowledge(ctx context.Context, id int) (*gql.DeleteKnowledgeResult, error)
 }
 
@@ -75,7 +75,7 @@ func (s *knowledgeService) GetMyKnowledge(ctx context.Context, id int) (*gql.Kno
 	return gqlk, nil
 }
 
-func (s *knowledgeService) CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledge) (*gql.Knowledge, error) {
+func (s *knowledgeService) CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledgeInput) (*gql.Knowledge, error) {
 	_, err := util.CheckAuth(ctx)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (s *knowledgeService) CreateKnowledge(ctx context.Context, gqlnew *gql.NewK
 	return gqlk, nil
 }
 
-func (s *knowledgeService) UpdateKnowledge(ctx context.Context, id int, gqlupdate *gql.UpdateKnowledge) (*gql.Knowledge, error) {
+func (s *knowledgeService) UpdateKnowledge(ctx context.Context, id int, gqlupdate *gql.UpdateKnowledgeInput) (*gql.Knowledge, error) {
 	my, err := util.CheckAuth(ctx)
 	if err != nil {
 		return nil, err

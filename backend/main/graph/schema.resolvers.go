@@ -22,12 +22,12 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) 
 }
 
 // CreateKnowledge is the resolver for the createKnowledge field.
-func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.NewKnowledge) (*model.Knowledge, error) {
+func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.NewKnowledgeInput) (*model.Knowledge, error) {
 	return r.AllService.CreateKnowledge(ctx, input)
 }
 
 // UpdateKnowledge is the resolver for the updateKnowledge field.
-func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledge) (*model.Knowledge, error) {
+func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledgeInput) (*model.Knowledge, error) {
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, err

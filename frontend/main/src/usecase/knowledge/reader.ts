@@ -26,3 +26,15 @@ const knowledgeDetail = graphql(/* GraphQL */ `
 export const useKnowledgeDetail = ({ id }: { id: string }) => {
     return useGraphQL(knowledgeDetail, { id })
 }
+
+const getKnowledgeForEdit = graphql(/* GraphQL */ `
+    query GetKnowledgeForEdit($id: ID!) {
+        knowledge(id: $id) {
+            ...KnowledgeEdit
+        }
+    }
+`)
+
+export const useGetKnowledgeForEdit = ({ id }: { id: string }) => {
+    return useGraphQL(getKnowledgeForEdit, { id })
+}

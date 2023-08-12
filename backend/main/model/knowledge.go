@@ -33,7 +33,7 @@ func MapKnowledgeListDBToModel(dblist []*db.Knowledge) []*Knowledge {
 	return klist
 }
 
-func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledge) *Knowledge {
+func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledgeInput) *Knowledge {
 	k := &Knowledge{}
 	k.Title = gqlnew.Title
 	k.Text = gqlnew.Text
@@ -43,6 +43,7 @@ func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledge) *Knowledge {
 
 func MapKnowledgeModelToDB(k *Knowledge) *db.Knowledge {
 	db := &db.Knowledge{
+		ID:       int64(k.ID),
 		UserID:   int64(k.UserID),
 		Title:    k.Title,
 		Text:     k.Text,

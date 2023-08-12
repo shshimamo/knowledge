@@ -1,0 +1,34 @@
+.customContainer {
+    @apply container mx-auto px-4
+}
+
+.form {
+    @apply bg-white p-6 shadow-md rounded mt-4
+}
+
+.customText {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none;
+}
+
+.customTextarea {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none;
+    min-height: 150px;
+}
+
+.customTextarea:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.customLabel {
+    @apply block text-gray-700 text-sm font-bold mb-2;
+    color: #333;
+    font-weight: bold;
+}
+
+.button {
+    @apply py-2 px-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-600
+}
+
+.link {
+    @apply py-2 px-4 bg-gray-300 text-black font-bold rounded hover:bg-gray-600
+}

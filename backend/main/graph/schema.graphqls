@@ -18,13 +18,13 @@ input NewUser {
   name: String!
 }
 
-input NewKnowledge {
+input NewKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
 }
 
-input UpdateKnowledge {
+input UpdateKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
@@ -33,7 +33,7 @@ input UpdateKnowledge {
 ### Mutations ###
 type Mutation {
     createUser(input: NewUser!): User!
-    createKnowledge(input: NewKnowledge): Knowledge!
-    updateKnowledge(id: ID!, input: UpdateKnowledge): Knowledge!
+    createKnowledge(input: NewKnowledgeInput): Knowledge!
+    updateKnowledge(id: ID!, input: UpdateKnowledgeInput): Knowledge!
     deleteKnowledge(id: ID!): DeleteKnowledgeResult!
 }

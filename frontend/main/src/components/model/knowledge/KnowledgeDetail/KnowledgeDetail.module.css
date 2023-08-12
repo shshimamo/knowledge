@@ -1,6 +1,10 @@
 /* KnowledgeDetail.module.css */
-.knowledge-detail {
-    @apply p-4;
+.container {
+    @apply mx-auto px-4;
+}
+
+.flame {
+    @apply bg-white p-6 shadow-md rounded text-gray-800 mt-4
 }
 
 .title {
@@ -8,9 +12,13 @@
 }
 
 .text {
-    @apply text-base;
+    @apply text-gray-700 leading-tight;
 }
 
 .info {
     @apply text-sm text-gray-500;
+}
+
+.button {
+    @apply py-2 px-4 bg-blue-500 text-white font-bold rounded hover:bg-blue-600
 }

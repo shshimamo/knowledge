@@ -7,7 +7,7 @@ type DeleteKnowledgeResult struct {
 	Success bool   `json:"success"`
 }
 
-type NewKnowledge struct {
+type NewKnowledgeInput struct {
 	Title    string `json:"title"`
 	Text     string `json:"text"`
 	IsPublic bool   `json:"isPublic"`
@@ -17,7 +17,7 @@ type NewUser struct {
 	Name string `json:"name"`
 }
 
-type UpdateKnowledge struct {
+type UpdateKnowledgeInput struct {
 	Title    string `json:"title"`
 	Text     string `json:"text"`
 	IsPublic bool   `json:"isPublic"`

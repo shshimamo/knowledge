@@ -58,7 +58,7 @@ export type Mutation = {
 
 
 export type MutationCreateKnowledgeArgs = {
-  input: InputMaybe<NewKnowledge>;
+  input: InputMaybe<NewKnowledgeInput>;
 };
 
 
@@ -74,10 +74,10 @@ export type MutationDeleteKnowledgeArgs = {
 
 export type MutationUpdateKnowledgeArgs = {
   id: Scalars['ID']['input'];
-  input: InputMaybe<UpdateKnowledge>;
+  input: InputMaybe<UpdateKnowledgeInput>;
 };
 
-export type NewKnowledge = {
+export type NewKnowledgeInput = {
   isPublic: Scalars['Boolean']['input'];
   text: Scalars['String']['input'];
   title: Scalars['String']['input'];
@@ -103,7 +103,7 @@ export type QueryUserArgs = {
   id: Scalars['ID']['input'];
 };
 
-export type UpdateKnowledge = {
+export type UpdateKnowledgeInput = {
   isPublic: Scalars['Boolean']['input'];
   text: Scalars['String']['input'];
   title: Scalars['String']['input'];
@@ -116,6 +116,8 @@ export type User = {
 };
 
 export type KnowledgeDetailFragment = { id: string, userId: string, title: string, text: string, isPublic: boolean, publishedAt: string } & { ' $fragmentName'?: 'KnowledgeDetailFragment' };
+
+export type KnowledgeEditFragment = { id: string, userId: string, title: string, text: string, isPublic: boolean, publishedAt: string } & { ' $fragmentName'?: 'KnowledgeEditFragment' };
 
 export type KnowledgeItemFragment = { title: string, text: string } & { ' $fragmentName'?: 'KnowledgeItemFragment' };
 
@@ -132,6 +134,21 @@ export type KnowledgeDetailQueryVariables = Exact<{
 
 
 export type KnowledgeDetailQuery = { knowledge: { ' $fragmentRefs'?: { 'KnowledgeDetailFragment': KnowledgeDetailFragment } } };
+
+export type GetKnowledgeForEditQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetKnowledgeForEditQuery = { knowledge: { ' $fragmentRefs'?: { 'KnowledgeEditFragment': KnowledgeEditFragment } } };
+
+export type UpdateKnowledgeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateKnowledgeInput;
+}>;
+
+
+export type UpdateKnowledgeMutation = { updateKnowledge: { id: string, userId: string, title: string, text: string, isPublic: boolean, publishedAt: string } };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -151,9 +168,12 @@ export type CurrentUserToSignInQueryVariables = Exact<{ [key: string]: never; }>
 export type CurrentUserToSignInQuery = { currentUser: { id: string, name: string | null } };
 
 export const KnowledgeDetailFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeDetail"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}}]}}]} as unknown as DocumentNode<KnowledgeDetailFragment, unknown>;
+export const KnowledgeEditFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeEdit"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}}]}}]} as unknown as DocumentNode<KnowledgeEditFragment, unknown>;
 export const KnowledgeItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]} as unknown as DocumentNode<KnowledgeItemFragment, unknown>;
 export const MyKnowledgeListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyKnowledgeList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"knowledgeList"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"KnowledgeItem"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]} as unknown as DocumentNode<MyKnowledgeListQuery, MyKnowledgeListQueryVariables>;
 export const KnowledgeDetailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"KnowledgeDetail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"knowledge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"KnowledgeDetail"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeDetail"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}}]}}]} as unknown as DocumentNode<KnowledgeDetailQuery, KnowledgeDetailQueryVariables>;
+export const GetKnowledgeForEditDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetKnowledgeForEdit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"knowledge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"KnowledgeEdit"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KnowledgeEdit"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Knowledge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}}]}}]} as unknown as DocumentNode<GetKnowledgeForEditQuery, GetKnowledgeForEditQueryVariables>;
+export const UpdateKnowledgeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateKnowledge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateKnowledgeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateKnowledge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"publishedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateKnowledgeMutation, UpdateKnowledgeMutationVariables>;
 export const CurrentUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
 export const CurrentUserToSignInDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CurrentUserToSignIn"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CurrentUserToSignInQuery, CurrentUserToSignInQueryVariables>;

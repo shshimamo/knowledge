@@ -1,5 +1,6 @@
 /* KnowledgeDetail Model */
 import React from 'react'
+import Link from 'next/link';
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 import styles from './KnowledgeDetail.module.css';
 
@@ -22,12 +23,17 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
   const knowledge = useFragment(knowledgeDetailFragment, props.knowledge)
 
   return (
-    <div>
-      <h2 className={styles.title}>{knowledge.title}</h2>
-      <p className={styles.text}>{knowledge.text}</p>
-      <div className={styles.info}>
-        <p>Public: {knowledge.isPublic ? 'Yes' : 'No'}</p>
-        <p>Published At: {knowledge.publishedAt}</p>
+    <div className={styles.container}>
+      <div className={styles.flame}>
+        <h2 className={styles.title}>{knowledge.title}</h2>
+        <p className={styles.text}>{knowledge.text}</p>
+        <br />
+        <div className={styles.info}>
+          <p>Public: {knowledge.isPublic ? 'Yes' : 'No'}</p>
+          <p>Published At: {knowledge.publishedAt}</p>
+        </div>
+        <br />
+        <Link href={`/knowledge/${knowledge.id}/edit`} className={styles.button}>Edit</Link>
       </div>
     </div>
   )
