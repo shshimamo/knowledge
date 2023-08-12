@@ -1,0 +1,16 @@
+/* KnowledgeDetail.module.css */
+.knowledge-detail {
+    @apply p-4;
+}
+
+.title {
+    @apply text-2xl font-semibold mb-2;
+}
+
+.text {
+    @apply text-base;
+}
+
+.info {
+    @apply text-sm text-gray-500;
+}

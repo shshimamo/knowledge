@@ -62,7 +62,11 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 
 // Knowledge is the resolver for the knowledge field.
 func (r *queryResolver) Knowledge(ctx context.Context, id string) (*model.Knowledge, error) {
-	panic(fmt.Errorf("not implemented: Knowledge - knowledge"))
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	return r.AllService.GetKnowledge(ctx, i)
 }
 
 // Mutation returns generated.MutationResolver implementation.

@@ -13,8 +13,10 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n    fragment KnowledgeDetail on Knowledge {\n        id\n        userId\n        title\n        text\n        isPublic\n        publishedAt\n    }\n": types.KnowledgeDetailFragmentDoc,
     "\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n": types.KnowledgeItemFragmentDoc,
     "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n": types.MyKnowledgeListDocument,
+    "\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n": types.KnowledgeDetailDocument,
     "\n    query CurrentUser {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserDocument,
     "\n    mutation createUser($name: String!) {\n        createUser(input: { name: $name }) {\n            id\n            authUserId\n            name\n        }\n    }\n": types.CreateUserDocument,
     "\n    query CurrentUserToSignIn {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserToSignInDocument,
@@ -37,11 +39,19 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n    fragment KnowledgeDetail on Knowledge {\n        id\n        userId\n        title\n        text\n        isPublic\n        publishedAt\n    }\n"): (typeof documents)["\n    fragment KnowledgeDetail on Knowledge {\n        id\n        userId\n        title\n        text\n        isPublic\n        publishedAt\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n"): (typeof documents)["\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"): (typeof documents)["\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"): (typeof documents)["\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

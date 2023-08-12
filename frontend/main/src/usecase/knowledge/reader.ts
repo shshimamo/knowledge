@@ -14,3 +14,15 @@ const myKnowledgeList = graphql(/* GraphQL */ `
 export const useMyKnowledgeList = ({ first }: { first: number }) => {
     return useGraphQL(myKnowledgeList, { first })
 }
+
+const knowledgeDetail = graphql(/* GraphQL */ `
+    query KnowledgeDetail($id: ID!) {
+        knowledge(id: $id) {
+            ...KnowledgeDetail
+        }
+    }
+`)
+
+export const useKnowledgeDetail = ({ id }: { id: string }) => {
+    return useGraphQL(knowledgeDetail, { id })
+}

@@ -29,14 +29,21 @@ func newKnowledgeService(db *sql.DB) *knowledgeService {
 
 func (s *knowledgeService) GetKnowledge(ctx context.Context, id int) (*gql.Knowledge, error) {
 	repo := repository.NewKnowledgeRepository(s.db)
-	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, IsPublic: true})
+	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id})
 	if err != nil {
 		return nil, err
 	}
 
-	gqlk := model.MapKnowledgeModelToGql(k)
+	if k.IsPublic {
+		return model.MapKnowledgeModelToGql(k), nil
+	}
 
-	return gqlk, nil
+	my, _ := util.CheckAuth(ctx)
+	if my == nil || k.UserID != my.ID {
+		return nil, util.ErrForbidden
+	}
+
+	return model.MapKnowledgeModelToGql(k), nil
 }
 
 func (s *knowledgeService) GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error) {
