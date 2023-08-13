@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import styles from './KnowledgeListItem.module.css';
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
-import { useKnowledgeCacheMutator } from '@/usecase/knowledge/cache'
 
 export const knowledgeListItemFragment = graphql(/* GraphQL */ `
     fragment KnowledgeListItem on Knowledge {
@@ -21,7 +20,6 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
   const knowledge = useFragment(knowledgeListItemFragment, props.knowledge)
   const router = useRouter();
   const { deleteKnowledge } = useKnowledgeUsecase();
-  const { mutateAllKnowledgeList, mutateAllKnowledgeItem } = useKnowledgeCacheMutator();
 
   const handleEdit = async () => {
     await router.push(`/knowledge/${knowledge.id}`);
@@ -29,8 +27,6 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
 
   const handleDelete = async () => {
     await deleteKnowledge(knowledge.id)
-    await mutateAllKnowledgeList()
-    await mutateAllKnowledgeItem({ id: knowledge.id })
   }
 
   return (
