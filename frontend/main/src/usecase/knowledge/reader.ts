@@ -1,40 +1,53 @@
 import { graphql } from '@/gql/__generated__'
 import { useGraphQL } from '@/api/main/useGraphQL'
+import { knowledgeCacheKeyGenerator } from '@/usecase/knowledge/cache'
 
-const myKnowledgeList = graphql(/* GraphQL */ `
+export const myKnowledgeList = graphql(/* GraphQL */ `
     query MyKnowledgeList($first: Int!) {
         currentUser {
             knowledgeList(first: $first) {
-                ...KnowledgeItem
+                ...KnowledgeListItem
             }
         }
     }
 `)
 
 export const useMyKnowledgeList = ({ first }: { first: number }) => {
-    return useGraphQL(myKnowledgeList, { first })
+    return useGraphQL(
+      knowledgeCacheKeyGenerator.myKnowledgeListKey({ variables: { first } }),
+      myKnowledgeList,
+      { first }
+    )
 }
 
-const knowledgeDetail = graphql(/* GraphQL */ `
-    query KnowledgeDetail($id: ID!) {
+const knowledgeItemForDetail = graphql(/* GraphQL */ `
+    query KnowledgeItemForDetail($id: ID!) {
         knowledge(id: $id) {
             ...KnowledgeDetail
         }
     }
 `)
 
-export const useKnowledgeDetail = ({ id }: { id: string }) => {
-    return useGraphQL(knowledgeDetail, { id })
+export const useKnowledgeItemForDetail = ({ id }: { id: string }) => {
+    return useGraphQL(
+      knowledgeCacheKeyGenerator.knowledgeItemForDetailKey({ id }),
+      knowledgeItemForDetail,
+      { id }
+    )
 }
 
-const getKnowledgeForEdit = graphql(/* GraphQL */ `
-    query GetKnowledgeForEdit($id: ID!) {
+const knowledgeItemForEdit = graphql(/* GraphQL */ `
+    query KnowledgeItemForEdit($id: ID!) {
         knowledge(id: $id) {
             ...KnowledgeEdit
         }
     }
 `)
 
-export const useGetKnowledgeForEdit = ({ id }: { id: string }) => {
-    return useGraphQL(getKnowledgeForEdit, { id })
+export const useKnowledgeItemForEdit = ({ id }: { id: string }) => {
+    return useGraphQL(
+      knowledgeCacheKeyGenerator.knowledgeItemForEditKey({ id }),
+      knowledgeItemForEdit,
+      { id }
+    )
 }

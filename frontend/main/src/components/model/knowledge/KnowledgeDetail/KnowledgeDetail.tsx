@@ -24,6 +24,10 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
 
   return (
     <div className={styles.container}>
+      <Link href="/knowledge_list" className={styles.backButton}>
+        &larr; Back to List
+      </Link>
+
       <div className={styles.flame}>
         <h2 className={styles.title}>{knowledge.title}</h2>
         <p className={styles.text}>{knowledge.text}</p>

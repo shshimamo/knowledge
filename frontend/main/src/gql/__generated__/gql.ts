@@ -15,11 +15,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
 const documents = {
     "\n    fragment KnowledgeDetail on Knowledge {\n        id\n        userId\n        title\n        text\n        isPublic\n        publishedAt\n    }\n": types.KnowledgeDetailFragmentDoc,
     "\n    fragment KnowledgeEdit on Knowledge {\n        id\n        userId\n        title\n        text\n        isPublic\n        publishedAt\n    }\n": types.KnowledgeEditFragmentDoc,
-    "\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n": types.KnowledgeItemFragmentDoc,
-    "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n": types.MyKnowledgeListDocument,
-    "\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n": types.KnowledgeDetailDocument,
-    "\n    query GetKnowledgeForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n": types.GetKnowledgeForEditDocument,
+    "\n    fragment KnowledgeListItem on Knowledge {\n        id\n        title\n        text\n    }\n": types.KnowledgeListItemFragmentDoc,
+    "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeListItem\n            }\n        }\n    }\n": types.MyKnowledgeListDocument,
+    "\n    query KnowledgeItemForDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n": types.KnowledgeItemForDetailDocument,
+    "\n    query KnowledgeItemForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n": types.KnowledgeItemForEditDocument,
     "\n    mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {\n        updateKnowledge(id: $id, input: $input) {\n            id\n            userId\n            title\n            text\n            isPublic\n            publishedAt\n        }\n    }\n": types.UpdateKnowledgeDocument,
+    "\n  mutation DeleteKnowledge($id: ID!) {\n      deleteKnowledge(id: $id) {\n          id\n          success\n      }\n  }\n": types.DeleteKnowledgeDocument,
     "\n    query CurrentUser {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserDocument,
     "\n    mutation createUser($name: String!) {\n        createUser(input: { name: $name }) {\n            id\n            authUserId\n            name\n        }\n    }\n": types.CreateUserDocument,
     "\n    query CurrentUserToSignIn {\n        currentUser {\n            id\n            name\n        }\n    }\n": types.CurrentUserToSignInDocument,
@@ -50,23 +51,27 @@ export function graphql(source: "\n    fragment KnowledgeEdit on Knowledge {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n"): (typeof documents)["\n    fragment KnowledgeItem on Knowledge {\n        title\n        text\n    }\n"];
+export function graphql(source: "\n    fragment KnowledgeListItem on Knowledge {\n        id\n        title\n        text\n    }\n"): (typeof documents)["\n    fragment KnowledgeListItem on Knowledge {\n        id\n        title\n        text\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"): (typeof documents)["\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeItem\n            }\n        }\n    }\n"];
+export function graphql(source: "\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeListItem\n            }\n        }\n    }\n"): (typeof documents)["\n    query MyKnowledgeList($first: Int!) {\n        currentUser {\n            knowledgeList(first: $first) {\n                ...KnowledgeListItem\n            }\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"): (typeof documents)["\n    query KnowledgeDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"];
+export function graphql(source: "\n    query KnowledgeItemForDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"): (typeof documents)["\n    query KnowledgeItemForDetail($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeDetail\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    query GetKnowledgeForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n"): (typeof documents)["\n    query GetKnowledgeForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n"];
+export function graphql(source: "\n    query KnowledgeItemForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n"): (typeof documents)["\n    query KnowledgeItemForEdit($id: ID!) {\n        knowledge(id: $id) {\n            ...KnowledgeEdit\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {\n        updateKnowledge(id: $id, input: $input) {\n            id\n            userId\n            title\n            text\n            isPublic\n            publishedAt\n        }\n    }\n"): (typeof documents)["\n    mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {\n        updateKnowledge(id: $id, input: $input) {\n            id\n            userId\n            title\n            text\n            isPublic\n            publishedAt\n        }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteKnowledge($id: ID!) {\n      deleteKnowledge(id: $id) {\n          id\n          success\n      }\n  }\n"): (typeof documents)["\n  mutation DeleteKnowledge($id: ID!) {\n      deleteKnowledge(id: $id) {\n          id\n          success\n      }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -16,6 +16,15 @@ const updateKnowledge = graphql(/* GraphQL */ `
     }
 `);
 
+const deleteKnowledge = graphql(/* GraphQL */ `
+  mutation DeleteKnowledge($id: ID!) {
+      deleteKnowledge(id: $id) {
+          id
+          success
+      }
+  }
+`);
+
 export const useKnowledgeUsecase = () => {
   return React.useMemo(
     () => createKnowledgeUsecase(),
@@ -32,5 +41,15 @@ const createKnowledgeUsecase = () => ({
       const errorMessage = 'unexpected error'
       throw new Error(errorMessage)
     }
-  }
+  },
+
+  async deleteKnowledge(id: string) {
+    try {
+      const data = await gqlClient.request(deleteKnowledge, { id })
+      // TODO: mutate SWR
+    } catch (error) {
+      const errorMessage = 'unexpected error'
+      throw new Error(errorMessage)
+    }
+  },
 })

@@ -1,10 +1,11 @@
 /* KnowledgeEdit Model */
 import React, { useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import styles from './KnowledgeEdit.module.css';
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
-import styles from './KnowledgeEdit.module.css';
-import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { useKnowledgeCacheMutator } from '@/usecase/knowledge/cache'
 
 export const knowledgeEditFragment = graphql(/* GraphQL */ `
     fragment KnowledgeEdit on Knowledge {
@@ -28,6 +29,7 @@ export const KnowledgeEdit: React.FC<KnowledgeEditProps> = (props) => {
   const [text, setText] = useState(knowledge.text);
   const [isPublic, setIsPublic] = useState(knowledge.isPublic);
   const { updateKnowledge } = useKnowledgeUsecase();
+  const { mutateAllKnowledgeList, mutateAllKnowledgeItem } = useKnowledgeCacheMutator();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,6 +39,8 @@ export const KnowledgeEdit: React.FC<KnowledgeEditProps> = (props) => {
         id: knowledge.id,
         input: { title, text, isPublic }
       });
+      await mutateAllKnowledgeList()
+      await mutateAllKnowledgeItem({ id: knowledge.id })
       await router.push(`/knowledge/${knowledge.id}`);
     } catch (error) {
       console.error(error);

@@ -1,5 +1,6 @@
 import { graphql } from '@/gql/__generated__'
 import { useGraphQL } from '@/api/main/useGraphQL'
+import { userCacheKeyGenerator } from '@/usecase/user/cache'
 
 const currentUser = graphql(/* GraphQL */ `
     query CurrentUser {
@@ -11,5 +12,5 @@ const currentUser = graphql(/* GraphQL */ `
 `);
 
 export const useCurrentUser = () => {
-  return useGraphQL(currentUser)
+  return useGraphQL(userCacheKeyGenerator.currentUserKey(), currentUser)
 }

@@ -1,4 +1,4 @@
-import { useGetKnowledgeForEdit, useKnowledgeDetail } from '@/usecase/knowledge/reader'
+import { useKnowledgeItemForEdit, useKnowledgeItemForDetail } from '@/usecase/knowledge/reader'
 import { Loading } from '@/components/page/global/Loading'
 import { KnowledgeEdit } from '@/components/model/knowledge/KnowledgeEdit/KnowledgeEdit'
 
@@ -7,7 +7,7 @@ type KnowledgeEditRootProps = {
 }
 
 export const KnowledgeEditRoot: React.FC<KnowledgeEditRootProps> = (props) => {
-  const { data, error, isLoading } = useGetKnowledgeForEdit({ id: props.id })
+  const { data, error, isLoading } = useKnowledgeItemForEdit({ id: props.id })
 
   if (error) return <div>failed to load</div>
   if (isLoading) return <Loading />
