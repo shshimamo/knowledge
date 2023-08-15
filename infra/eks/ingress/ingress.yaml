@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: aws
+spec:
+  controller: ingress.k8s.aws/alb
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: knowledge-ingress
+  namespace: app-ns
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  ingressClassName: aws
+  rules:
+    - host: backend.main.shshimamo.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: backend-main-service
+                port:
+                  number: 80
+    - host: frontend.main.shshimamo.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: frontend-main-service
+                port:
+                  number: 80
