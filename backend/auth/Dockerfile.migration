@@ -1,0 +1,14 @@
+# Use an official Go runtime as a parent image
+FROM golang:1.20
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Install goose
+RUN go install github.com/pressly/goose/v3/cmd/goose@v3.11.2
+
+# Copy the Makefile
+COPY . .
+
+# Run the migration
+CMD ["make", "migration"]
