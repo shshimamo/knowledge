@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-main
+  namespace: app-ns
+spec:
+  selector:
+    matchLabels:
+      app: frontend-main
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: __REGISTRY__/knowledge-frontend-main:__IMAGE_TAG__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000

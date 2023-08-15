@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migration-backend-main
+  namespace: app-ns
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+        - name: migration-backend-main
+          image: __REGISTRY__/knowledge-backend-main-migration:__IMAGE_TAG__
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_HOST
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_PASSWORD
+      restartPolicy: OnFailure
