@@ -67,6 +67,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
         run: |
-          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./front/k8s/frontend-deployment.yaml > /tmp/frontend-deployment.yaml
+          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./front/main/k8s/frontend-deployment.yaml > /tmp/frontend-deployment.yaml
           sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/frontend-deployment.yaml
           kubectl apply -f /tmp/frontend-deployment.yaml -n app-ns
