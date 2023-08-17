@@ -10,7 +10,7 @@ $ make create-cluster
 ```sh
 # eksctl で作成した VPC など利用
 $ cd infra/rds
-$ make rds-cdk-deploy
+$ DB_PASSWORD=xxx make rds-cdk-deploy
 ```
 
 ## Namespace, ConfigMap, Secret 作成

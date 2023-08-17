@@ -29,7 +29,7 @@ create-db-secret:
 
 .PHONY: create-db-configmap
 create-db-configmap:
-	kubectl create configmap db-config --from-literal=DB_HOST=${DB_HOST} --from-literal=DB_PORT=5432 --from-literal=DB_NAME=todo-app-next-go --from-literal=DB_USER=postgres --namespace=app-ns
+	kubectl create configmap db-config --from-literal=DB_HOST=${DB_HOST} --from-literal=DB_PORT=5432 --from-literal=DB_USER=postgres --namespace=app-ns
 
 #
 # kubeconfig
