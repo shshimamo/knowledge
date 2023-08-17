@@ -1,4 +1,4 @@
-name: Apply Backend Deployment
+name: Apply Backend Deployment (Main)
 
 on:
   workflow_dispatch:

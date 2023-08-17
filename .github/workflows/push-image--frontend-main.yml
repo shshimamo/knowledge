@@ -1,4 +1,4 @@
-name: Push Image Frontend
+name: Push Image Frontend (Main)
 
 on:
   workflow_dispatch:

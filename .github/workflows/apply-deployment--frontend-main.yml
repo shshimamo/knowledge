@@ -1,4 +1,4 @@
-name: Apply Frontend Deployment
+name: Apply Frontend Deployment (Main)
 
 on:
   workflow_dispatch:

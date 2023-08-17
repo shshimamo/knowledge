@@ -1,4 +1,4 @@
-name: Push Image Backend
+name: Push Image Backend (Main)
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: Push Image Migration
+name: Push Image Migration (Main)
 
 on:
   workflow_dispatch:
@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./backend
-          file: ./backend/Dockerfile.migration
+          file: ./backend/main/Dockerfile.migration
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           provenance: false
