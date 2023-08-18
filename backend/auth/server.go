@@ -33,8 +33,9 @@ func main() {
 	}
 	defer db.Close()
 
+	port := getPort()
 	h := setupHandler(db, appEnv)
-	log.Fatal(http.ListenAndServe(":80", h))
+	log.Fatal(http.ListenAndServe(":"+port, h))
 }
 
 func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
@@ -91,4 +92,13 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	h := c.Handler(mux)
 
 	return h
+}
+
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		return "8081"
+	} else {
+		return port
+	}
 }

@@ -44,3 +44,5 @@ spec:
                   key: DB_PASSWORD
             - name: DB_NAME
               value: 'knowledge-auth'
+            - name: PORT
+              value: '8080'
