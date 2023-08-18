@@ -43,7 +43,4 @@ spec:
                   name: db-credentials
                   key: DB_PASSWORD
             - name: DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: DB_NAME
+              value: 'knowledge-main'

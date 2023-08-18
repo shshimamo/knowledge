@@ -27,9 +27,14 @@ $ make create-db-secret
 $ make create-db-configmap
 ```
 
+## Service 作成
+```sh
+$ make apply-backend-service
+```
+
 ## Ingress 作成
 ```sh
-$ cd infra/ingress
+$ cd infra/eks/ingress
 
 # OIDC Provider 作成
 $ make create-oidc-provider
@@ -46,6 +51,19 @@ $ make install-ingress-controller
 # Ingress 作成
 $ make apply-ingress
 ```
+
+## Role と IAM プリンシパル
+```sh
+$ cd infra/eks/role
+# ClusterRole, RoleBinding 作成
+$ make apply-role
+# IAM プリンシパル 作成
+$ make create-iamidentitymapping
+```
+
+## マイグレーション
+* GHA の Push Image Migration を実行
+* GHA の Exec Migration Job を実行
 
 # デプロイ
 
