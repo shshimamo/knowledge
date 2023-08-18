@@ -1,4 +1,4 @@
-name: Exec Migration Job (Main)
+name: Migrate Backend Main
 
 on:
   workflow_dispatch:
