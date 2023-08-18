@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-auth
+  namespace: app-ns
+spec:
+  selector:
+    matchLabels:
+      app: backend-auth
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: backend-auth
+    spec:
+      containers:
+        - name: backend-auth
+          image: __REGISTRY__/knowledge-backend-auth:__IMAGE_TAG__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_ENV
+              value: production
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              value: 'knowledge-auth'

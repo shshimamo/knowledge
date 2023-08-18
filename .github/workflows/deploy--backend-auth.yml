@@ -1,0 +1,72 @@
+name: Deploy Backend Auth
+
+on:
+  workflow_dispatch:
+
+env:
+  REPOSITORY_NAME: knowledge-backend-auth
+  CLUSTER_NAME: knowledge-cluster
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: 'ap-northeast-1'
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-oidc
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        with:
+          images: |
+            ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY_NAME }}
+          tags: |
+            type=sha
+
+      - name: Image Tag from meta
+        id: image-tag
+        run: |
+          tag=$(echo "${{ steps.meta.outputs.tags }}" | cut -d ":" -f 2)
+          echo "::set-output name=tag::$tag"
+
+      - name: Check if image exists
+        id: check-image
+        env:
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: |
+          EXISTS=$(aws ecr describe-images --repository-name "${{ env.REPOSITORY_NAME }}" --image-ids imageTag="${{ env.IMAGE_TAG }}" --region ap-northeast-1)
+          if [ $? == 0 ]; then
+            echo "Image found: ${{ env.IMAGE_TAG }}"
+          else
+            echo "::error::Image does not exist. Stopping workflow."
+            exit 1
+          fi
+
+      - uses: azure/setup-kubectl@v1
+
+      - name: Create kubeconfig file
+        run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
+
+      - name: Replace image tag in the Kubernetes deployment
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: |
+          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./backend/auth/k8s/deployment.yaml > /tmp/deployment.yaml
+          sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
+          kubectl apply -f /tmp/deployment.yaml -n app-ns

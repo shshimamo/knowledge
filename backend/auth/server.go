@@ -53,7 +53,7 @@ func setupDatabase(env model.AppEnv) (*sql.DB, error) {
 			port:     os.Getenv("DB_PORT"),
 			user:     os.Getenv("DB_USER"),
 			password: os.Getenv("DB_PASSWORD"),
-			dbname:   "knowledge-auth",
+			dbname:   os.Getenv("DB_NAME"),
 		}
 	} else {
 		dbCfg = databaseConfig{

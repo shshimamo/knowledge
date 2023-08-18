@@ -26,6 +26,16 @@ spec:
                 name: backend-main-service
                 port:
                   number: 80
+    - host: backend.auth.shshimamo.com
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: backend-auth-service
+                port:
+                  number: 80
     - host: frontend.main.shshimamo.com
       http:
         paths:
