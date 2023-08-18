@@ -45,7 +45,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./backend
+          context: ./backend/main
           file: ./backend/main/Dockerfile.migration
           push: true
           tags: ${{ steps.meta.outputs.tags }}
