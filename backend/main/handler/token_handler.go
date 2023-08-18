@@ -49,16 +49,17 @@ func (h *tokenHandler) SetToken(ctx context.Context, w http.ResponseWriter, r *h
 		return
 	}
 
-	secure := true
-	if h.appEnv != model.Production {
-		secure = false
-	}
+	//secure := true
+	//if h.appEnv != model.Production {
+	//	secure = false
+	//}
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    string(req.Token),
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   secure,
+		//Secure:   secure,
+		Secure: false,
 	})
 
 	w.WriteHeader(http.StatusOK)

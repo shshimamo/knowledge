@@ -110,8 +110,14 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	th := hand.NewTokenHandler(appEnv)
 	mux.HandleFunc("/set_token", withContext(th.SetToken))
 
+	var allowOrigins []string
+	if appEnv == model.Production {
+		allowOrigins = []string{"http://frontend.main.shshimamo.com"}
+	} else {
+		allowOrigins = []string{"http://localhost:3000"}
+	}
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   allowOrigins,
 		AllowCredentials: true,
 		AllowedMethods:   []string{"GET", "HEAD", "POST", "PUT", "OPTIONS"},
 		AllowedHeaders:   []string{"*"}, // Allow All HTTP Headers
