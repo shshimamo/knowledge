@@ -46,8 +46,8 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
-        context: ./front/main
-        file: ./front/main/Dockerfile
+        context: ./frontend/main
+        file: ./frontend/main/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         provenance: false
