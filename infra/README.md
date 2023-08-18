@@ -29,7 +29,10 @@ $ make create-db-configmap
 
 ## Service 作成
 ```sh
+$ cd backend/main/k8s
 $ make apply-backend-service
+$ cd frontend/main/k8s
+$ make apply-frontend-service
 ```
 
 ## Ingress 作成
@@ -68,16 +71,16 @@ $ make create-iamidentitymapping
 # デプロイ
 
 ## バックエンドデプロイ
-* GHA の Push Image Backend を実行
-* GHA の Apply Backend Deployment を実行
+* GHA の Build And Push Image Backend Main を実行
+* GHA の Deploy Backend Main を実行
 
 ## フロントエンドデプロイ
-* GHA の Push Image Frontend を実行
-* GHA の Apply Frontend Deployment を実行
+* GHA の Build And Push Image Frontend Main を実行
+* GHA の Deploy Frontend Main を実行
 
 ## マイグレーション
-* GHA の Push Image Migration を実行
-* GHA の Exec Migration Job を実行
+* GHA の Build And Push Image Backend Main Migration を実行
+* GHA の Migrate Backend Main を実行
 
 # クリーンアップ
 
