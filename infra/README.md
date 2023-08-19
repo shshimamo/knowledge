@@ -86,24 +86,24 @@ knowledge-frontend-main
 # デプロイ
 
 ## バックエンドデプロイ(Main)
-* GHA の Build And Push Image Backend Main を実行
-* GHA の Deploy Backend Main を実行
+* GHA の Build Push | Backend Main を実行
+* GHA の Deploy | Backend Main を実行
 
 ## バックエンドデプロイ(Auth)
-* GHA の Build And Push Image Backend Auth を実行
-* GHA の Deploy Backend Auth を実行
+* GHA の Build Push | Backend Auth を実行
+* GHA の Deploy | Backend Auth を実行
 
 ## フロントエンドデプロイ
-* GHA の Build And Push Image Frontend Main を実行
-* GHA の Deploy Frontend Main を実行
+* GHA の Build Push | Frontend Main を実行
+* GHA の Deploy | Frontend Main を実行
 
 ## マイグレーション(Main)
-* GHA の Build And Push Image Backend Main Migration を実行
-* GHA の Migrate Backend Main を実行
+* GHA の Build Push | Backend Main Migration を実行
+* GHA の Migrate | Backend Main を実行
 
 ## マイグレーション(Auth)
-* GHA の Build And Push Image Backend Auth Migration を実行
-* GHA の Migrate Backend Auth を実行
+* GHA の Build Push | Backend Auth Migration を実行
+* GHA の Migrate | Backend Auth を実行
 
 # クリーンアップ
 
