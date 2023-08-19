@@ -30,13 +30,13 @@ $ make create-db-configmap
 ## EKS: Service 作成
 ```sh
 $ cd backend/main/k8s
-$ make apply-backend-service
+$ make apply-service
 
 $ cd backend/auth/k8s
 $ make apply-service
 
 $ cd frontend/main/k8s
-$ make apply-frontend-service
+$ make apply-service
 ```
 
 ## EKS: Ingress 作成
