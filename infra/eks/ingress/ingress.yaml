@@ -35,7 +35,7 @@ spec:
               service:
                 name: backend-auth-service
                 port:
-                  number: 8081
+                  number: 80
     - host: frontend.main.shshimamo.com
       http:
         paths:
