@@ -1,4 +1,4 @@
-name: Deploy Backend Main
+name: Deploy | Backend Main
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: Deploy Backend Auth
+name: Deploy | Backend Auth
 
 on:
   workflow_dispatch:

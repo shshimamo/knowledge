@@ -1,4 +1,4 @@
-name: Migrate Backend Main
+name: Migrate | Backend Main
 
 on:
   workflow_dispatch:

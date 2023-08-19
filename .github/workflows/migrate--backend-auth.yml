@@ -1,4 +1,4 @@
-name: Migrate Backend Auth
+name: Migrate | Backend Auth
 
 on:
   workflow_dispatch:

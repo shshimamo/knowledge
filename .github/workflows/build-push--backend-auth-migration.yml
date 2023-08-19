@@ -1,9 +1,9 @@
-name: Build And Push Image Backend Auth Migration
+name: Build Push | Backend Auth Migration
 
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [push-image-migration]
+    types: [build-and-push-image-backend-auth-migration]
 
 env:
   REPOSITORY_NAME: knowledge-backend-auth-migration

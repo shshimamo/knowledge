@@ -1,12 +1,12 @@
-name: Build And Push Image Backend Auth
+name: Build Push | Frontend Main
 
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [push-image-backend, push-image-app]
+    types: [push-image-frontend, push-image-app]
 
 env:
-  REPOSITORY_NAME: knowledge-backend-auth
+  REPOSITORY_NAME: knowledge-frontend-main
 
 jobs:
   deploy:
@@ -42,11 +42,12 @@ jobs:
         tags: |
           type=sha
 
+
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
-        context: ./backend/auth
-        file: ./backend/auth/Dockerfile
+        context: ./frontend/main
+        file: ./frontend/main/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         provenance: false

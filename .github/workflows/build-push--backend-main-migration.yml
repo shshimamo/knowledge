@@ -1,4 +1,4 @@
-name: Build And Push Image Backend Main Migration
+name: Build Push | Backend Main Migration
 
 on:
   workflow_dispatch:
