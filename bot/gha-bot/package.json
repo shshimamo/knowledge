@@ -1,0 +1,22 @@
+{
+  "name": "gha-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.5.1",
+    "esbuild": "^0.17.19",
+    "serverless-esbuild": "^1.46.0",
+    "serverless-offline": "^12.0.4",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.13.3"
+  }
+}
