@@ -13,7 +13,7 @@ $ cd infra/rds
 $ DB_PASSWORD=xxx make rds-cdk-deploy
 ```
 
-## Namespace, ConfigMap, Secret 作成
+## EKS: Namespace, ConfigMap, Secret 作成
 ```sh
 $ cd infra/eks
 $ export DB_PASSWORD=password
@@ -27,15 +27,19 @@ $ make create-db-secret
 $ make create-db-configmap
 ```
 
-## Service 作成
+## EKS: Service 作成
 ```sh
 $ cd backend/main/k8s
 $ make apply-backend-service
+
+$ cd backend/auth/k8s
+$ make apply-service
+
 $ cd frontend/main/k8s
 $ make apply-frontend-service
 ```
 
-## Ingress 作成
+## EKS: Ingress 作成
 ```sh
 $ cd infra/eks/ingress
 
@@ -55,7 +59,11 @@ $ make install-ingress-controller
 $ make apply-ingress
 ```
 
-## Role と IAM プリンシパル
+## IAM: GA用のIDプロバイダ、ロール
+
+* TODO: 自動化
+
+## EKS: Role と IAM プリンシパル
 ```sh
 $ cd infra/eks/role
 # ClusterRole, RoleBinding 作成
@@ -64,23 +72,38 @@ $ make apply-role
 $ make create-iamidentitymapping
 ```
 
-## マイグレーション
-* GHA の Push Image Migration を実行
-* GHA の Exec Migration Job を実行
+## ECR
+
+手動作成
+```
+knowledge-backend-auth
+knowledge-backend-auth-migration
+knowledge-backend-main
+knowledge-backend-main-migration
+knowledge-frontend-main
+```
 
 # デプロイ
 
-## バックエンドデプロイ
+## バックエンドデプロイ(Main)
 * GHA の Build And Push Image Backend Main を実行
 * GHA の Deploy Backend Main を実行
+
+## バックエンドデプロイ(Auth)
+* GHA の Build And Push Image Backend Auth を実行
+* GHA の Deploy Backend Auth を実行
 
 ## フロントエンドデプロイ
 * GHA の Build And Push Image Frontend Main を実行
 * GHA の Deploy Frontend Main を実行
 
-## マイグレーション
+## マイグレーション(Main)
 * GHA の Build And Push Image Backend Main Migration を実行
 * GHA の Migrate Backend Main を実行
+
+## マイグレーション(Auth)
+* GHA の Build And Push Image Backend Auth Migration を実行
+* GHA の Migrate Backend Auth を実行
 
 # クリーンアップ
 
