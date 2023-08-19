@@ -3,7 +3,7 @@ name: Build Push | Frontend Main
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [push-image-frontend, push-image-app]
+    types: [build-push-frontend-main, build-push-all]
 
 env:
   REPOSITORY_NAME: knowledge-frontend-main

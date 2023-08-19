@@ -3,7 +3,7 @@ name: Build Push | Backend Main
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [build-and-push-image-backend-main]
+    types: [build-push-backend-main, build-push-backend-main-all, build-push-all]
 
 env:
   REPOSITORY_NAME: knowledge-backend-main

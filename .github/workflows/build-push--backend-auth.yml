@@ -3,7 +3,7 @@ name: Build Push | Backend Auth
 on:
   workflow_dispatch:
   repository_dispatch:
-    types: [build-and-push-image-backend-auth, build-and-push-image-backend-auth]
+    types: [build-push-backend-auth, build-push-backend-auth-all, build-push-all]
 
 env:
   REPOSITORY_NAME: knowledge-backend-auth
