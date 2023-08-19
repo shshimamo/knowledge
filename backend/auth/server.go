@@ -79,6 +79,9 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	auth := handler.NewAuthHandler(db, appEnv)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("ok"))
+	})
 	mux.HandleFunc("/signup", withContext(auth.Signup))
 	mux.HandleFunc("/signin", withContext(auth.Signin))
 	mux.HandleFunc("/signout", withContext(auth.Signout))
