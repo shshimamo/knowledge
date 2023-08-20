@@ -35,6 +35,10 @@ func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql
 
 	user := model.MapUserGqlNewToModel(gqlnew)
 	user.AuthUserID = token.AuthUserID
+	err := user.Validate()
+	if err != nil {
+		return nil, err
+	}
 
 	repo := repository.NewUserRepository(s.db)
 	newuser, err := repo.CreateUser(ctx, user)

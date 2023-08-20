@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/shshimamo/knowledge-main/db"
 	gql "github.com/shshimamo/knowledge-main/graph/model"
+	"github.com/shshimamo/knowledge-main/model/errs"
 	"github.com/volatiletech/null/v8"
 	"strconv"
 )
@@ -11,6 +12,16 @@ type User struct {
 	ID         int
 	AuthUserID int
 	Name       string
+}
+
+func (u *User) Validate() error {
+	if u.AuthUserID == 0 {
+		return errs.NewValidationError("AuthUserID is required")
+	}
+	if u.Name == "" {
+		return errs.NewValidationError("Name is required")
+	}
+	return nil
 }
 
 func MapUserDBToModel(dbuser *db.User) *User {

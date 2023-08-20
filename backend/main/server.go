@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/shshimamo/knowledge-main/graph/loader"
 	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge-main/utils"
 	"log"
 	"net/http"
 	"os"
@@ -14,7 +14,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	_ "github.com/lib/pq"
 	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge-main/graph"
 	"github.com/shshimamo/knowledge-main/graph/generated"
@@ -24,18 +23,10 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
-type databaseConfig struct {
-	host     string
-	port     string
-	user     string
-	password string
-	dbname   string
-}
-
 func main() {
-	appEnv := model.AppEnv(os.Getenv("APP_ENV"))
+	appEnv := model.NewAppEnv()
 
-	db, err := setupDatabase(appEnv)
+	db, err := utils.SetupDatabase(appEnv)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,35 +42,6 @@ func main() {
 	port := getPort()
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, h))
-}
-
-func setupDatabase(env model.AppEnv) (*sql.DB, error) {
-	var dbCfg databaseConfig
-	if env == model.Production {
-		dbCfg = databaseConfig{
-			host:     os.Getenv("DB_HOST"),
-			port:     os.Getenv("DB_PORT"),
-			user:     os.Getenv("DB_USER"),
-			password: os.Getenv("DB_PASSWORD"),
-			dbname:   os.Getenv("DB_NAME"),
-		}
-	} else {
-		dbCfg = databaseConfig{
-			host:     "localhost",
-			port:     "5432",
-			user:     "postgres",
-			password: "password",
-			dbname:   "knowledge-main",
-		}
-	}
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbCfg.host, dbCfg.port, dbCfg.user, dbCfg.password, dbCfg.dbname)
-	db, err := sql.Open("postgres", connStr)
-
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, err
 }
 
 func getPort() string {
