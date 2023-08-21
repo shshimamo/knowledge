@@ -1,7 +1,6 @@
 package model
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -55,19 +54,5 @@ func getClaims(token *jwt.Token) (*claims, error) {
 		return claims, nil
 	} else {
 		return nil, errors.New("Invalid token")
-	}
-}
-
-type CurrentTokenKey struct{}
-
-func GetCurrentToken(ctx context.Context) (*Token, bool) {
-	switch v := ctx.Value(CurrentTokenKey{}).(type) {
-	case *Token:
-		if v == nil {
-			return nil, false
-		}
-		return v, true
-	default:
-		return nil, false
 	}
 }

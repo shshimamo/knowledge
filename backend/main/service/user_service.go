@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/shshimamo/knowledge-main/middlewares/auth"
+	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
 	"github.com/shshimamo/knowledge-main/repository"
 
@@ -24,11 +24,11 @@ func newUserService(db *sql.DB) *userService {
 }
 
 func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql.User, error) {
-	token, ok := model.GetCurrentToken(ctx)
+	token, ok := middlewares.GetCurrentToken(ctx)
 	if !ok {
 		return nil, errors.New("not authenticated")
 	}
-	_, ok = auth.GetCurrentUser(ctx)
+	_, ok = middlewares.GetCurrentUser(ctx)
 	if ok {
 		return nil, errors.New("Already registered")
 	}

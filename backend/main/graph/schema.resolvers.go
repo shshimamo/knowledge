@@ -8,11 +8,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/shshimamo/knowledge-main/middlewares"
 	"strconv"
 
 	"github.com/shshimamo/knowledge-main/graph/generated"
 	"github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/middlewares/auth"
 	m "github.com/shshimamo/knowledge-main/model"
 )
 
@@ -46,7 +46,7 @@ func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*mod
 
 // CurrentUser is the resolver for the currentUser field.
 func (r *queryResolver) CurrentUser(ctx context.Context) (*model.CurrentUser, error) {
-	user, ok := auth.GetCurrentUser(ctx)
+	user, ok := middlewares.GetCurrentUser(ctx)
 
 	if !ok {
 		return nil, errors.New("not authenticated")

@@ -1,4 +1,4 @@
-package auth
+package middlewares
 
 import (
 	"context"
@@ -9,6 +9,31 @@ import (
 )
 
 type currentUserKey struct{}
+type CurrentTokenKey struct{}
+
+func GetCurrentUser(ctx context.Context) (*model.User, bool) {
+	switch v := ctx.Value(currentUserKey{}).(type) {
+	case *model.User:
+		if v == nil {
+			return nil, false
+		}
+		return v, true
+	default:
+		return nil, false
+	}
+}
+
+func GetCurrentToken(ctx context.Context) (*model.Token, bool) {
+	switch v := ctx.Value(CurrentTokenKey{}).(type) {
+	case *model.Token:
+		if v == nil {
+			return nil, false
+		}
+		return v, true
+	default:
+		return nil, false
+	}
+}
 
 func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -32,7 +57,7 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}
-			ctx = context.WithValue(ctx, model.CurrentTokenKey{}, token)
+			ctx = context.WithValue(ctx, CurrentTokenKey{}, token)
 
 			repo := repository.NewUserRepository(exec)
 			user, err := repo.GetUserByToken(ctx, token)
@@ -46,17 +71,5 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
-	}
-}
-
-func GetCurrentUser(ctx context.Context) (*model.User, bool) {
-	switch v := ctx.Value(currentUserKey{}).(type) {
-	case *model.User:
-		if v == nil {
-			return nil, false
-		}
-		return v, true
-	default:
-		return nil, false
 	}
 }

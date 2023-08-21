@@ -29,69 +29,67 @@ func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
 }
 
 func TestCreateUser(t *testing.T) {
-	tests := []struct {
-		name string
+	tests := map[string]struct {
 		user *model.User
 		want *model.User
 	}{
-		{name: "AuthUserID and Name", user: &model.User{AuthUserID: 1, Name: "test"}, want: &model.User{AuthUserID: 1, Name: "test"}},
+		"AuthUserID and Name": {user: &model.User{AuthUserID: 1, Name: "test"}, want: &model.User{AuthUserID: 1, Name: "test"}},
 	}
 
-	for _, test := range tests {
-		test := test
-		t.Run(test.name, func(t *testing.T) {
+	for name, tt := range tests {
+		test := tt
+		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			db, tx, repo := setupUserRepository(t)
-			defer db.Close()
-			defer tx.Rollback()
+			defer func() { _ = db.Close() }()
+			defer func() { _ = tx.Rollback() }()
 
-			got, err := repo.CreateUser(context.Background(), test.user)
+			got, err := repo.CreateUser(context.Background(), tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}
 			if diff := cmp.Diff(got, test.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
-				t.Errorf("%v: want: %v, but %v", test.name, test.want, got)
+				t.Errorf("%v: want: %v, but %v", name, test.want, got)
 			}
 			if got.ID == 0 {
-				t.Errorf("%v: expect got.ID is not zero, but zero", test.name)
+				t.Errorf("%v: expect got.ID is not zero, but zero", name)
 			}
 		})
 	}
 }
 
 func TestGetUserByToken(t *testing.T) {
-	tests := []struct {
-		name  string
+	tests := map[string]struct {
 		user  *model.User
 		token *model.Token
 		want  *model.User
 	}{
-		{name: "AuthUserID and Name", user: &model.User{AuthUserID: 1, Name: "test"}, token: &model.Token{AuthUserID: 1}, want: &model.User{AuthUserID: 1, Name: "test"}},
+		"AuthUserID and Name": {user: &model.User{AuthUserID: 1, Name: "test"}, token: &model.Token{AuthUserID: 1}, want: &model.User{AuthUserID: 1, Name: "test"}},
 	}
 
-	for _, test := range tests {
-		test := test
-		t.Run(test.name, func(t *testing.T) {
+	for name, tt := range tests {
+		tt := tt
+		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
 			db, tx, repo := setupUserRepository(t)
-			defer db.Close()
-			defer tx.Rollback()
+			defer func() { _ = db.Close() }()
+			defer func() { _ = tx.Rollback() }()
 
 			// MEMO: use fixture?
-			_, err := repo.CreateUser(context.Background(), test.user)
+			_, err := repo.CreateUser(context.Background(), tt.user)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			got, err := repo.GetUserByToken(context.Background(), test.token)
+			got, err := repo.GetUserByToken(context.Background(), tt.token)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			if diff := cmp.Diff(got, test.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
-				t.Errorf("%v: want: %v, but %v", test.name, test.want, got)
+			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
+				t.Errorf("%v: want: %v, but %v", name, tt.want, got)
 			}
 		})
 	}

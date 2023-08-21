@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/shshimamo/knowledge-main/graph/loader"
+	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
 	"github.com/shshimamo/knowledge-main/utils"
 	"log"
@@ -18,7 +19,6 @@ import (
 	"github.com/shshimamo/knowledge-main/graph"
 	"github.com/shshimamo/knowledge-main/graph/generated"
 	hand "github.com/shshimamo/knowledge-main/handler"
-	"github.com/shshimamo/knowledge-main/middlewares/auth"
 	"github.com/shshimamo/knowledge-main/service"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
@@ -67,7 +67,7 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	//gqlMiddleware(srv)
 
 	mux.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	mux.Handle("/query", auth.NewAuthMiddleware(db)(srv))
+	mux.Handle("/query", middlewares.NewAuthMiddleware(db)(srv))
 
 	th := hand.NewTokenHandler(appEnv)
 	mux.HandleFunc("/set_token", withContext(th.SetToken))
