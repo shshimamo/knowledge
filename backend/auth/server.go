@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
+	"github.com/shshimamo/knowledge-auth/utils"
 	"log"
 	"net/http"
 	"os"
@@ -14,20 +14,12 @@ import (
 	"github.com/shshimamo/knowledge-auth/model"
 )
 
-type databaseConfig struct {
-	host     string
-	port     string
-	user     string
-	password string
-	dbname   string
-}
-
 func main() {
 	var err error
 
-	appEnv := model.AppEnv(os.Getenv("APP_ENV"))
+	appEnv := model.NewAppEnv()
 
-	db, err := setupDatabase(appEnv)
+	db, err := utils.SetupDatabase(appEnv)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,35 +36,6 @@ func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) h
 		// set context using context.WithTimeout, context.WithDeadline, context.WithCancel
 		fn(ctx, w, r)
 	}
-}
-
-func setupDatabase(env model.AppEnv) (*sql.DB, error) {
-	var dbCfg databaseConfig
-	if env == model.Production {
-		dbCfg = databaseConfig{
-			host:     os.Getenv("DB_HOST"),
-			port:     os.Getenv("DB_PORT"),
-			user:     os.Getenv("DB_USER"),
-			password: os.Getenv("DB_PASSWORD"),
-			dbname:   os.Getenv("DB_NAME"),
-		}
-	} else {
-		dbCfg = databaseConfig{
-			host:     "localhost",
-			port:     "5432",
-			user:     "postgres",
-			password: "password",
-			dbname:   "knowledge-auth",
-		}
-	}
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbCfg.host, dbCfg.port, dbCfg.user, dbCfg.password, dbCfg.dbname)
-	db, err := sql.Open("postgres", connStr)
-
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, err
 }
 
 func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {

@@ -9,7 +9,7 @@ services:
       db:
         condition: service_healthy
   db:
-    image: postgres
+    image: postgres:14
     restart: always
     user: postgres
     volumes:

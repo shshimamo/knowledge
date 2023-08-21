@@ -21,8 +21,3 @@ rds-cdk-destroy:
 	echo "CDK_MY_IP: $$CDK_MY_IP" ;\
 	echo "CDK_DB_PASSWORD: $$CDK_DB_PASSWORD" ;\
 	CDK_VPC_ID=$$CDK_VPC_ID CDK_EKS_NODE_SG_ID=$$CDK_EKS_NODE_SG_ID CDK_MY_IP=$$CDK_MY_IP CDK_DB_PASSWORD=$$CDK_DB_PASSWORD npx cdk destroy
-
-.PHONY: database-create
-database-create:
-	psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"knowledge-main\";" ;\
-	psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"knowledge-auth\";"

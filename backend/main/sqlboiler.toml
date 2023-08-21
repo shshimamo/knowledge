@@ -2,7 +2,7 @@ pkgname = "db"
 output  = "db"
 
 [psql]
-  dbname  = "knowledge-main"
+  dbname  = "knowledge-main-develop"
   host    = "localhost"
   port    = 5432
   user    = "postgres"
