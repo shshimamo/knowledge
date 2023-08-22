@@ -59,7 +59,7 @@ $ make install-ingress-controller
 $ make apply-ingress
 ```
 
-## IAM: GA用のIDプロバイダ、ロール
+## IAM: GitHub Actions 用のIDプロバイダ、ロール
 
 * TODO: 自動化
 
