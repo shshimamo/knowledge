@@ -50,7 +50,7 @@ func TestGetJWTToken(t *testing.T) {
 		errmsg string
 	}{
 		"valid-token":       {in: validTokenStr},
-		"invalid-token":     {in: invalidTokenStr, errmsg: "token contains an invalid number of segments"},
+		"invalid-token":     {in: invalidTokenStr, errmsg: "token contains an invalid number of segments aaa"},
 		"invalid-claims":    {in: invalidClaimsTokenStr},
 		"invalid-expiresAt": {in: expiredTokenStr, errmsg: "token is expired by"},
 	}
@@ -63,11 +63,11 @@ func TestGetJWTToken(t *testing.T) {
 
 			if err != nil {
 				if !strings.Contains(err.Error(), tt.errmsg) {
-					t.Errorf("%v: want err: %q, got: %v", name, tt.errmsg, err.Error())
+					t.Errorf("want: %q, got: %v", tt.errmsg, err.Error())
 				}
 			} else {
 				if got == nil {
-					t.Errorf("%v: want: token, got: nil", name)
+					t.Errorf("want: token, got: nil")
 				}
 			}
 		})
@@ -94,7 +94,7 @@ func TestGetClaims(t *testing.T) {
 			got, _ := getClaims(tt.in)
 
 			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreTypes(jwt.StandardClaims{})); diff != "" {
-				t.Errorf("%v: want: %v, got: %v", name, tt.want, got)
+				t.Errorf("want: %v, got: %v", tt.want, got)
 			}
 		})
 	}

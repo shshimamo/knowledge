@@ -37,7 +37,7 @@ func TestCreateUser(t *testing.T) {
 	}
 
 	for name, tt := range tests {
-		test := tt
+		tt := tt
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
@@ -49,11 +49,11 @@ func TestCreateUser(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if diff := cmp.Diff(got, test.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
-				t.Errorf("%v: want: %v, but %v", name, test.want, got)
+			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
+				t.Errorf("want: %v, got: %v", tt.want, got)
 			}
 			if got.ID == 0 {
-				t.Errorf("%v: expect got.ID is not zero, but zero", name)
+				t.Errorf("Expected got.ID is not zero, but zero")
 			}
 		})
 	}
@@ -89,7 +89,7 @@ func TestGetUserByToken(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
-				t.Errorf("%v: want: %v, but %v", name, tt.want, got)
+				t.Errorf("want: %v, got: %v", tt.want, got)
 			}
 		})
 	}

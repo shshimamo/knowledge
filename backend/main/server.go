@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"database/sql"
 	"github.com/shshimamo/knowledge-main/graph/loader"
@@ -12,7 +11,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/rs/cors"
@@ -89,36 +87,36 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	return h
 }
 
-func gqlMiddleware(srv *handler.Server) {
-	srv.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
-		log.Println("before OperationHandler")
-		res := next(ctx)
-		defer log.Println("after OperationHandler")
-		return res
-	})
-	srv.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
-		log.Println("before ResponseHandler")
-		res := next(ctx)
-		defer log.Println("after ResponseHandler")
-		return res
-	})
-	srv.AroundRootFields(func(ctx context.Context, next graphql.RootResolver) graphql.Marshaler {
-		log.Println("before RootResolver")
-		res := next(ctx)
-		defer func() {
-			var b bytes.Buffer
-			res.MarshalGQL(&b)
-			log.Println("after RootResolver", b.String())
-		}()
-		return res
-	})
-	srv.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
-		log.Println("before Resolver")
-		res, err = next(ctx)
-		defer log.Println("after Resolver", res)
-		return
-	})
-}
+//func gqlMiddleware(srv *handler.Server) {
+//	srv.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+//		log.Println("before OperationHandler")
+//		res := next(ctx)
+//		defer log.Println("after OperationHandler")
+//		return res
+//	})
+//	srv.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+//		log.Println("before ResponseHandler")
+//		res := next(ctx)
+//		defer log.Println("after ResponseHandler")
+//		return res
+//	})
+//	srv.AroundRootFields(func(ctx context.Context, next graphql.RootResolver) graphql.Marshaler {
+//		log.Println("before RootResolver")
+//		res := next(ctx)
+//		defer func() {
+//			var b bytes.Buffer
+//			res.MarshalGQL(&b)
+//			log.Println("after RootResolver", b.String())
+//		}()
+//		return res
+//	})
+//	srv.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
+//		log.Println("before Resolver")
+//		res, err = next(ctx)
+//		defer log.Println("after Resolver", res)
+//		return
+//	})
+//}
 
 func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

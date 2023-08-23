@@ -47,7 +47,7 @@ func (r *knowledgeRepository) GetKnowledge(ctx context.Context, cmd *GetKnowledg
 	if cmd.UserID != 0 {
 		queryMods = append(queryMods, db.KnowledgeWhere.UserID.EQ(int64(cmd.UserID)))
 	}
-	if cmd.IsPublic != false {
+	if cmd.IsPublic {
 		queryMods = append(queryMods, db.KnowledgeWhere.IsPublic.EQ(true))
 	}
 
