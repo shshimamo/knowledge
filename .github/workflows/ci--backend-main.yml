@@ -34,8 +34,16 @@ jobs:
 
       - name: Setup Go
         uses: actions/setup-go@v4
+        id: setup-go
         with:
           go-version: ${{ matrix.go }}
+          cache: true
+          cache-dependency-path: ./backend/main/go.sum
+
+      - name: Check Cache Hit
+        shell: bash
+        run: |
+          echo "cache-hit: ${{ steps.setup-go.outputs.cache-hit }}"
 
       - name: Check dependencies
         run: |
