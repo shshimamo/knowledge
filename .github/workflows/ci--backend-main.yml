@@ -51,8 +51,9 @@ jobs:
         env:
           DB_HOST: localhost
           DB_PASSWORD: password
-          DB_NAME: knowledge-main-test
+          APP_ENV: test
         run: |
+          go install github.com/pressly/goose/v3/cmd/goose@v3.11.2
           make migration
 
       - name: Run test
