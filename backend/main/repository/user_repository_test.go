@@ -29,12 +29,16 @@ func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
 }
 
 func TestCreateUser(t *testing.T) {
+	type args struct {
+		ctx  context.Context
+		user *model.User
+	}
 	tests := map[string]struct {
-		in      *model.User
+		args    *args
 		want    *model.User
 		wantErr bool
 	}{
-		"AuthUserID and Name": {&model.User{AuthUserID: 1, Name: "test"}, &model.User{AuthUserID: 1, Name: "test"}, false},
+		"AuthUserID and Name": {&args{ctx: context.Background(), user: &model.User{AuthUserID: 1, Name: "test"}}, &model.User{AuthUserID: 1, Name: "test"}, false},
 	}
 
 	for name, tt := range tests {
@@ -46,9 +50,10 @@ func TestCreateUser(t *testing.T) {
 			defer func() { _ = db.Close() }()
 			defer func() { _ = tx.Rollback() }()
 
-			got, err := repo.CreateUser(context.Background(), tt.in)
-			if err != nil && !tt.wantErr {
-				t.Fatal(err)
+			got, err := repo.CreateUser(tt.args.ctx, tt.args.user)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("wantErr: %v, err: %v", tt.wantErr, err)
 			}
 			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
 				t.Errorf("want: %v, got: %v", tt.want, got)
@@ -61,12 +66,22 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestGetUserByToken(t *testing.T) {
-	tests := map[string]struct {
-		user  *model.User
+	type args struct {
+		ctx   context.Context
 		token *model.Token
-		want  *model.User
+	}
+	tests := map[string]struct {
+		seed    *model.User
+		args    *args
+		want    *model.User
+		wantErr bool
 	}{
-		"AuthUserID and Name": {user: &model.User{AuthUserID: 1, Name: "test"}, token: &model.Token{AuthUserID: 1}, want: &model.User{AuthUserID: 1, Name: "test"}},
+		"AuthUserID and Name": {
+			&model.User{AuthUserID: 1, Name: "test"},
+			&args{ctx: context.Background(), token: &model.Token{AuthUserID: 1}},
+			&model.User{AuthUserID: 1, Name: "test"},
+			false,
+		},
 	}
 
 	for name, tt := range tests {
@@ -79,16 +94,16 @@ func TestGetUserByToken(t *testing.T) {
 			defer func() { _ = tx.Rollback() }()
 
 			// MEMO: use fixture?
-			_, err := repo.CreateUser(context.Background(), tt.user)
+			_, err := repo.CreateUser(context.Background(), tt.seed)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			got, err := repo.GetUserByToken(context.Background(), tt.token)
-			if err != nil {
-				t.Fatal(err)
-			}
+			got, err := repo.GetUserByToken(tt.args.ctx, tt.args.token)
 
+			if (err != nil) != tt.wantErr {
+				t.Errorf("wantErr: %v, err: %v", tt.wantErr, err)
+			}
 			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
 				t.Errorf("want: %v, got: %v", tt.want, got)
 			}
