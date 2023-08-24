@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"log"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -13,9 +12,10 @@ import (
 )
 
 func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
+	t.Helper()
 	db, err := utils.SetupDatabase(model.Test)
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 
 	tx, err := db.Begin()
@@ -30,10 +30,11 @@ func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
 
 func TestCreateUser(t *testing.T) {
 	tests := map[string]struct {
-		user *model.User
-		want *model.User
+		in      *model.User
+		want    *model.User
+		wantErr bool
 	}{
-		"AuthUserID and Name": {user: &model.User{AuthUserID: 1, Name: "test"}, want: &model.User{AuthUserID: 1, Name: "test"}},
+		"AuthUserID and Name": {&model.User{AuthUserID: 1, Name: "test"}, &model.User{AuthUserID: 1, Name: "test"}, false},
 	}
 
 	for name, tt := range tests {
@@ -45,8 +46,8 @@ func TestCreateUser(t *testing.T) {
 			defer func() { _ = db.Close() }()
 			defer func() { _ = tx.Rollback() }()
 
-			got, err := repo.CreateUser(context.Background(), tt.user)
-			if err != nil {
+			got, err := repo.CreateUser(context.Background(), tt.in)
+			if err != nil && !tt.wantErr {
 				t.Fatal(err)
 			}
 			if diff := cmp.Diff(got, tt.want, cmpopts.IgnoreFields(model.User{}, "ID")); diff != "" {
