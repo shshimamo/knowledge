@@ -2,6 +2,7 @@ package service
 
 import (
 	"database/sql"
+	"github.com/shshimamo/knowledge-main/repository"
 )
 
 type AllService interface {
@@ -15,8 +16,10 @@ type allService struct {
 }
 
 func NewAllService(db *sql.DB) AllService {
+	userRepo := repository.NewUserRepository(db)
+	knowRepo := repository.NewKnowledgeRepository(db)
 	return &allService{
-		userService:      newUserService(db),
-		knowledgeService: newKnowledgeService(db),
+		userService:      newUserService(userRepo),
+		knowledgeService: newKnowledgeService(knowRepo),
 	}
 }

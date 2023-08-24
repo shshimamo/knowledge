@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	gql "github.com/shshimamo/knowledge-main/graph/model"
 	"github.com/shshimamo/knowledge-main/model"
 	"github.com/shshimamo/knowledge-main/repository"
@@ -20,16 +19,15 @@ type KnowledgeService interface {
 }
 
 type knowledgeService struct {
-	db *sql.DB
+	knowRepo repository.KnowledgeRepository
 }
 
-func newKnowledgeService(db *sql.DB) *knowledgeService {
-	return &knowledgeService{db}
+func newKnowledgeService(knowRepo repository.KnowledgeRepository) *knowledgeService {
+	return &knowledgeService{knowRepo: knowRepo}
 }
 
 func (s *knowledgeService) GetKnowledge(ctx context.Context, id int) (*gql.Knowledge, error) {
-	repo := repository.NewKnowledgeRepository(s.db)
-	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id})
+	k, err := s.knowRepo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id})
 	if err != nil {
 		return nil, err
 	}
@@ -47,8 +45,7 @@ func (s *knowledgeService) GetKnowledge(ctx context.Context, id int) (*gql.Knowl
 }
 
 func (s *knowledgeService) GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error) {
-	repo := repository.NewKnowledgeRepository(s.db)
-	klist, err := repo.GetKnowledgeList(ctx, &repository.GetKnowledgeListCommand{IDs: ids, UserIDs: uids})
+	klist, err := s.knowRepo.GetKnowledgeList(ctx, &repository.GetKnowledgeListCommand{IDs: ids, UserIDs: uids})
 	if err != nil {
 		return nil, err
 	}
@@ -64,8 +61,7 @@ func (s *knowledgeService) GetMyKnowledge(ctx context.Context, id int) (*gql.Kno
 		return nil, err
 	}
 
-	repo := repository.NewKnowledgeRepository(s.db)
-	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
+	k, err := s.knowRepo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +79,7 @@ func (s *knowledgeService) CreateKnowledge(ctx context.Context, gqlnew *gql.NewK
 
 	k := model.MapKnowledgeGqlNewToModel(gqlnew)
 
-	repo := repository.NewKnowledgeRepository(s.db)
-	newk, err := repo.CreateKnowledge(ctx, k)
+	newk, err := s.knowRepo.CreateKnowledge(ctx, k)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +95,7 @@ func (s *knowledgeService) UpdateKnowledge(ctx context.Context, id int, gqlupdat
 		return nil, err
 	}
 
-	repo := repository.NewKnowledgeRepository(s.db)
-	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
+	k, err := s.knowRepo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +104,7 @@ func (s *knowledgeService) UpdateKnowledge(ctx context.Context, id int, gqlupdat
 	k.Text = gqlupdate.Text
 	k.IsPublic = gqlupdate.IsPublic
 
-	k2, err := repo.UpdateKnowledge(ctx, k)
+	k2, err := s.knowRepo.UpdateKnowledge(ctx, k)
 	if err != nil {
 		return nil, err
 	}
@@ -125,13 +119,12 @@ func (s *knowledgeService) DeleteKnowledge(ctx context.Context, id int) (*gql.De
 		return nil, err
 	}
 
-	repo := repository.NewKnowledgeRepository(s.db)
-	k, err := repo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
+	k, err := s.knowRepo.GetKnowledge(ctx, &repository.GetKnowledgeCommand{ID: id, UserID: my.ID})
 	if err != nil {
 		return nil, err
 	}
 
-	err = repo.DeleteKnowledge(ctx, k)
+	err = s.knowRepo.DeleteKnowledge(ctx, k)
 	if err != nil {
 		return nil, err
 	}

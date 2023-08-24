@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
@@ -16,11 +15,11 @@ type UserService interface {
 }
 
 type userService struct {
-	db *sql.DB
+	userRepo repository.UserRepository
 }
 
-func newUserService(db *sql.DB) *userService {
-	return &userService{db}
+func newUserService(userRepo repository.UserRepository) *userService {
+	return &userService{userRepo: userRepo}
 }
 
 func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql.User, error) {
@@ -40,8 +39,7 @@ func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql
 		return nil, err
 	}
 
-	repo := repository.NewUserRepository(s.db)
-	newuser, err := repo.CreateUser(ctx, user)
+	newuser, err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}
