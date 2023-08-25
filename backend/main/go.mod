@@ -17,6 +17,7 @@ require (
 	github.com/volatiletech/randomize v0.0.1
 	github.com/volatiletech/sqlboiler/v4 v4.14.2
 	github.com/volatiletech/strmangle v0.0.4
+	go.uber.org/mock v0.2.0
 )
 
 require (

@@ -22,7 +22,7 @@ func newUserService(userRepo repository.UserRepository) *userService {
 	return &userService{userRepo: userRepo}
 }
 
-func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql.User, error) {
+func (s *userService) CreateUser(ctx context.Context, gqlNew *gql.NewUser) (*gql.User, error) {
 	token, ok := middlewares.GetCurrentToken(ctx)
 	if !ok {
 		return nil, errors.New("not authenticated")
@@ -32,19 +32,19 @@ func (s *userService) CreateUser(ctx context.Context, gqlnew *gql.NewUser) (*gql
 		return nil, errors.New("Already registered")
 	}
 
-	user := model.MapUserGqlNewToModel(gqlnew)
+	user := model.MapUserGqlNewToModel(gqlNew)
 	user.AuthUserID = token.AuthUserID
 	err := user.Validate()
 	if err != nil {
 		return nil, err
 	}
 
-	newuser, err := s.userRepo.CreateUser(ctx, user)
+	newUser, err := s.userRepo.CreateUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}
 
-	gqluser := model.MapUserModelToGql(newuser)
+	gqlUser := model.MapUserModelToGql(newUser)
 
-	return gqluser, nil
+	return gqlUser, nil
 }
