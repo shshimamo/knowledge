@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-type currentUserKey struct{}
+type CurrentUserKey struct{}
 type CurrentTokenKey struct{}
 
 func GetCurrentUser(ctx context.Context) (*model.User, bool) {
-	switch v := ctx.Value(currentUserKey{}).(type) {
+	switch v := ctx.Value(CurrentUserKey{}).(type) {
 	case *model.User:
 		if v == nil {
 			return nil, false
@@ -67,7 +67,7 @@ func NewAuthMiddleware(exec boil.ContextExecutor) func(next http.Handler) http.H
 				return
 			}
 
-			ctx = context.WithValue(ctx, currentUserKey{}, user)
+			ctx = context.WithValue(ctx, CurrentUserKey{}, user)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})

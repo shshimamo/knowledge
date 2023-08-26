@@ -13,24 +13,41 @@ import (
 )
 
 func TestCreateUser(t *testing.T) {
-	username := "tester"
 	type args struct {
 		ctx    context.Context
 		gqlNew *gql.NewUser
 	}
 
+	baseCtx := context.Background()
+	// Context without token
+	noTokenCtx := baseCtx
+
+	// Context with token
+	withTokenCtx := context.WithValue(baseCtx, middlewares.CurrentTokenKey{}, &model.Token{AuthUserID: 1})
+
+	// Context with token and existing user
+	withTokenAndUserCtx := context.WithValue(withTokenCtx, middlewares.CurrentUserKey{}, &model.User{ID: 1, AuthUserID: 1, Name: "tester"})
+
+	// Context with no AuthUserID token
+	withNoAuthUserIDTokenCtx := context.WithValue(baseCtx, middlewares.CurrentTokenKey{}, &model.Token{})
+
+	userName := "tester"
 	tests := map[string]struct {
-		repoReturnUser *model.User
 		args           *args
+		repoReturnUser *model.User
 		want           *gql.User
 		wantErr        bool
 	}{
-		"no-token": {nil, &args{ctx: context.Background(), gqlNew: &gql.NewUser{Name: "tester"}}, nil, true},
 		"valid-args": {
-			&model.User{ID: 1, AuthUserID: 1, Name: "tester"},
-			&args{ctx: context.WithValue(context.Background(), middlewares.CurrentTokenKey{}, &model.Token{AuthUserID: 1}), gqlNew: &gql.NewUser{Name: "tester"}},
-			&gql.User{ID: "1", AuthUserID: "1", Name: &username}, false,
+			&args{ctx: withTokenCtx, gqlNew: &gql.NewUser{Name: userName}},
+			&model.User{ID: 1, AuthUserID: 1, Name: userName},
+			&gql.User{ID: "1", AuthUserID: "1", Name: &userName},
+			false,
 		},
+		"no-token":            {&args{ctx: noTokenCtx, gqlNew: &gql.NewUser{Name: userName}}, nil, nil, true},
+		"current-user-exists": {&args{ctx: withTokenAndUserCtx, gqlNew: &gql.NewUser{Name: userName}}, nil, nil, true},
+		"no-name-user":        {&args{ctx: withTokenCtx, gqlNew: &gql.NewUser{}}, nil, nil, true},
+		"invalid-token":       {&args{ctx: withNoAuthUserIDTokenCtx, gqlNew: &gql.NewUser{Name: userName}}, nil, nil, true},
 	}
 
 	for name, tt := range tests {
