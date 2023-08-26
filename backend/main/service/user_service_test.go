@@ -56,7 +56,7 @@ func TestCreateUser(t *testing.T) {
 			t.Parallel()
 
 			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
+			t.Cleanup(func() { ctrl.Finish() })
 
 			mockRepo := mockrepository.NewMockUserRepository(ctrl)
 			if tt.repoReturnUser != nil {

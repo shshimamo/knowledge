@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"testing"
 
@@ -11,7 +10,7 @@ import (
 	"github.com/shshimamo/knowledge-main/utils"
 )
 
-func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
+func setupUserRepository(t *testing.T) UserRepository {
 	t.Helper()
 	db, err := utils.SetupDatabase(model.Test)
 	if err != nil {
@@ -23,9 +22,14 @@ func setupUserRepository(t *testing.T) (*sql.DB, *sql.Tx, UserRepository) {
 		t.Fatal(err)
 	}
 
+	t.Cleanup(func() {
+		_ = tx.Rollback()
+		_ = db.Close()
+	})
+
 	repo := NewUserRepository(tx)
 
-	return db, tx, repo
+	return repo
 }
 
 func TestCreateUser(t *testing.T) {
@@ -46,9 +50,7 @@ func TestCreateUser(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			db, tx, repo := setupUserRepository(t)
-			defer func() { _ = db.Close() }()
-			defer func() { _ = tx.Rollback() }()
+			repo := setupUserRepository(t)
 
 			got, err := repo.CreateUser(tt.args.ctx, tt.args.user)
 
@@ -89,9 +91,7 @@ func TestGetUserByToken(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
 
-			db, tx, repo := setupUserRepository(t)
-			defer func() { _ = db.Close() }()
-			defer func() { _ = tx.Rollback() }()
+			repo := setupUserRepository(t)
 
 			// MEMO: use fixture?
 			_, err := repo.CreateUser(context.Background(), tt.seed)
