@@ -34,23 +34,10 @@ func setupTestHandler(t *testing.T) (http.Handler, *sql.Tx) {
 	return setupHandler(tx, model.Test), tx
 }
 
-func TestUserQuery(t *testing.T) {
-	handler, tx := setupTestHandler(t)
-
-	// Seed
-	seedUser, err := repository.NewUserRepository(tx).CreateUser(context.Background(), &model.User{AuthUserID: 1, Name: "tester"})
-	if err != nil {
-		t.Fatal(err)
-	}
+func gqlRequest(t *testing.T, query string, handler http.Handler) map[string]interface{} {
+	t.Helper()
 
 	// Create Body
-	query := fmt.Sprintf(`{
-		user(id: "%d") {
-			id
-			authUserId
-			name
-		}
-    }`, seedUser.ID)
 	payload := map[string]string{
 		"query": query,
 	}
@@ -63,6 +50,7 @@ func TestUserQuery(t *testing.T) {
 	rec := httptest.NewRecorder()
 	handler.ServeHTTP(rec, req)
 
+	// Response
 	resp := rec.Result()
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("want: http.StatusOK, got: %v", resp.StatusCode)
@@ -71,13 +59,38 @@ func TestUserQuery(t *testing.T) {
 	var responseBody map[string]interface{}
 	_ = json.NewDecoder(resp.Body).Decode(&responseBody)
 
-	data, _ := responseBody["data"].(map[string]interface{})
+	data, ok := responseBody["data"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("Failed to cast response body: %v", responseBody)
+	}
+
+	return data
+}
+
+func TestUserQuery(t *testing.T) {
+	handler, tx := setupTestHandler(t)
+
+	// Seed
+	seedUser, err := repository.NewUserRepository(tx).CreateUser(context.Background(), &model.User{AuthUserID: 1, Name: "tester"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	query := fmt.Sprintf(`{
+		user(id: "%d") {
+			id
+			authUserId
+			name
+		}
+    }`, seedUser.ID)
+
+	data := gqlRequest(t, query, handler)
 	user, _ := data["user"].(map[string]interface{})
 
-	if user["authUserId"] != "1" {
+	if user["authUserId"].(string) != "1" {
 		t.Errorf("want: 1, got: %v", user["authUserId"])
 	}
-	if user["name"] != "tester" {
+	if user["name"].(string) != "tester" {
 		t.Errorf("want: tester, got: %v", user["name"])
 	}
 }
