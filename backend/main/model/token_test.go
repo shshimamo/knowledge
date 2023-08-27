@@ -50,7 +50,7 @@ func TestGetJWTToken(t *testing.T) {
 		errmsg string
 	}{
 		"valid-token":       {in: validTokenStr},
-		"invalid-token":     {in: invalidTokenStr, errmsg: "token contains an invalid number of segments aaa"},
+		"invalid-token":     {in: invalidTokenStr, errmsg: "token contains an invalid number of segments"},
 		"invalid-claims":    {in: invalidClaimsTokenStr},
 		"invalid-expiresAt": {in: expiredTokenStr, errmsg: "token is expired by"},
 	}
