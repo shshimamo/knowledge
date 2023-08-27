@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/shshimamo/knowledge-main/model"
 	"github.com/shshimamo/knowledge-main/repository"
+	"log/slog"
 	"net/http"
 )
 
@@ -53,6 +54,7 @@ func NewAuthMiddleware(userRepo repository.UserRepository) func(next http.Handle
 
 			token, err := model.NewToken(tokenStr)
 			if err != nil {
+				slog.InfoContext(ctx, "Unexpected token", "token", tokenStr, "err", err)
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}

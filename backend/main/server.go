@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"github.com/shshimamo/knowledge-main/graph/loader"
 	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
@@ -68,10 +67,10 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	mux.Handle("/query", middlewares.NewAuthMiddleware(userRepo)(srv))
+	mux.Handle("/query", middlewares.NewSlogMiddleware(middlewares.NewAuthMiddleware(userRepo)(srv)))
 
 	th := hand.NewTokenHandler(appEnv)
-	mux.HandleFunc("/set_token", withContext(th.SetToken))
+	mux.Handle("/set_token", middlewares.NewSlogMiddleware(http.HandlerFunc(th.SetToken)))
 
 	var allowOrigins []string
 	if appEnv == model.Production {
@@ -120,11 +119,3 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 //		return
 //	})
 //}
-
-func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.Background()
-		// set context using context.WithTimeout, context.WithDeadline, context.WithCancel
-		fn(ctx, w, r)
-	}
-}

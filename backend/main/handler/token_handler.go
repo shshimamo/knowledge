@@ -1,15 +1,15 @@
 package handler
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/shshimamo/knowledge-main/model"
+	"log/slog"
 	"net/http"
 )
 
 type TokenHandler interface {
-	SetToken(ctx context.Context, w http.ResponseWriter, r *http.Request)
+	SetToken(w http.ResponseWriter, r *http.Request)
 }
 
 type tokenHandler struct {
@@ -24,7 +24,9 @@ func NewTokenHandler(appEnv model.AppEnv) TokenHandler {
 	return &tokenHandler{appEnv: appEnv}
 }
 
-func (h *tokenHandler) SetToken(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+func (h *tokenHandler) SetToken(w http.ResponseWriter, r *http.Request) {
+	slog.InfoContext(r.Context(), "SetToken called")
+
 	if cookie, err := r.Cookie("token"); err == nil {
 		tokenStr := cookie.Value
 		fmt.Printf("\n%#v", tokenStr)
