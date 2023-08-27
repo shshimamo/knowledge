@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	model "github.com/shshimamo/knowledge-main/model"
+	repository "github.com/shshimamo/knowledge-main/repository"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -48,6 +49,21 @@ func (m *MockUserRepository) CreateUser(ctx context.Context, user *model.User) (
 func (mr *MockUserRepositoryMockRecorder) CreateUser(ctx, user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserRepository)(nil).CreateUser), ctx, user)
+}
+
+// GetUser mocks base method.
+func (m *MockUserRepository) GetUser(ctx context.Context, cmd *repository.GetUserCommand) (*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", ctx, cmd)
+	ret0, _ := ret[0].(*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser.
+func (mr *MockUserRepositoryMockRecorder) GetUser(ctx, cmd interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockUserRepository)(nil).GetUser), ctx, cmd)
 }
 
 // GetUserByToken mocks base method.

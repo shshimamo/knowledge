@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"github.com/shshimamo/knowledge-main/graph/loader"
 	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge-main/repository"
 	"github.com/shshimamo/knowledge-main/utils"
 	"log"
 	"net/http"
@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer func() { _ = db.Close() }()
 
 	sqlDebug := os.Getenv("SQL_DEBUG")
 	if sqlDebug == "true" {
@@ -51,10 +51,12 @@ func getPort() string {
 	}
 }
 
-func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
-	mux := http.NewServeMux()
-
-	allService := service.NewAllService(db)
+func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
+	userRepo := repository.NewUserRepository(exec)
+	allService := service.NewAllService(
+		userRepo,
+		repository.NewKnowledgeRepository(exec),
+	)
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
 			AllService: allService,
@@ -64,8 +66,9 @@ func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	}))
 	//gqlMiddleware(srv)
 
+	mux := http.NewServeMux()
 	mux.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	mux.Handle("/query", middlewares.NewAuthMiddleware(db)(srv))
+	mux.Handle("/query", middlewares.NewAuthMiddleware(userRepo)(srv))
 
 	th := hand.NewTokenHandler(appEnv)
 	mux.HandleFunc("/set_token", withContext(th.SetToken))

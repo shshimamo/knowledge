@@ -7,7 +7,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/shshimamo/knowledge-main/middlewares"
 	"strconv"
 
@@ -57,7 +56,11 @@ func (r *queryResolver) CurrentUser(ctx context.Context) (*model.CurrentUser, er
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, err
+	}
+	return r.AllService.GetUser(ctx, i)
 }
 
 // Knowledge is the resolver for the knowledge field.

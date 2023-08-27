@@ -4,15 +4,19 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/shshimamo/knowledge-main/db"
 	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge-main/repository/errs"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *model.User) (*model.User, error)
 	GetUserByToken(ctx context.Context, token *model.Token) (*model.User, error)
+	GetUser(ctx context.Context, cmd *GetUserCommand) (*model.User, error)
 }
 
 type userRepository struct {
@@ -48,4 +52,33 @@ func (r *userRepository) GetUserByToken(ctx context.Context, token *model.Token)
 	}
 
 	return model.MapUserDBToModel(dbUser), nil
+}
+
+type GetUserCommand struct {
+	ID   int
+	Name string
+}
+
+func (r *userRepository) GetUser(ctx context.Context, cmd *GetUserCommand) (*model.User, error) {
+	if cmd.ID == 0 && cmd.Name == "" {
+		return nil, errors.New("id or name is required")
+	}
+
+	queryMods := make([]qm.QueryMod, 0)
+
+	if cmd.ID != 0 {
+		queryMods = append(queryMods, db.UserWhere.ID.EQ(cmd.ID))
+	}
+	if cmd.Name != "" {
+		queryMods = append(queryMods, db.UserWhere.Name.EQ(null.StringFrom(cmd.Name)))
+	}
+
+	dbUser, err := db.Users(queryMods...).One(ctx, r.exec)
+	if err != nil {
+		return nil, errs.ConvertSqlError(err)
+	}
+
+	u := model.MapUserDBToModel(dbUser)
+
+	return u, nil
 }

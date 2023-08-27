@@ -3,15 +3,15 @@ package service
 import (
 	"context"
 	"errors"
+	gql "github.com/shshimamo/knowledge-main/graph/model"
 	"github.com/shshimamo/knowledge-main/middlewares"
 	"github.com/shshimamo/knowledge-main/model"
 	"github.com/shshimamo/knowledge-main/repository"
-
-	gql "github.com/shshimamo/knowledge-main/graph/model"
 )
 
 type UserService interface {
 	CreateUser(ctx context.Context, input *gql.NewUser) (*gql.User, error)
+	GetUser(ctx context.Context, id int) (*gql.User, error)
 }
 
 type userService struct {
@@ -47,4 +47,13 @@ func (s *userService) CreateUser(ctx context.Context, gqlNew *gql.NewUser) (*gql
 	gqlUser := model.MapUserModelToGql(newUser)
 
 	return gqlUser, nil
+}
+
+func (s *userService) GetUser(ctx context.Context, id int) (*gql.User, error) {
+	u, err := s.userRepo.GetUser(ctx, &repository.GetUserCommand{ID: id})
+	if err != nil {
+		return nil, err
+	}
+
+	return model.MapUserModelToGql(u), nil
 }
