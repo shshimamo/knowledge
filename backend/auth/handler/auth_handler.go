@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"github.com/shshimamo/knowledge-auth/model"
@@ -10,9 +9,9 @@ import (
 )
 
 type AuthHandler interface {
-	Signup(ctx context.Context, w http.ResponseWriter, r *http.Request)
-	Signin(ctx context.Context, w http.ResponseWriter, r *http.Request)
-	Signout(ctx context.Context, w http.ResponseWriter, r *http.Request)
+	Signup(w http.ResponseWriter, r *http.Request)
+	Signin(w http.ResponseWriter, r *http.Request)
+	Signout(w http.ResponseWriter, r *http.Request)
 }
 
 type authHandler struct {
@@ -24,7 +23,9 @@ func NewAuthHandler(db *sql.DB, appEnv model.AppEnv) AuthHandler {
 	return &authHandler{db: db, appEnv: appEnv}
 }
 
-func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+func (h *authHandler) Signup(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -57,7 +58,9 @@ func (h *authHandler) Signup(ctx context.Context, w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+func (h *authHandler) Signin(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
@@ -89,7 +92,9 @@ func (h *authHandler) Signin(ctx context.Context, w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *authHandler) Signout(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+func (h *authHandler) Signout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return

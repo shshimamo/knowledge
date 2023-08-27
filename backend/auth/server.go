@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"github.com/shshimamo/knowledge-auth/utils"
 	"log"
@@ -30,24 +29,16 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, h))
 }
 
-func withContext(fn func(context.Context, http.ResponseWriter, *http.Request)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.Background()
-		// set context using context.WithTimeout, context.WithDeadline, context.WithCancel
-		fn(ctx, w, r)
-	}
-}
-
 func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
 	auth := handler.NewAuthHandler(db, appEnv)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("ok"))
+		_, _ = w.Write([]byte("ok"))
 	})
-	mux.HandleFunc("/signup", withContext(auth.Signup))
-	mux.HandleFunc("/signin", withContext(auth.Signin))
-	mux.HandleFunc("/signout", withContext(auth.Signout))
+	mux.HandleFunc("/signup", auth.Signup)
+	mux.HandleFunc("/signin", auth.Signin)
+	mux.HandleFunc("/signout", auth.Signout)
 
 	var allowOrigins []string
 	if appEnv == model.Production {
