@@ -11,7 +11,7 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "cd ../.. && husky install frontend/main/.husky"
   },
   "dependencies": {
     "@types/node": "20.4.4",
