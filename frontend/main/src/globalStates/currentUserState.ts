@@ -1,29 +1,30 @@
 import React from 'react'
-import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
-import { graphql } from '@/gql/__generated__'
+import { atom, useRecoilValue, useSetRecoilState } from 'recoil'
 
 type CurrentUserState = {
-  id: string | null;
-  name: string | null;
+  id: string | null
+  name: string | null
 }
 
 const currentUserRecoilState = atom<CurrentUserState>({
   key: 'currentUserState',
   default: { id: null, name: null },
-});
+})
 
 export const useCurrentUserState = () => {
-  return useRecoilValue(currentUserRecoilState);
+  return useRecoilValue(currentUserRecoilState)
 }
 
 export const useCurrentUserMutators = () => {
-  const setState = useSetRecoilState(currentUserRecoilState);
+  const setState = useSetRecoilState(currentUserRecoilState)
 
   const setCurrentUser = React.useCallback(
     (id: string, name: string | null) => setState({ id, name }),
-    [setState]
+    [setState],
   )
 
   return { setCurrentUser }
 }
-export type SetCurrentUserType = ReturnType<typeof useCurrentUserMutators>["setCurrentUser"];
+export type SetCurrentUserType = ReturnType<
+  typeof useCurrentUserMutators
+>['setCurrentUser']

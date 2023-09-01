@@ -1,12 +1,11 @@
-import React from 'react';
-import { useMyKnowledgeList } from '@/usecase/knowledge/reader'
+import React from 'react'
+
 import { KnowledgeList } from '@/components/model/knowledge/KnowledgeList/KnowledgeList'
-import { useSWRConfig } from 'swr'
+import { useMyKnowledgeList } from '@/usecase/knowledge/reader'
 
 export const KnowledgeListTop = () => {
-  const { data, error, isLoading } = useMyKnowledgeList({ first: 10})
+  const { data, isLoading } = useMyKnowledgeList({ first: 10 })
 
-  if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
 
   return (
@@ -15,5 +14,5 @@ export const KnowledgeListTop = () => {
         <KnowledgeList knowledgeList={data.currentUser.knowledgeList} />
       )}
     </div>
-  );
-};
+  )
+}

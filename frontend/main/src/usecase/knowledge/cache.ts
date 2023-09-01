@@ -1,15 +1,28 @@
 import React from 'react'
-import { useSWRConfig } from "swr"
+import { useSWRConfig } from 'swr'
+
 import { MyKnowledgeListQueryVariables } from '@/gql/__generated__/graphql'
 
 export const knowledgeCacheKeyGenerator = {
-  myKnowledgeListKey: ({ variables, includeAll }: { variables: MyKnowledgeListQueryVariables, includeAll?: boolean }) => {
-    return ['KNOWLEDGE', 'LIST', 'MyKnowledgeList', ...(includeAll ? [] : [variables])] as const
+  myKnowledgeListKey: ({
+    variables,
+    includeAll,
+  }: {
+    variables: MyKnowledgeListQueryVariables
+    includeAll?: boolean
+  }): readonly string[] => {
+    const vStr = JSON.stringify(variables)
+    return [
+      'KNOWLEDGE',
+      'LIST',
+      'MyKnowledgeList',
+      ...(includeAll ? [] : [vStr]),
+    ] as const
   },
-  knowledgeItemForDetailKey: ({ id }: { id: string })  => {
+  knowledgeItemForDetailKey: ({ id }: { id: string }): readonly string[] => {
     return ['KNOWLEDGE', 'ITEM', 'KnowledgeItemForDetail', id] as const
   },
-  knowledgeItemForEditKey: ({ id }: { id: string })  => {
+  knowledgeItemForEditKey: ({ id }: { id: string }): readonly string[] => {
     return ['KNOWLEDGE', 'ITEM', 'KnowledgeItemForEdit', id] as const
   },
 }
@@ -23,14 +36,15 @@ export const useKnowledgeCacheMutator = () => {
         return mutate(
           (key: string[]) => key[0] == 'KNOWLEDGE' && key[1] == 'LIST',
           undefined,
-          { revalidate: true }
+          { revalidate: true },
         )
       },
       mutateAllKnowledgeItem: ({ id }: { id: string }) => {
         return mutate(
-          (key: string[]) => key[0] == 'KNOWLEDGE' && key[1] == 'ITEM' && key[key.length - 1] == id,
+          (key: string[]) =>
+            key[0] == 'KNOWLEDGE' && key[1] == 'ITEM' && key[key.length - 1] == id,
           undefined,
-          { revalidate: true }
+          { revalidate: true },
         )
       },
     }),

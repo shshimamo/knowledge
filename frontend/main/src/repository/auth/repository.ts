@@ -1,12 +1,14 @@
-import React from 'react';
-import { ApiClient, useApiClient } from '@/api/auth/apiClient';
+import React from 'react'
+
+import { ApiClient, useApiClient } from '@/api/auth/apiClient'
+import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
+
 import {
   convertSigninResponseToToken,
   convertSigninSeedToReqParams,
   convertSignupResponseToToken,
-  convertSignupSeedToReqParams
-} from './converter';
-import { SigninSeed, SignupSeed, Token } from '@/components/model/auth/type'
+  convertSignupSeedToReqParams,
+} from './converter'
 
 export type AuthRepositoryType = ReturnType<typeof createAuthRepository>
 
@@ -21,13 +23,13 @@ export const useAuthRepository = () => {
 export const createAuthRepository = (apiClient: ApiClient) => ({
   async signup(seed: SignupSeed): Promise<Token> {
     const reqParams = convertSignupSeedToReqParams(seed)
-    const res = await apiClient.signup(reqParams);
-    return convertSignupResponseToToken(res);
+    const res = await apiClient.signup(reqParams)
+    return convertSignupResponseToToken(res)
   },
 
   async signin(seed: SigninSeed): Promise<Token> {
     const reqParams = convertSigninSeedToReqParams(seed)
-    const res = await apiClient.signin(reqParams);
-    return convertSigninResponseToToken(res);
+    const res = await apiClient.signin(reqParams)
+    return convertSigninResponseToToken(res)
   },
-});
+})

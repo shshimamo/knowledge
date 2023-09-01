@@ -1,9 +1,12 @@
+import { useRouter } from 'next/router'
 import React from 'react'
-import { useRouter } from 'next/router';
-import styles from './KnowledgeListItem.module.css';
+
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
 
+import styles from './KnowledgeListItem.module.css'
+
+// prettier-ignore
 export const knowledgeListItemFragment = graphql(/* GraphQL */ `
     fragment KnowledgeListItem on Knowledge {
         id
@@ -14,29 +17,37 @@ export const knowledgeListItemFragment = graphql(/* GraphQL */ `
 
 type KnowledgeListItemProps = {
   knowledge: FragmentType<typeof knowledgeListItemFragment>
-};
+}
 
 export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
   const knowledge = useFragment(knowledgeListItemFragment, props.knowledge)
-  const router = useRouter();
-  const { deleteKnowledge } = useKnowledgeUsecase();
+  const router = useRouter()
+  const knowledgeUsecase = useKnowledgeUsecase()
 
-  const handleEdit = async () => {
-    await router.push(`/knowledge/${knowledge.id}`);
-  };
+  const handleEdit = () => {
+    router.push(`/knowledge/${knowledge.id}`).catch((error) => {
+      console.error(error)
+    })
+  }
 
-  const handleDelete = async () => {
-    await deleteKnowledge(knowledge.id)
+  const handleDelete = () => {
+    knowledgeUsecase.deleteKnowledge(knowledge.id).catch((error) => {
+      console.error(error)
+    })
   }
 
   return (
-      <div className={styles.knowledgeItem}>
-        <h3 className={styles.knowledgeTitle}>{knowledge.title}</h3>
-        <p className={styles.knowledgeText}>{knowledge.text}</p>
-        <div className={styles.buttons}>
-          <button className={styles.editButton} onClick={handleEdit}>Show</button>
-          <button className={styles.deleteButton} onClick={handleDelete}>Delete</button>
-        </div>
+    <div className={styles.knowledgeItem}>
+      <h3 className={styles.knowledgeTitle}>{knowledge.title}</h3>
+      <p className={styles.knowledgeText}>{knowledge.text}</p>
+      <div className={styles.buttons}>
+        <button className={styles.editButton} onClick={handleEdit}>
+          Show
+        </button>
+        <button className={styles.deleteButton} onClick={handleDelete}>
+          Delete
+        </button>
       </div>
-    );
-};
+    </div>
+  )
+}

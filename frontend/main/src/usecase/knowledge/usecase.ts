@@ -1,9 +1,11 @@
 import React from 'react'
+
+import { gqlClient } from '@/api/main/gqlClient'
 import { graphql } from '@/gql/__generated__'
 import { UpdateKnowledgeInput } from '@/gql/__generated__/graphql'
-import { gqlClient } from '@/api/main/gqlClient'
 import { useKnowledgeCacheMutator } from '@/usecase/knowledge/cache'
 
+// prettier-ignore
 const updateKnowledge = graphql(/* GraphQL */ `
     mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {
         updateKnowledge(id: $id, input: $input) {
@@ -15,8 +17,9 @@ const updateKnowledge = graphql(/* GraphQL */ `
             publishedAt
         }
     }
-`);
+`)
 
+// prettier-ignore
 const deleteKnowledge = graphql(/* GraphQL */ `
   mutation DeleteKnowledge($id: ID!) {
       deleteKnowledge(id: $id) {
@@ -24,21 +27,20 @@ const deleteKnowledge = graphql(/* GraphQL */ `
           success
       }
   }
-`);
+`)
 
 export const useKnowledgeUsecase = () => {
-  const mutator = useKnowledgeCacheMutator();
+  const mutator = useKnowledgeCacheMutator()
 
-  return React.useMemo(
-    () => createKnowledgeUsecase({ mutator }),
-    [mutator]
-  )
+  return React.useMemo(() => createKnowledgeUsecase({ mutator }), [mutator])
 }
 
-const createKnowledgeUsecase = ({ mutator }: {
+const createKnowledgeUsecase = ({
+  mutator,
+}: {
   mutator: ReturnType<typeof useKnowledgeCacheMutator>
 }) => ({
-  async updateKnowledge({ id, input }: { id: string, input: UpdateKnowledgeInput }) {
+  async updateKnowledge({ id, input }: { id: string; input: UpdateKnowledgeInput }) {
     try {
       await gqlClient.request(updateKnowledge, { id, input })
       await mutator.mutateAllKnowledgeList()

@@ -1,12 +1,13 @@
 import { RecoilRoot } from 'recoil'
-import { Signup } from '@/components/page/Signup/Signup'
+
 import { Header } from '@/components/page/global/Header'
+import { Signup } from '@/components/page/Signup/Signup'
 
 export const SignupPage = () => {
   return (
     <RecoilRoot>
-      <Header/>
-      <Signup/>
+      <Header />
+      <Signup />
     </RecoilRoot>
   )
 }

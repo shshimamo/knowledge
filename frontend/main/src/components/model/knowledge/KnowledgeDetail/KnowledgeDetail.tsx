@@ -1,9 +1,12 @@
 /* KnowledgeDetail Model */
+import Link from 'next/link'
 import React from 'react'
-import Link from 'next/link';
-import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
-import styles from './KnowledgeDetail.module.css';
 
+import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
+
+import styles from './KnowledgeDetail.module.css'
+
+// prettier-ignore
 export const knowledgeDetailFragment = graphql(/* GraphQL */ `
     fragment KnowledgeDetail on Knowledge {
         id
@@ -24,7 +27,7 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
 
   return (
     <div className={styles.container}>
-      <Link href="/knowledge_list" className={styles.backButton}>
+      <Link href='/knowledge_list' className={styles.backButton}>
         &larr; Back to List
       </Link>
 
@@ -37,7 +40,9 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
           <p>Published At: {knowledge.publishedAt}</p>
         </div>
         <br />
-        <Link href={`/knowledge/${knowledge.id}/edit`} className={styles.button}>Edit</Link>
+        <Link href={`/knowledge/${knowledge.id}/edit`} className={styles.button}>
+          Edit
+        </Link>
       </div>
     </div>
   )

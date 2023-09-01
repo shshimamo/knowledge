@@ -1,11 +1,16 @@
 import React from 'react'
-import { KnowledgeListItem, knowledgeListItemFragment } from '@/components/model/knowledge/KnowledgeListItem/KnowledgeListItem'
+
+import {
+  KnowledgeListItem,
+  knowledgeListItemFragment,
+} from '@/components/model/knowledge/KnowledgeListItem/KnowledgeListItem'
 import { FragmentType } from '@/gql/__generated__'
-import styles from './KnowledgeList.module.css';
+
+import styles from './KnowledgeList.module.css'
 
 type KnowledgeListProps = {
-  knowledgeList: Array<FragmentType<typeof knowledgeListItemFragment>>;
-};
+  knowledgeList: Array<FragmentType<typeof knowledgeListItemFragment>>
+}
 
 export const KnowledgeList: React.FC<KnowledgeListProps> = (props) => {
   return (
@@ -14,5 +19,5 @@ export const KnowledgeList: React.FC<KnowledgeListProps> = (props) => {
         <KnowledgeListItem key={index} knowledge={knowledge} />
       ))}
     </div>
-  );
-};
+  )
+}

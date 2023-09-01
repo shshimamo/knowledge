@@ -27,51 +27,9 @@ module.exports = {
           'index',
         ],
         'newlines-between': 'always',
-        pathGroupsExcludedImportTypes: ['builtin'],
-        pathGroups: [
-          {
-            pattern: '@/api/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/components/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/globalStates/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/gql/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/pages/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/repository/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/styles/**',
-            group: 'internal',
-            position: 'before',
-          },
-          {
-            pattern: '@/usecase/**',
-            group: 'internal',
-            position: 'before',
-          },
-        ],
         alphabetize: {
           order: 'asc',
+          caseInsensitive: true,
         },
       },
     ],
