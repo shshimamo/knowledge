@@ -72,12 +72,13 @@ func (s *knowledgeService) GetMyKnowledge(ctx context.Context, id int) (*gql.Kno
 }
 
 func (s *knowledgeService) CreateKnowledge(ctx context.Context, input *gql.CreateKnowledgeInput) (*gql.Knowledge, error) {
-	_, err := util.CheckAuth(ctx)
+	user, err := util.CheckAuth(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	k := model.MapKnowledgeGqlCreateInputToModel(input)
+	k.UserID = user.ID
 
 	newk, err := s.knowRepo.CreateKnowledge(ctx, k)
 	if err != nil {
