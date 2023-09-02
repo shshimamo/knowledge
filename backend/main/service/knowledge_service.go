@@ -10,7 +10,7 @@ import (
 )
 
 type KnowledgeService interface {
-	CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledgeInput) (*gql.Knowledge, error)
+	CreateKnowledge(ctx context.Context, input *gql.CreateKnowledgeInput) (*gql.Knowledge, error)
 	GetKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
 	GetKnowledgeList(ctx context.Context, ids []int, uids []int) ([]*gql.Knowledge, error)
 	GetMyKnowledge(ctx context.Context, id int) (*gql.Knowledge, error)
@@ -71,13 +71,13 @@ func (s *knowledgeService) GetMyKnowledge(ctx context.Context, id int) (*gql.Kno
 	return gqlk, nil
 }
 
-func (s *knowledgeService) CreateKnowledge(ctx context.Context, gqlnew *gql.NewKnowledgeInput) (*gql.Knowledge, error) {
+func (s *knowledgeService) CreateKnowledge(ctx context.Context, input *gql.CreateKnowledgeInput) (*gql.Knowledge, error) {
 	_, err := util.CheckAuth(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	k := model.MapKnowledgeGqlNewToModel(gqlnew)
+	k := model.MapKnowledgeGqlCreateInputToModel(input)
 
 	newk, err := s.knowRepo.CreateKnowledge(ctx, k)
 	if err != nil {

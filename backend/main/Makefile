@@ -21,3 +21,7 @@ database-create:
 	DB_NAME="knowledge-main-$${APP_ENV}" ;\
 	echo "Start create database: $${DB_NAME}" ;\
 	psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"$${DB_NAME}\";" ;\
+
+.PHONY: gqlgen-generate
+gqlgen-generate:
+	go run github.com/99designs/gqlgen generate

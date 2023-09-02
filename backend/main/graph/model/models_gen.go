@@ -2,15 +2,15 @@
 
 package model
 
-type DeleteKnowledgeResult struct {
-	ID      string `json:"id"`
-	Success bool   `json:"success"`
-}
-
-type NewKnowledgeInput struct {
+type CreateKnowledgeInput struct {
 	Title    string `json:"title"`
 	Text     string `json:"text"`
 	IsPublic bool   `json:"isPublic"`
+}
+
+type DeleteKnowledgeResult struct {
+	ID      string `json:"id"`
+	Success bool   `json:"success"`
 }
 
 type NewUser struct {

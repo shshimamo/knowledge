@@ -33,11 +33,11 @@ func MapKnowledgeListDBToModel(dblist []*db.Knowledge) []*Knowledge {
 	return klist
 }
 
-func MapKnowledgeGqlNewToModel(gqlnew *gql.NewKnowledgeInput) *Knowledge {
+func MapKnowledgeGqlCreateInputToModel(input *gql.CreateKnowledgeInput) *Knowledge {
 	k := &Knowledge{}
-	k.Title = gqlnew.Title
-	k.Text = gqlnew.Text
-	k.IsPublic = gqlnew.IsPublic
+	k.Title = input.Title
+	k.Text = input.Text
+	k.IsPublic = input.IsPublic
 	return k
 }
 
