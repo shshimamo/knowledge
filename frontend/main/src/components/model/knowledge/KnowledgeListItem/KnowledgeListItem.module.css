@@ -23,3 +23,11 @@
 .deleteButton {
     @apply bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded;
 }
+
+.publicButton {
+    @apply bg-green-400 text-white font-bold py-2 px-4 rounded;
+}
+
+.privateButton {
+    @apply bg-gray-600 text-white font-bold py-2 px-4 rounded;
+}

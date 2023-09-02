@@ -133,9 +133,12 @@ export type KnowledgeEditFragment = {
   publishedAt: string
 } & { ' $fragmentName'?: 'KnowledgeEditFragment' }
 
-export type KnowledgeListItemFragment = { id: string; title: string; text: string } & {
-  ' $fragmentName'?: 'KnowledgeListItemFragment'
-}
+export type KnowledgeListItemFragment = {
+  id: string
+  title: string
+  text: string
+  isPublic: boolean
+} & { ' $fragmentName'?: 'KnowledgeListItemFragment' }
 
 export type MyKnowledgeListQueryVariables = Exact<{
   first: Scalars['Int']['input']
@@ -268,6 +271,7 @@ export const KnowledgeListItemFragmentDoc = {
           { kind: 'Field', name: { kind: 'Name', value: 'id' } },
           { kind: 'Field', name: { kind: 'Name', value: 'title' } },
           { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isPublic' } },
         ],
       },
     },
@@ -335,6 +339,7 @@ export const MyKnowledgeListDocument = {
           { kind: 'Field', name: { kind: 'Name', value: 'id' } },
           { kind: 'Field', name: { kind: 'Name', value: 'title' } },
           { kind: 'Field', name: { kind: 'Name', value: 'text' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'isPublic' } },
         ],
       },
     },

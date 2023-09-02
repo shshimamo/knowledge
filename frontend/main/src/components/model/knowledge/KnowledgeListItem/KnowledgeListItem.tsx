@@ -11,6 +11,7 @@ export const knowledgeListItemFragment = graphql(/* GraphQL */ `
     id
     title
     text
+    isPublic
   }
 `)
 
@@ -40,6 +41,9 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
       <h3 className={styles.knowledgeTitle}>{knowledge.title}</h3>
       <p className={styles.knowledgeText}>{knowledge.text}</p>
       <div className={styles.buttons}>
+        <span className={knowledge.isPublic ? styles.publicButton : styles.privateButton}>
+          {knowledge.isPublic ? 'Public' : 'Private'}
+        </span>
         <button className={styles.editButton} onClick={handleEdit}>
           Show
         </button>

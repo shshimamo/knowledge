@@ -17,7 +17,7 @@ const documents = {
     types.KnowledgeDetailFragmentDoc,
   '\n  fragment KnowledgeEdit on Knowledge {\n    id\n    userId\n    title\n    text\n    isPublic\n    publishedAt\n  }\n':
     types.KnowledgeEditFragmentDoc,
-  '\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n  }\n':
+  '\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n    isPublic\n  }\n':
     types.KnowledgeListItemFragmentDoc,
   '\n  query MyKnowledgeList($first: Int!) {\n    currentUser {\n      knowledgeList(first: $first) {\n        ...KnowledgeListItem\n      }\n    }\n  }\n':
     types.MyKnowledgeListDocument,
@@ -69,8 +69,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n  }\n',
-): (typeof documents)['\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n  }\n']
+  source: '\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n    isPublic\n  }\n',
+): (typeof documents)['\n  fragment KnowledgeListItem on Knowledge {\n    id\n    title\n    text\n    isPublic\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
