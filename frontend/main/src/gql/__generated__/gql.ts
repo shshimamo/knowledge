@@ -25,6 +25,8 @@ const documents = {
     types.KnowledgeItemForDetailDocument,
   '\n  query KnowledgeItemForEdit($id: ID!) {\n    knowledge(id: $id) {\n      ...KnowledgeEdit\n    }\n  }\n':
     types.KnowledgeItemForEditDocument,
+  '\n  mutation CreateKnowledge($input: CreateKnowledgeInput!) {\n    createKnowledge(input: $input) {\n      id\n    }\n  }\n':
+    types.CreateKnowledgeDocument,
   '\n  mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {\n    updateKnowledge(id: $id, input: $input) {\n      id\n      userId\n      title\n      text\n      isPublic\n      publishedAt\n    }\n  }\n':
     types.UpdateKnowledgeDocument,
   '\n  mutation DeleteKnowledge($id: ID!) {\n    deleteKnowledge(id: $id) {\n      id\n      success\n    }\n  }\n':
@@ -87,6 +89,12 @@ export function graphql(
 export function graphql(
   source: '\n  query KnowledgeItemForEdit($id: ID!) {\n    knowledge(id: $id) {\n      ...KnowledgeEdit\n    }\n  }\n',
 ): (typeof documents)['\n  query KnowledgeItemForEdit($id: ID!) {\n    knowledge(id: $id) {\n      ...KnowledgeEdit\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation CreateKnowledge($input: CreateKnowledgeInput!) {\n    createKnowledge(input: $input) {\n      id\n    }\n  }\n',
+): (typeof documents)['\n  mutation CreateKnowledge($input: CreateKnowledgeInput!) {\n    createKnowledge(input: $input) {\n      id\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
