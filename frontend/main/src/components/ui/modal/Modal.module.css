@@ -1,0 +1,25 @@
+.modal {
+    @apply fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50;
+    z-index: 1000; /* Ensure the modal appears on top */
+}
+
+.modalContent {
+    @apply bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto;
+    @apply flex flex-col items-center justify-center;
+}
+
+.modalContent h2 {
+    @apply text-black text-lg font-semibold p-4 border-b;
+}
+
+.buttonGroup {
+    @apply flex justify-center space-x-4;
+}
+
+.buttonNo {
+    @apply bg-gray-400 text-white p-2 px-6 rounded m-4 hover:bg-gray-600;
+}
+
+.buttonYes {
+    @apply bg-blue-500 text-white p-2 px-6 rounded m-4 hover:bg-blue-700;
+}

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
+import { Modal } from '@/components/ui/modal/Modal'
 import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
 
@@ -23,6 +24,7 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
   const knowledge = useFragment(knowledgeListItemFragment, props.knowledge)
   const router = useRouter()
   const knowledgeUsecase = useKnowledgeUsecase()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const handleEdit = () => {
     router.push(`/knowledge/${knowledge.id}`).catch((error) => {
@@ -30,9 +32,18 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
     })
   }
 
-  const handleDelete = () => {
+  const showDeleteModal = () => {
+    setIsDeleteModalOpen(true)
+  }
+
+  const onDeleteModalNo = () => {
+    setIsDeleteModalOpen(false)
+  }
+
+  const onDeleteModalYes = () => {
     knowledgeUsecase.deleteKnowledge(knowledge.id).catch((error) => {
       console.error(error)
+      setIsDeleteModalOpen(false)
     })
   }
 
@@ -47,9 +58,12 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
         <button className={styles.editButton} onClick={handleEdit}>
           Show
         </button>
-        <button className={styles.deleteButton} onClick={handleDelete}>
+        <button className={styles.deleteButton} onClick={showDeleteModal}>
           Delete
         </button>
+        {isDeleteModalOpen && (
+          <Modal text={'Delete?'} onNo={onDeleteModalNo} onYes={onDeleteModalYes} />
+        )}
       </div>
     </div>
   )
