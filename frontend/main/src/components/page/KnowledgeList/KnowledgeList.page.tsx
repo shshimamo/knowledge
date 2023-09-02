@@ -1,6 +1,6 @@
 import { RecoilRoot } from 'recoil'
 
-import { Header } from '@/components/page/global/Header'
+import { Header } from '@/components/ui/global/Header'
 
 import { KnowledgeListTop } from './KnowledgeList'
 

@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
-import { Header } from '@/components/page/global/Header'
-import { Loading } from '@/components/page/global/Loading'
 import { KnowledgeEditRoot } from '@/components/page/KnowledgeEdit/KnowledgeEdit'
+import { Header } from '@/components/ui/global/Header'
+import { Loading } from '@/components/ui/global/Loading'
 
 export const KnowledgeEditPage = () => {
   const router = useRouter()

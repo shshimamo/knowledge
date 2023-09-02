@@ -1,5 +1,5 @@
 import { KnowledgeEdit } from '@/components/model/knowledge/KnowledgeEdit/KnowledgeEdit'
-import { Loading } from '@/components/page/global/Loading'
+import { Loading } from '@/components/ui/global/Loading'
 import { useKnowledgeItemForEdit } from '@/usecase/knowledge/reader'
 
 type KnowledgeEditRootProps = {

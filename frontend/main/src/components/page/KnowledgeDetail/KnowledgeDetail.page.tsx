@@ -2,8 +2,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
-import { Header } from '@/components/page/global/Header'
-import { Loading } from '@/components/page/global/Loading'
+import { Header } from '@/components/ui/global/Header'
+import { Loading } from '@/components/ui/global/Loading'
 
 import { KnowledgeDetailRoot } from './KnowledgeDetail'
 

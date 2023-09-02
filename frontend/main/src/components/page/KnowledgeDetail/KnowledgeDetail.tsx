@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { KnowledgeDetail } from '@/components/model/knowledge/KnowledgeDetail/KnowledgeDetail'
-import { Loading } from '@/components/page/global/Loading'
+import { Loading } from '@/components/ui/global/Loading'
 import { useKnowledgeItemForDetail } from '@/usecase/knowledge/reader'
 
 type KnowledgeDetailRootProps = {
