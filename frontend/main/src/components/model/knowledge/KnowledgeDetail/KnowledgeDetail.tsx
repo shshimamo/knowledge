@@ -6,16 +6,15 @@ import { FragmentType, graphql, useFragment } from '@/gql/__generated__'
 
 import styles from './KnowledgeDetail.module.css'
 
-// prettier-ignore
 export const knowledgeDetailFragment = graphql(/* GraphQL */ `
-    fragment KnowledgeDetail on Knowledge {
-        id
-        userId
-        title
-        text
-        isPublic
-        publishedAt
-    }
+  fragment KnowledgeDetail on Knowledge {
+    id
+    userId
+    title
+    text
+    isPublic
+    publishedAt
+  }
 `)
 
 type KnowledgeDetailProps = {

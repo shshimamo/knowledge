@@ -8,16 +8,15 @@ import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
 
 import styles from './KnowledgeEdit.module.css'
 
-// prettier-ignore
 export const knowledgeEditFragment = graphql(/* GraphQL */ `
-    fragment KnowledgeEdit on Knowledge {
-        id
-        userId
-        title
-        text
-        isPublic
-        publishedAt
-    }
+  fragment KnowledgeEdit on Knowledge {
+    id
+    userId
+    title
+    text
+    isPublic
+    publishedAt
+  }
 `)
 
 type KnowledgeEditProps = {

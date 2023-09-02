@@ -2,15 +2,14 @@ import { useGraphQL } from '@/api/main/useGraphQL'
 import { graphql } from '@/gql/__generated__'
 import { knowledgeCacheKeyGenerator } from '@/usecase/knowledge/cache'
 
-// prettier-ignore
 export const myKnowledgeList = graphql(/* GraphQL */ `
-    query MyKnowledgeList($first: Int!) {
-        currentUser {
-            knowledgeList(first: $first) {
-                ...KnowledgeListItem
-            }
-        }
+  query MyKnowledgeList($first: Int!) {
+    currentUser {
+      knowledgeList(first: $first) {
+        ...KnowledgeListItem
+      }
     }
+  }
 `)
 
 export const useMyKnowledgeList = ({ first }: { first: number }) => {
@@ -21,13 +20,12 @@ export const useMyKnowledgeList = ({ first }: { first: number }) => {
   )
 }
 
-// prettier-ignore
 const knowledgeItemForDetail = graphql(/* GraphQL */ `
-    query KnowledgeItemForDetail($id: ID!) {
-        knowledge(id: $id) {
-            ...KnowledgeDetail
-        }
+  query KnowledgeItemForDetail($id: ID!) {
+    knowledge(id: $id) {
+      ...KnowledgeDetail
     }
+  }
 `)
 
 export const useKnowledgeItemForDetail = ({ id }: { id: string }) => {
@@ -38,13 +36,12 @@ export const useKnowledgeItemForDetail = ({ id }: { id: string }) => {
   )
 }
 
-// prettier-ignore
 const knowledgeItemForEdit = graphql(/* GraphQL */ `
-    query KnowledgeItemForEdit($id: ID!) {
-        knowledge(id: $id) {
-            ...KnowledgeEdit
-        }
+  query KnowledgeItemForEdit($id: ID!) {
+    knowledge(id: $id) {
+      ...KnowledgeEdit
     }
+  }
 `)
 
 export const useKnowledgeItemForEdit = ({ id }: { id: string }) => {

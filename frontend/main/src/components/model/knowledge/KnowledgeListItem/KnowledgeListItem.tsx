@@ -6,14 +6,13 @@ import { useKnowledgeUsecase } from '@/usecase/knowledge/usecase'
 
 import styles from './KnowledgeListItem.module.css'
 
-// prettier-ignore
 export const knowledgeListItemFragment = graphql(/* GraphQL */ `
-    fragment KnowledgeListItem on Knowledge {
-        id
-        title
-        text
-    }
-`);
+  fragment KnowledgeListItem on Knowledge {
+    id
+    title
+    text
+  }
+`)
 
 type KnowledgeListItemProps = {
   knowledge: FragmentType<typeof knowledgeListItemFragment>

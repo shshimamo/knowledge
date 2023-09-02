@@ -5,27 +5,25 @@ import { graphql } from '@/gql/__generated__'
 import { UpdateKnowledgeInput } from '@/gql/__generated__/graphql'
 import { useKnowledgeCacheMutator } from '@/usecase/knowledge/cache'
 
-// prettier-ignore
 const updateKnowledge = graphql(/* GraphQL */ `
-    mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {
-        updateKnowledge(id: $id, input: $input) {
-            id
-            userId
-            title
-            text
-            isPublic
-            publishedAt
-        }
+  mutation UpdateKnowledge($id: ID!, $input: UpdateKnowledgeInput!) {
+    updateKnowledge(id: $id, input: $input) {
+      id
+      userId
+      title
+      text
+      isPublic
+      publishedAt
     }
+  }
 `)
 
-// prettier-ignore
 const deleteKnowledge = graphql(/* GraphQL */ `
   mutation DeleteKnowledge($id: ID!) {
-      deleteKnowledge(id: $id) {
-          id
-          success
-      }
+    deleteKnowledge(id: $id) {
+      id
+      success
+    }
   }
 `)
 
