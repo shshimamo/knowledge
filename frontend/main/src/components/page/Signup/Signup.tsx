@@ -16,7 +16,7 @@ export const Signup = () => {
   const signup = async () => {
     try {
       await authUsecase.signup({ email, password }, name)
-      await router.push('/')
+      await router.push('/knowledge_list')
     } catch (error) {
       console.error(error)
     }

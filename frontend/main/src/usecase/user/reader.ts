@@ -14,3 +14,5 @@ const currentUser = graphql(/* GraphQL */ `
 export const useCurrentUser = () => {
   return useGraphQL(userCacheKeyGenerator.currentUserKey(), currentUser)
 }
+
+export type UseCurrentUserType = ReturnType<typeof useCurrentUser>

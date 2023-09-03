@@ -3,6 +3,7 @@ import React from 'react'
 import { RecoilRoot } from 'recoil'
 
 import { KnowledgeEditRoot } from '@/components/page/KnowledgeEdit/KnowledgeEdit'
+import { AppInitializer } from '@/components/ui/global/AppInitializer'
 import { Header } from '@/components/ui/global/Header'
 import { Loading } from '@/components/ui/global/Loading'
 
@@ -16,8 +17,10 @@ export const KnowledgeEditPage = () => {
 
   return (
     <RecoilRoot>
-      <Header />
-      <KnowledgeEditRoot id={id} />
+      <AppInitializer>
+        <Header />
+        <KnowledgeEditRoot id={id} />
+      </AppInitializer>
     </RecoilRoot>
   )
 }

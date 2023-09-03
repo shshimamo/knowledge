@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
+import { AppInitializer } from '@/components/ui/global/AppInitializer'
 import { Header } from '@/components/ui/global/Header'
 import { Loading } from '@/components/ui/global/Loading'
 
@@ -17,8 +18,10 @@ export const KnowledgeDetailPage = () => {
 
   return (
     <RecoilRoot>
-      <Header />
-      <KnowledgeDetailRoot id={id} />
+      <AppInitializer>
+        <Header />
+        <KnowledgeDetailRoot id={id} />
+      </AppInitializer>
     </RecoilRoot>
   )
 }
