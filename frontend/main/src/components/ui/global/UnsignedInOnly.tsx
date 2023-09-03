@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router'
 import React, { PropsWithChildren, useEffect, useState } from 'react'
 
-import { useAppInitializedState } from '@/globalStates/appInitializedState'
 import { useCurrentUserState } from '@/globalStates/currentUserState'
+import { useInitCurrentUserState } from '@/globalStates/initCurrentUserState'
 
 export const UnsignedInOnly: React.FC<PropsWithChildren> = ({ children }) => {
-  const appInitialized = useAppInitializedState()
+  const initCurrentUserState = useInitCurrentUserState()
   const currentUser = useCurrentUserState()
   const router = useRouter()
   const [shouldRedirect, setShouldRedirect] = useState(false)
 
   useEffect(() => {
-    if (appInitialized.currentUserInitialized && currentUser.id) {
+    if (initCurrentUserState.isInitialized && currentUser.id) {
       setShouldRedirect(true) // For UI flickering
       void router.push('/knowledge_list')
     }
   }, [currentUser, router])
 
-  if (!appInitialized.currentUserInitialized || shouldRedirect) {
+  if (!initCurrentUserState.isInitialized || shouldRedirect) {
     return <div>loading...</div>
   }
 
