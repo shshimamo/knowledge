@@ -10,7 +10,7 @@ export const Header = () => {
   return (
     <header className='flex items-center justify-between bg-blue-500 px-6 py-4 text-white'>
       <h1 className='text-2xl font-bold'>Your App Name</h1>
-      {currentUser && (
+      {currentUser.id && (
         <div className='flex items-center'>
           <p className='mr-4'>Welcome, {currentUser.name}!</p>
           <button

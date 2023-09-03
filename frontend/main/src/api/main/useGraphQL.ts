@@ -16,5 +16,6 @@ export function useGraphQL<TResult, TVariables extends Variables | undefined>(
         document: document,
         variables: variables,
       })) as Promise<TResult>,
+    { revalidateOnFocus: false },
   )
 }
