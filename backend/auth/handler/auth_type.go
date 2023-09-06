@@ -1,6 +1,6 @@
 package handler
 
-import "github.com/shshimamo/knowledge-auth/model"
+import "github.com/shshimamo/knowledge/auth/model"
 
 type SignupRequest struct {
 	Email    string `json:"email"`

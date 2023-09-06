@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/shshimamo/knowledge-main/graph/model"
+	"github.com/shshimamo/knowledge/main/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1594,7 +1594,7 @@ func (ec *executionContext) _Query_currentUser(ctx context.Context, field graphq
 		if data, ok := tmp.(*model.CurrentUser); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/shshimamo/knowledge-main/graph/model.CurrentUser`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/shshimamo/knowledge/main/graph/model.CurrentUser`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)

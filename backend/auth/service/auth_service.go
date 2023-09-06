@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"database/sql"
-	"github.com/shshimamo/knowledge-auth/model"
-	"github.com/shshimamo/knowledge-auth/repository"
+	"github.com/shshimamo/knowledge/auth/model"
+	"github.com/shshimamo/knowledge/auth/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 

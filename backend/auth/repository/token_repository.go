@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"github.com/shshimamo/knowledge-auth/model"
+	"github.com/shshimamo/knowledge/auth/model"
 )
 
 type TokenRepository interface {

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/shshimamo/knowledge-main/graph/loader"
-	"github.com/shshimamo/knowledge-main/middlewares"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository"
-	"github.com/shshimamo/knowledge-main/utils"
+	"github.com/shshimamo/knowledge/main/graph/loader"
+	"github.com/shshimamo/knowledge/main/middlewares"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository"
+	"github.com/shshimamo/knowledge/main/utils"
 	"log"
 	"net/http"
 	"os"
@@ -13,10 +13,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/rs/cors"
-	"github.com/shshimamo/knowledge-main/graph"
-	"github.com/shshimamo/knowledge-main/graph/generated"
-	hand "github.com/shshimamo/knowledge-main/handler"
-	"github.com/shshimamo/knowledge-main/service"
+	"github.com/shshimamo/knowledge/main/graph"
+	"github.com/shshimamo/knowledge/main/graph/generated"
+	hand "github.com/shshimamo/knowledge/main/handler"
+	"github.com/shshimamo/knowledge/main/service"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 

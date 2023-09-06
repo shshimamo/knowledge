@@ -2,15 +2,15 @@ package main
 
 import (
 	"database/sql"
-	"github.com/shshimamo/knowledge-auth/utils"
+	"github.com/shshimamo/knowledge/auth/utils"
 	"log"
 	"net/http"
 	"os"
 
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
-	"github.com/shshimamo/knowledge-auth/handler"
-	"github.com/shshimamo/knowledge-auth/model"
+	"github.com/shshimamo/knowledge/auth/handler"
+	"github.com/shshimamo/knowledge/auth/model"
 )
 
 func main() {

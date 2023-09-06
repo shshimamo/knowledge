@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	gql "github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository"
-	"github.com/shshimamo/knowledge-main/service/util"
+	gql "github.com/shshimamo/knowledge/main/graph/model"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository"
+	"github.com/shshimamo/knowledge/main/service/util"
 	"strconv"
 )
 

@@ -2,8 +2,8 @@ package util
 
 import (
 	"context"
-	"github.com/shshimamo/knowledge-main/middlewares"
-	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge/main/middlewares"
+	"github.com/shshimamo/knowledge/main/model"
 )
 
 func CheckAuth(ctx context.Context) (*model.User, error) {

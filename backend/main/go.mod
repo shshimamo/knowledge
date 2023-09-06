@@ -1,4 +1,4 @@
-module github.com/shshimamo/knowledge-main
+module github.com/shshimamo/knowledge/main
 
 go 1.21
 
