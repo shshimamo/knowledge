@@ -6,7 +6,7 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
-	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge/main/model"
 )
 
 type databaseConfig struct {

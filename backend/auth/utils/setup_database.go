@@ -3,7 +3,7 @@ package utils
 import (
 	"database/sql"
 	"fmt"
-	"github.com/shshimamo/knowledge-auth/model"
+	"github.com/shshimamo/knowledge/auth/model"
 	"os"
 
 	_ "github.com/lib/pq"

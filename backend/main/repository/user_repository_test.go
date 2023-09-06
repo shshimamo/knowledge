@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/utils"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/utils"
 )
 
 func setupUserRepository(t *testing.T) UserRepository {

@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"github.com/graph-gophers/dataloader/v7"
-	gql "github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/service"
-	"github.com/shshimamo/knowledge-main/utils"
+	gql "github.com/shshimamo/knowledge/main/graph/model"
+	"github.com/shshimamo/knowledge/main/service"
+	"github.com/shshimamo/knowledge/main/utils"
 )
 
 type knowledgeBatch struct {

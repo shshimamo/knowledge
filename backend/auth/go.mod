@@ -1,4 +1,4 @@
-module github.com/shshimamo/knowledge-auth
+module github.com/shshimamo/knowledge/auth
 
 go 1.21
 

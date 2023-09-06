@@ -1,10 +1,10 @@
 package loader
 
 import (
-	"github.com/shshimamo/knowledge-main/service"
+	"github.com/shshimamo/knowledge/main/service"
 
 	"github.com/graph-gophers/dataloader/v7"
-	gql "github.com/shshimamo/knowledge-main/graph/model"
+	gql "github.com/shshimamo/knowledge/main/graph/model"
 )
 
 type Loaders struct {

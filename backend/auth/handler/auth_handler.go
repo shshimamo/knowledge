@@ -3,8 +3,8 @@ package handler
 import (
 	"database/sql"
 	"encoding/json"
-	"github.com/shshimamo/knowledge-auth/model"
-	"github.com/shshimamo/knowledge-auth/service"
+	"github.com/shshimamo/knowledge/auth/model"
+	"github.com/shshimamo/knowledge/auth/service"
 	"net/http"
 )
 

@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"errors"
-	gql "github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/middlewares"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository"
+	gql "github.com/shshimamo/knowledge/main/graph/model"
+	"github.com/shshimamo/knowledge/main/middlewares"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository"
 )
 
 type UserService interface {

@@ -1,8 +1,8 @@
 package graph
 
 import (
-	"github.com/shshimamo/knowledge-main/graph/loader"
-	"github.com/shshimamo/knowledge-main/service"
+	"github.com/shshimamo/knowledge/main/graph/loader"
+	"github.com/shshimamo/knowledge/main/service"
 )
 
 // This file will not be regenerated automatically.
