@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package hello;
 
-option go_package = "github.com/shshimamo/knowledge/protobufs/pkg/example/hello/go_hello_v1";
+option go_package = "github.com/shshimamo/knowledge/protobufs/example/gen/pb_go";
 
 service helloService{
  rpc GetServerResponse(Message) returns (MessageResponse) {}

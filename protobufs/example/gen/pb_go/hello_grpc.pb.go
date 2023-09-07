@@ -4,7 +4,7 @@
 // - protoc             v4.24.2
 // source: hello.proto
 
-package go_hello_v1
+package pb_go
 
 import (
 	context "context"
