@@ -1,0 +1,67 @@
+name: Build Push | Backend Auth
+
+on:
+  workflow_dispatch:
+    inputs:
+      dir_name:
+        description: "ビルド対象"
+        required: true
+        default: grpc_server
+        type: choice
+        options:
+          - grpc_server
+          - grpc_client
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Set Repository Name
+      id: set_repository_name
+      run: |
+        if [[ "${{ github.event.inputs.dir_name }}" == "grpc_server" ]]; then
+          echo "::set-output name=repository::sample-grpc-server"
+        elif [[ "${{ github.event.inputs.dir_name }}" == "grpc_client" ]]; then
+          echo "::set-output name=repository::sample-grpc-client"
+        fi
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-region: 'ap-northeast-1'
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-oidc
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      with:
+        images: |
+          ${{ env.ECR_REGISTRY }}/${{ steps.set_repository_name.outputs.repository }}
+        tags: |
+          type=sha
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: ./sample/${{ github.event.inputs.dir_name }}
+        file: ./sample/${{ github.event.inputs.dir_name }}/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        provenance: false
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

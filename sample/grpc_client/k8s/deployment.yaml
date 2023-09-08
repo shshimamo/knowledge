@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-grpc-client
+  namespace: app-ns
+spec:
+  selector:
+    matchLabels:
+      app: sample-grpc-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sample-grpc-client
+    spec:
+      containers:
+        - name: sample-grpc-client
+          image: __REGISTRY__/sample-grpc-client:__IMAGE_TAG__
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+          env:
+            - name: APP_ENV
+              value: production
