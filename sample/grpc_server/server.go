@@ -34,28 +34,19 @@ func main() {
 	reflection.Register(s)
 
 	// Create Lisnter
-	gport := gRPCPort()
-	listener, err := net.Listen("tcp", ":"+gport)
+	port := getPort()
+	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		panic(err)
 	}
 
 	// Start gRPC Server
-	log.Printf("start gRPC server port: %v", gport)
+	log.Printf("start gRPC server port: %v", port)
 	s.Serve(listener)
 }
 
 func getPort() string {
 	port := os.Getenv("PORT")
-	if port == "" {
-		return "8081"
-	} else {
-		return port
-	}
-}
-
-func gRPCPort() string {
-	port := os.Getenv("GRPC_PORT")
 	if port == "" {
 		return "8082"
 	} else {
