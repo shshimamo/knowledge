@@ -3,7 +3,6 @@ package handler
 import (
 	"database/sql"
 	"encoding/json"
-	"github.com/shshimamo/knowledge-auth/model"
 	"github.com/shshimamo/knowledge-auth/service"
 	"net/http"
 )
@@ -15,12 +14,11 @@ type AuthHandler interface {
 }
 
 type authHandler struct {
-	db     *sql.DB
-	appEnv model.AppEnv
+	db *sql.DB
 }
 
-func NewAuthHandler(db *sql.DB, appEnv model.AppEnv) AuthHandler {
-	return &authHandler{db: db, appEnv: appEnv}
+func NewAuthHandler(db *sql.DB) AuthHandler {
+	return &authHandler{db: db}
 }
 
 func (h *authHandler) Signup(w http.ResponseWriter, r *http.Request) {

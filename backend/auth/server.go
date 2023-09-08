@@ -30,7 +30,7 @@ func main() {
 }
 
 func setupHandler(db *sql.DB, appEnv model.AppEnv) http.Handler {
-	auth := handler.NewAuthHandler(db, appEnv)
+	auth := handler.NewAuthHandler(db)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
