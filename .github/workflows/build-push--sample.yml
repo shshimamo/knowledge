@@ -1,4 +1,4 @@
-name: Build Push | Backend Auth
+name: Build Push | Sample
 
 on:
   workflow_dispatch:
