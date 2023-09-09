@@ -8,8 +8,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "github.com/shshimamo/knowledge-main/model"
-	repository "github.com/shshimamo/knowledge-main/repository"
+	model "github.com/shshimamo/knowledge/main/model"
+	repository "github.com/shshimamo/knowledge/main/repository"
 	gomock "go.uber.org/mock/gomock"
 )
 

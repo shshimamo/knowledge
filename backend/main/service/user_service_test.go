@@ -3,16 +3,16 @@ package service
 import (
 	"context"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/shshimamo/knowledge-main/middlewares"
-	mockrepository "github.com/shshimamo/knowledge-main/mock/repository"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository"
-	"github.com/shshimamo/knowledge-main/utils"
+	"github.com/shshimamo/knowledge/main/middlewares"
+	mockrepository "github.com/shshimamo/knowledge/main/mock/repository"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository"
+	"github.com/shshimamo/knowledge/main/utils"
 	"go.uber.org/mock/gomock"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	gql "github.com/shshimamo/knowledge-main/graph/model"
+	gql "github.com/shshimamo/knowledge/main/graph/model"
 )
 
 func TestCreateUser(t *testing.T) {

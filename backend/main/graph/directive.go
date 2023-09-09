@@ -3,10 +3,10 @@ package graph
 import (
 	"context"
 	"errors"
-	"github.com/shshimamo/knowledge-main/middlewares"
+	"github.com/shshimamo/knowledge/main/middlewares"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/shshimamo/knowledge-main/graph/generated"
+	"github.com/shshimamo/knowledge/main/graph/generated"
 )
 
 var Directive generated.DirectiveRoot = generated.DirectiveRoot{

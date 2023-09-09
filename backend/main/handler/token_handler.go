@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge/main/model"
 	"log/slog"
 	"net/http"
 )

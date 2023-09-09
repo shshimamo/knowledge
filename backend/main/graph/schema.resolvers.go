@@ -9,10 +9,10 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/shshimamo/knowledge-main/graph/generated"
-	"github.com/shshimamo/knowledge-main/graph/model"
-	"github.com/shshimamo/knowledge-main/middlewares"
-	m "github.com/shshimamo/knowledge-main/model"
+	"github.com/shshimamo/knowledge/main/graph/generated"
+	"github.com/shshimamo/knowledge/main/graph/model"
+	"github.com/shshimamo/knowledge/main/middlewares"
+	m "github.com/shshimamo/knowledge/main/model"
 )
 
 // CreateUser is the resolver for the createUser field.

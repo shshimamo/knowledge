@@ -3,8 +3,9 @@ package handler
 import (
 	"database/sql"
 	"encoding/json"
-	"github.com/shshimamo/knowledge-auth/service"
 	"net/http"
+
+	"github.com/shshimamo/knowledge/auth/service"
 )
 
 type AuthHandler interface {

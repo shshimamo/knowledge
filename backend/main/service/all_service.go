@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/shshimamo/knowledge-main/repository"
+	"github.com/shshimamo/knowledge/main/repository"
 )
 
 type AllService interface {

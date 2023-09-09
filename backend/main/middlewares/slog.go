@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"github.com/shshimamo/knowledge-main/middlewares/sloghelper"
+	"github.com/shshimamo/knowledge/main/middlewares/sloghelper"
 	"log/slog"
 	"net/http"
 	"os"

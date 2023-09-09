@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"context"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository"
 	"log/slog"
 	"net/http"
 )

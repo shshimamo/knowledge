@@ -3,11 +3,11 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/shshimamo/knowledge-main/utils"
+	"github.com/shshimamo/knowledge/main/utils"
 
-	"github.com/shshimamo/knowledge-main/db"
-	"github.com/shshimamo/knowledge-main/model"
-	"github.com/shshimamo/knowledge-main/repository/errs"
+	"github.com/shshimamo/knowledge/main/db"
+	"github.com/shshimamo/knowledge/main/model"
+	"github.com/shshimamo/knowledge/main/repository/errs"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
