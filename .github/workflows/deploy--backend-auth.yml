@@ -57,7 +57,7 @@ jobs:
             exit 1
           fi
 
-      - uses: azure/setup-kubectl@v1
+      - uses: azure/setup-kubectl@v3
 
       - name: Create kubeconfig file
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
