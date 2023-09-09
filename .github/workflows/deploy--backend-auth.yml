@@ -73,7 +73,7 @@ jobs:
 
       - name: Get Pods
         run: |
-          kubectl get pods
+          kubectl get pods --v=4
 
 #      - name: Replace image tag in the Kubernetes deployment
 #        env:
