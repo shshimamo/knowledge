@@ -31,6 +31,10 @@ create-db-secret:
 create-db-configmap:
 	kubectl create configmap db-config --from-literal=DB_HOST=${DB_HOST} --from-literal=DB_PORT=5432 --from-literal=DB_USER=postgres --namespace=app-ns
 
+.PHONY: check-db-configmap
+check-db-configmap:
+	kubectl get configmap db-config -o yaml
+
 #
 # kubeconfig
 #

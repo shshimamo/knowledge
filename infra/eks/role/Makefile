@@ -6,9 +6,17 @@ apply-role:
 check-clusterroles:
 	kubectl describe clusterroles role-for-github-actions
 
+.PHONY: check-clusterroles2
+check-clusterroles2:
+	kubectl get clusterrole role-for-github-actions -o yaml
+
 .PHONY: check-rolebindings
 check-rolebindings:
 	kubectl describe rolebindings -n app-ns;
+
+.PHONY: search-rolebindings
+search-rolebindings:
+	kubectl get rolebindings,clusterrolebindings --all-namespaces | grep github-actions
 
 .PHONY: create-iamidentitymapping
 create-iamidentitymapping:
