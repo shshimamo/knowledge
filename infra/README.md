@@ -43,10 +43,10 @@ $ make apply-service
 ```sh
 $ cd infra/eks/ingress
 
-# OIDC Provider 作成
+# EKS に OIDC Provider 作成
 $ make create-oidc-provider
 
-# Policy 作成
+# IAM Policy 作成
 $ make create-ingress-controller-policy
 
 # IAM Role と Service Account 作成
@@ -63,12 +63,12 @@ $ make apply-ingress
 
 * TODO: 自動化
 
-## EKS: Role と IAM プリンシパル
+## EKS: RBAC
 ```sh
 $ cd infra/eks/role
 # ClusterRole, RoleBinding 作成
 $ make apply-role
-# IAM プリンシパル 作成
+# GHA が使う IAM ロールをk8s内のユーザー、グループに紐付ける
 $ make create-iamidentitymapping
 ```
 
