@@ -67,6 +67,10 @@ jobs:
           kubectl config get-contexts
           kubectl config current-context
 
+      - name: AWS Who am I
+        run: |
+          aws sts get-caller-identity
+
       - name: Replace image tag in the Kubernetes deployment
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
