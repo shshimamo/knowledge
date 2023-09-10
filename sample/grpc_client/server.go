@@ -23,9 +23,7 @@ var (
 )
 
 func main() {
-	log.Println("main start.")
 	appEnv = model.NewAppEnv()
-	log.Println("appEnv: " + string(appEnv))
 	conn, err := setGRPCClient()
 	defer func() { _ = conn.Close() }()
 	if err != nil {
@@ -34,7 +32,6 @@ func main() {
 	}
 
 	port := getPort()
-	log.Println("port: " + port)
 	h := setupHandler()
 	log.Println("Listen And Serve...")
 	log.Fatal(http.ListenAndServe(":"+port, h))
@@ -61,14 +58,12 @@ func setupHandler() http.Handler {
 }
 
 func setGRPCClient() (*grpc.ClientConn, error) {
-	log.Println("Start setGRPCClient")
 	var address string
 	if appEnv == model.Production {
 		address = "sample-grpc-server-service:80"
 	} else {
 		address = "localhost:8082"
 	}
-	log.Println("address: " + address)
 	conn, err := grpc.Dial(
 		address,
 		grpc.WithUnaryInterceptor(unaryClientInterceptor),
@@ -76,12 +71,10 @@ func setGRPCClient() (*grpc.ClientConn, error) {
 		grpc.WithBlock(),
 	)
 	if err != nil {
-		log.Println("grpc.Dial err: " + err.Error())
 		return nil, err
 	}
 
 	client = pb_example.NewHelloServiceClient(conn)
-	log.Println("Finish setGRPCClient")
 	return conn, nil
 }
 
