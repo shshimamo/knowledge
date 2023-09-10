@@ -64,7 +64,7 @@ func setGRPCClient() (*grpc.ClientConn, error) {
 	log.Println("Start setGRPCClient")
 	var address string
 	if appEnv == model.Production {
-		address = "sample-grpc-server-service:8082"
+		address = "sample-grpc-server-service:80"
 	} else {
 		address = "localhost:8082"
 	}
