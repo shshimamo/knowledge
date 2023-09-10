@@ -6,6 +6,7 @@ on:
 env:
   REPOSITORY_NAME: knowledge-frontend-main
   CLUSTER_NAME: knowledge-cluster
+  DEPLOYMENT_YAML: frontend/main/k8s/deployment.yaml
 
 jobs:
   deploy:
@@ -71,6 +72,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
         run: |
-          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./frontend/main/k8s/frontend-deployment.yaml > /tmp/frontend-deployment.yaml
-          sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/frontend-deployment.yaml
-          kubectl apply -f /tmp/frontend-deployment.yaml -n app-ns
+          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./${{ env.DEPLOYMENT_YAML }} > /tmp/deployment.yaml
+          sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
+          kubectl apply -f /tmp/deployment.yaml -n app-ns

@@ -48,9 +48,10 @@ jobs:
         uses: docker/metadata-action@v4
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY_NAME: ${{ steps.set_repository_name.outputs.repository }}
         with:
           images: |
-            ${{ env.ECR_REGISTRY }}/${{ steps.set_repository_name.outputs.repository }}
+            ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY_NAME }}
           tags: |
             type=sha
 
@@ -64,8 +65,9 @@ jobs:
         id: check-image
         env:
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+          REPOSITORY_NAME: ${{ steps.set_repository_name.outputs.repository }}
         run: |
-          EXISTS=$(aws ecr describe-images --repository-name "${{ steps.set_repository_name.outputs.repository }}" --image-ids imageTag="${{ env.IMAGE_TAG }}" --region ap-northeast-1)
+          EXISTS=$(aws ecr describe-images --repository-name "${{ env.REPOSITORY_NAME }}" --image-ids imageTag="${{ env.IMAGE_TAG }}" --region ap-northeast-1)
           if [ $? == 0 ]; then
             echo "Image found: ${{ env.IMAGE_TAG }}"
           else
@@ -86,7 +88,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+          DEPLOYMENT_YAML: sample/${{ github.event.inputs.dir_name }}/k8s/deployment.yaml
         run: |
-          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./sample/${{ github.event.inputs.dir_name }}/k8s/deployment.yaml > /tmp/deployment.yaml
+          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./${{ env.DEPLOYMENT_YAML }} > /tmp/deployment.yaml
           sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
           kubectl apply -f /tmp/deployment.yaml -n app-ns
