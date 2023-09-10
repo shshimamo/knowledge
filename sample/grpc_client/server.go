@@ -24,6 +24,8 @@ var (
 
 func main() {
 	log.Println("main start.")
+	appEnv = model.NewAppEnv()
+	log.Println("appEnv: " + string(appEnv))
 	conn, err := setGRPCClient()
 	defer func() { _ = conn.Close() }()
 	if err != nil {
@@ -31,8 +33,6 @@ func main() {
 		return
 	}
 
-	appEnv = model.NewAppEnv()
-	log.Println("appEnv: " + string(appEnv))
 	port := getPort()
 	log.Println("port: " + port)
 	h := setupHandler()
