@@ -20,14 +20,22 @@ search-rolebindings:
 
 .PHONY: create-iamidentitymapping
 create-iamidentitymapping:
-	export AWS_ACCOUNT_ID=$$(aws sts get-caller-identity --query Account --output text); \
+	AWS_ACCOUNT_ID=$(shell aws sts get-caller-identity --query Account --output text) ;\
+	echo "AWS_ACCOUNT_ID: $$AWS_ACCOUNT_ID" ;\
 	eksctl create iamidentitymapping \
 	--cluster knowledge-cluster \
 	--region=ap-northeast-1 \
-    --arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/github-oidc \
+    --arn arn:aws:iam::$$AWS_ACCOUNT_ID:role/github-oidc \
     --username github-actions  \
     --group github-actions \
     --no-duplicate-arns
+
+.PHONY: delete-iamidentitymapping
+delete-iamidentitymapping:
+	AWS_ACCOUNT_ID=$(shell aws sts get-caller-identity --query Account --output text) ;\
+	echo "AWS_ACCOUNT_ID: $$AWS_ACCOUNT_ID" ;\
+	eksctl delete iamidentitymapping --cluster knowledge-cluster --arn arn:aws:iam::$$AWS_ACCOUNT_ID:role/github-oidc
+
 
 .PHONY: check-iamidentitymapping
 check-iamidentitymapping:
