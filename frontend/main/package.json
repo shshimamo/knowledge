@@ -10,8 +10,7 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "test": "jest --watch",
     "test:ci": "jest --ci",
-    "format": "prettier --write .",
-    "prepare": "cd ../.. && husky install frontend/main/.husky"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@types/node": "20.4.4",
