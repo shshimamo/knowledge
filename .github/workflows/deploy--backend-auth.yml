@@ -57,37 +57,14 @@ jobs:
             exit 1
           fi
 
-#      - uses: azure/setup-kubectl@v3
-
       - name: Install kubectl
         run: |
-          curl -LO "https://dl.k8s.io/release/v1.27.5/bin/linux/amd64/kubectl"
+          curl -LO "https://dl.k8s.io/release/$(curl -LS https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
-      - name: Verify kubectl version
-        run: |
-          kubectl version --client
-
       - name: Create kubeconfig file
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
-
-      - name: Check kubectl contexts
-        run: |
-          kubectl config get-contexts
-          kubectl config current-context
-
-      - name: AWS Who am I
-        run: |
-          aws sts get-caller-identity
-
-#      - name: Can I get pods
-#        run: |
-#          kubectl auth can-i get pods --v=4
-
-#      - name: Get Pods
-#        run: |
-#          kubectl get pods --v=4
 
       - name: Replace image tag in the Kubernetes deployment
         env:

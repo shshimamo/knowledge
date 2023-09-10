@@ -40,3 +40,7 @@ delete-iamidentitymapping:
 .PHONY: check-iamidentitymapping
 check-iamidentitymapping:
 	eksctl get iamidentitymapping --cluster knowledge-cluster --region=ap-northeast-1
+
+.PHONY: check-iamidentitymapping-with-configmap
+check-iamidentitymapping-with-configmap:
+	kubectl get configmap aws-auth -o yaml -n kube-system

@@ -73,7 +73,11 @@ jobs:
             exit 1
           fi
 
-      - uses: azure/setup-kubectl@v1
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -LS https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
 
       - name: Create kubeconfig file
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }}
