@@ -23,16 +23,20 @@ var (
 )
 
 func main() {
+	log.Println("main start.")
 	conn, err := setGRPCClient()
 	defer func() { _ = conn.Close() }()
 	if err != nil {
-		log.Fatal("Connection failed.")
+		log.Fatal("Connection failed. error: " + err.Error())
 		return
 	}
 
 	appEnv = model.NewAppEnv()
+	log.Println("appEnv: " + string(appEnv))
 	port := getPort()
+	log.Println("port: " + port)
 	h := setupHandler()
+	log.Println("Listen And Serve...")
 	log.Fatal(http.ListenAndServe(":"+port, h))
 }
 
