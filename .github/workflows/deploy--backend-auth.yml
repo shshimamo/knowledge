@@ -44,18 +44,18 @@ jobs:
           tag=$(echo "${{ steps.meta.outputs.tags }}" | cut -d ":" -f 2)
           echo "::set-output name=tag::$tag"
 
-#      - name: Check if image exists
-#        id: check-image
-#        env:
-#          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
-#        run: |
-#          EXISTS=$(aws ecr describe-images --repository-name "${{ env.REPOSITORY_NAME }}" --image-ids imageTag="${{ env.IMAGE_TAG }}" --region ap-northeast-1)
-#          if [ $? == 0 ]; then
-#            echo "Image found: ${{ env.IMAGE_TAG }}"
-#          else
-#            echo "::error::Image does not exist. Stopping workflow."
-#            exit 1
-#          fi
+      - name: Check if image exists
+        id: check-image
+        env:
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: |
+          EXISTS=$(aws ecr describe-images --repository-name "${{ env.REPOSITORY_NAME }}" --image-ids imageTag="${{ env.IMAGE_TAG }}" --region ap-northeast-1)
+          if [ $? == 0 ]; then
+            echo "Image found: ${{ env.IMAGE_TAG }}"
+          else
+            echo "::error::Image does not exist. Stopping workflow."
+            exit 1
+          fi
 
 #      - uses: azure/setup-kubectl@v3
 
@@ -81,19 +81,19 @@ jobs:
         run: |
           aws sts get-caller-identity
 
-      - name: Can I get pods
-        run: |
-          kubectl auth can-i get pods --v=4
-
-      - name: Get Pods
-        run: |
-          kubectl get pods --v=4
-
-#      - name: Replace image tag in the Kubernetes deployment
-#        env:
-#          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+#      - name: Can I get pods
 #        run: |
-#          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./backend/auth/k8s/deployment.yaml > /tmp/deployment.yaml
-#          sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
-#          kubectl apply -f /tmp/deployment.yaml -n app-ns
+#          kubectl auth can-i get pods --v=4
+
+#      - name: Get Pods
+#        run: |
+#          kubectl get pods --v=4
+
+      - name: Replace image tag in the Kubernetes deployment
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: |
+          sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./backend/auth/k8s/deployment.yaml > /tmp/deployment.yaml
+          sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
+          kubectl apply -f /tmp/deployment.yaml -n app-ns
