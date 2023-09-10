@@ -81,13 +81,9 @@ jobs:
         run: |
           aws sts get-caller-identity
 
-      - name: AWS EKS List Clusters
-        run: |
-          aws eks list-clusters --query 'clusters' --output text
-
       - name: Can I get pods
         run: |
-          kubectl auth can-i get pods
+          kubectl auth can-i get pods --v=4
 
       - name: Get Pods
         run: |
