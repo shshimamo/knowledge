@@ -9,11 +9,11 @@
 ARG GO_VERSION=1.21
 FROM golang:${GO_VERSION} AS build
 
-WORKDIR /src/sample/grpc_client
+WORKDIR /src/sample/grpc/grpc_server
 
 COPY protobufs/example/gen/pb_go /src/protobufs/example/gen/pb_go
-COPY sample/grpc_client/go.mod sample/grpc_client/go.sum ./
-COPY sample/grpc_client/ ./
+COPY sample/grpc/grpc_server/go.mod sample/grpc_server/go.sum ./
+COPY sample/grpc/grpc_server/ ./
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
@@ -67,7 +67,7 @@ USER appuser
 COPY --from=build /bin/server /bin/
 
 # Expose the port that the application listens on.
-EXPOSE 8083
+EXPOSE 8082
 
 # What the container should run when it is started.
 ENTRYPOINT [ "/bin/server" ]

@@ -1,4 +1,4 @@
-# sample/grpc_client, grpc_server 概要
+# sample/grpc/grpc_client, grpc_server 概要
 
 * grpc_server: サンプルgRPCサーバー
 * grpc_client: サンプルgRPCサーバーのクライアント
@@ -14,12 +14,12 @@
 3. EKS: Service 作成
 
 ```sh
-$ cd sample/grpc_server
+$ cd sample/grpc/grpc_server
 $ make apply-service
 ```
 
 ```sh
-$ cd sample/grpc_client
+$ cd sample/grpc/grpc_client
 $ make apply-service
 ```
 
@@ -28,7 +28,7 @@ $ make apply-service
    * infra/eks/ingress の apply-ingress は不要
 
 ```sh
-$ cd sample/grpc_client
+$ cd sample/grpc/grpc_client
 $ make apply-ingress
 ```
 

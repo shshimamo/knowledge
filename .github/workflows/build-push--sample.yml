@@ -59,7 +59,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: ./
-        file: ./sample/${{ github.event.inputs.dir_name }}/Dockerfile
+        file: ./sample/grpc/${{ github.event.inputs.dir_name }}/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         provenance: false
