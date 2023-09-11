@@ -16,4 +16,4 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 )
 
-replace github.com/shshimamo/knowledge/protobufs/example/gen/pb_go => ../../protobufs/example/gen/pb_go
+replace github.com/shshimamo/knowledge/protobufs/example/gen/pb_go => ../../../protobufs/example/gen/pb_go
