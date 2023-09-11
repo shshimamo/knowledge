@@ -12,7 +12,7 @@ FROM golang:${GO_VERSION} AS build
 WORKDIR /src/sample/grpc/grpc_server
 
 COPY protobufs/example/gen/pb_go /src/protobufs/example/gen/pb_go
-COPY sample/grpc/grpc_server/go.mod sample/grpc_server/go.sum ./
+COPY sample/grpc/grpc_server/go.mod sample/grpc/grpc_server/go.sum ./
 COPY sample/grpc/grpc_server/ ./
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
