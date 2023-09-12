@@ -18,7 +18,7 @@ spec:
           image: __REGISTRY__/sample-grpc-server:__IMAGE_TAG__
           imagePullPolicy: Always
           ports:
-            - containerPort: 8083
+            - containerPort: 8082
           env:
             - name: APP_ENV
               value: production
