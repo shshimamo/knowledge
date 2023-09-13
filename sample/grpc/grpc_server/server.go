@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	pb_example "github.com/shshimamo/knowledge/protobufs/example/gen/pb_go"
+	pb_example "github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"

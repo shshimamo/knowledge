@@ -3,13 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/shshimamo/knowledge/examples/grpc_client/model"
+	"github.com/shshimamo/knowledge/sample/grpc/grpc_client/model"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
 	"os"
 
-	pb_example "github.com/shshimamo/knowledge/protobufs/example/gen/pb_go"
+	pb_example "github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go"
 
 	_ "google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"

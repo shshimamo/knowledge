@@ -1,9 +1,9 @@
-module github.com/shshimamo/knowledge/examples/grpc_client
+module github.com/shshimamo/knowledge/sample/grpc/grpc_client
 
 go 1.21.0
 
 require (
-	github.com/shshimamo/knowledge/protobufs/example/gen/pb_go v0.0.0-20230910081736-1eabec03d0bd
+	github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go v0.0.0-00010101000000-000000000000
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230822172742-b8732ec3820d
 	google.golang.org/grpc v1.58.0
 )
@@ -16,4 +16,4 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 )
 
-replace github.com/shshimamo/knowledge/protobufs/example/gen/pb_go => ../../../protobufs/example/gen/pb_go
+replace github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go => ../../../protobufs/example/hello/gen/pb_go

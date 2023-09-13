@@ -1,4 +1,4 @@
-module github.com/shshimamo/knowledge/protobufs/example/gen/pb_go
+module github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go
 
 go 1.20
 
