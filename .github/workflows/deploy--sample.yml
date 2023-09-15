@@ -9,8 +9,8 @@ on:
         default: grpc_server
         type: choice
         options:
-          - grpc_server
-          - grpc_client
+          - sample/grpc_hello/grpc_server
+          - sample/grpc_hello/grpc_client
 
 env:
   CLUSTER_NAME: knowledge-cluster
@@ -25,9 +25,9 @@ jobs:
       - name: Set Repository Name
         id: set_repository_name
         run: |
-          if [[ "${{ github.event.inputs.dir_name }}" == "grpc_server" ]]; then
+          if [[ "${{ github.event.inputs.dir_name }}" == "sample/grpc_hello/grpc_server" ]]; then
             echo "::set-output name=repository::sample-grpc-server"
-          elif [[ "${{ github.event.inputs.dir_name }}" == "grpc_client" ]]; then
+          elif [[ "${{ github.event.inputs.dir_name }}" == "sample/grpc_hello/grpc_client" ]]; then
             echo "::set-output name=repository::sample-grpc-client"
           fi
       - name: Checkout
@@ -88,7 +88,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
-          DEPLOYMENT_YAML: sample/grpc/${{ github.event.inputs.dir_name }}/k8s/deployment.yaml
+          DEPLOYMENT_YAML: ${{ github.event.inputs.dir_name }}/k8s/deployment.yaml
         run: |
           sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./${{ env.DEPLOYMENT_YAML }} > /tmp/deployment.yaml
           sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/deployment.yaml
