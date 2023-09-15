@@ -1,4 +1,4 @@
-module github.com/shshimamo/knowledge/sample/grpc/grpc_client
+module github.com/shshimamo/knowledge/sample/grpc_hello/grpc_client
 
 go 1.21.0
 

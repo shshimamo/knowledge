@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/shshimamo/knowledge/sample/grpc/grpc_client/model"
+	"github.com/shshimamo/knowledge/sample/grpc_hello/grpc_client/model"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
