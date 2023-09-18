@@ -1,0 +1,10 @@
+develop:
+  dialect: postgres
+  datasource: host=localhost dbname=knowledge-oauth-develop user=postgres password=password sslmode=disable
+  dir: db/migrations
+
+production:
+  dialect: postgres
+  datasource: host=${DB_HOST} dbname=knowledge-oauth-production user=${DB_USER} password=${DB_PASSWORD} sslmode=disable
+  dir: db/migrations
+
