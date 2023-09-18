@@ -7,8 +7,8 @@ import (
 )
 
 type Knowledge struct {
-	ID       int
-	UserID   int
+	ID       int64
+	UserID   int64
 	Title    string
 	Text     string
 	IsPublic bool
@@ -16,8 +16,8 @@ type Knowledge struct {
 
 func MapKnowledgeDBToModel(dbk *db.Knowledge) *Knowledge {
 	k := &Knowledge{
-		ID:       int(dbk.ID),
-		UserID:   int(dbk.UserID),
+		ID:       dbk.ID,
+		UserID:   dbk.UserID,
 		Title:    dbk.Title,
 		Text:     dbk.Text,
 		IsPublic: dbk.IsPublic,
@@ -54,8 +54,8 @@ func MapKnowledgeModelToDB(k *Knowledge) *db.Knowledge {
 
 func MapKnowledgeModelToGql(k *Knowledge) *gql.Knowledge {
 	gql := &gql.Knowledge{
-		ID:       strconv.Itoa(k.ID),
-		UserID:   strconv.Itoa(k.UserID),
+		ID:       strconv.FormatInt(k.ID, 10),
+		UserID:   strconv.FormatInt(k.UserID, 10),
 		Title:    k.Title,
 		Text:     k.Text,
 		IsPublic: k.IsPublic,

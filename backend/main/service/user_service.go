@@ -11,7 +11,7 @@ import (
 
 type UserService interface {
 	CreateUser(ctx context.Context, input *gql.NewUser) (*gql.User, error)
-	GetUser(ctx context.Context, id int) (*gql.User, error)
+	GetUser(ctx context.Context, id int64) (*gql.User, error)
 }
 
 type userService struct {
@@ -49,7 +49,7 @@ func (s *userService) CreateUser(ctx context.Context, gqlNew *gql.NewUser) (*gql
 	return gqlUser, nil
 }
 
-func (s *userService) GetUser(ctx context.Context, id int) (*gql.User, error) {
+func (s *userService) GetUser(ctx context.Context, id int64) (*gql.User, error) {
 	u, err := s.userRepo.GetUser(ctx, &repository.GetUserCommand{ID: id})
 	if err != nil {
 		return nil, err

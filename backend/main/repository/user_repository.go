@@ -55,7 +55,7 @@ func (r *userRepository) GetUserByToken(ctx context.Context, token *model.Token)
 }
 
 type GetUserCommand struct {
-	ID   int
+	ID   int64
 	Name string
 }
 

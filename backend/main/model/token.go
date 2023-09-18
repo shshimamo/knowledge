@@ -7,11 +7,11 @@ import (
 )
 
 type Token struct {
-	AuthUserID int
+	AuthUserID int64
 }
 
 type claims struct {
-	AuthUserID int `json:"auth_user_id"`
+	AuthUserID int64 `json:"auth_user_id"`
 	jwt.StandardClaims
 }
 

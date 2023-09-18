@@ -3,7 +3,7 @@
 CREATE TABLE knowledges
 (
     id           BIGSERIAL PRIMARY KEY,
-    user_id      BIGINT       NOT NULL,
+    user_id      BIGINT       NOT NULL REFERENCES users (id),
     title        VARCHAR(255) NOT NULL,
     text         TEXT         NOT NULL,
     is_public    BOOLEAN      NOT NULL DEFAULT FALSE,

@@ -5,6 +5,15 @@ define check_var
   fi
 endef
 
+.PHONY: test
+test:
+	go test -v $(go list ./... | grep -v ./db)
+
+.PHONY: test-db
+test-db:
+	cd ./db ;\
+	go test -v -test.config=../sqlboiler.test.toml ./db/...
+
 .PHONY: migration
 migration:
 	$(call check_var,${DB_HOST},DB_HOST)
@@ -17,10 +26,11 @@ migration:
 .PHONY: database-create
 database-create:
 	$(call check_var,${DB_HOST},DB_HOST)
+	$(call check_var,${DB_PASSWORD},DB_PASSWORD)
 	$(call check_var,${APP_ENV},APP_ENV)
 	DB_NAME="knowledge-main-$${APP_ENV}" ;\
 	echo "Start create database: $${DB_NAME}" ;\
-	psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"$${DB_NAME}\";" ;\
+	PGPASSWORD=$${DB_PASSWORD} psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"$${DB_NAME}\";" ;\
 
 .PHONY: gqlgen-generate
 gqlgen-generate:

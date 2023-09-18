@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.Cre
 
 // UpdateKnowledge is the resolver for the updateKnowledge field.
 func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input *model.UpdateKnowledgeInput) (*model.Knowledge, error) {
-	i, err := strconv.Atoi(id)
+	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input
 
 // DeleteKnowledge is the resolver for the deleteKnowledge field.
 func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*model.DeleteKnowledgeResult, error) {
-	i, err := strconv.Atoi(id)
+	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (r *queryResolver) CurrentUser(ctx context.Context) (*model.CurrentUser, er
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	i, err := strconv.Atoi(id)
+	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 
 // Knowledge is the resolver for the knowledge field.
 func (r *queryResolver) Knowledge(ctx context.Context, id string) (*model.Knowledge, error) {
-	i, err := strconv.Atoi(id)
+	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return nil, err
 	}

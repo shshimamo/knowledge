@@ -9,8 +9,8 @@ import (
 )
 
 type User struct {
-	ID         int
-	AuthUserID int
+	ID         int64
+	AuthUserID int64
 	Name       string
 }
 
@@ -29,7 +29,7 @@ func MapUserDBToModel(dbuser *db.User) *User {
 		ID: dbuser.ID,
 	}
 	if dbuser.AuthUserID.Valid {
-		user.AuthUserID = int(dbuser.AuthUserID.Int64)
+		user.AuthUserID = dbuser.AuthUserID.Int64
 	}
 	if dbuser.Name.Valid {
 		user.Name = dbuser.Name.String
@@ -60,8 +60,8 @@ func MapUserModelToGql(u *User) *gql.User {
 		name = &temp
 	}
 	gql := &gql.User{
-		ID:         strconv.Itoa(u.ID),
-		AuthUserID: strconv.Itoa(u.AuthUserID),
+		ID:         strconv.FormatInt(u.ID, 10),
+		AuthUserID: strconv.FormatInt(u.AuthUserID, 10),
 		Name:       name,
 	}
 	return gql
@@ -74,8 +74,8 @@ func MapUserModelToGqlCurrent(u *User) *gql.CurrentUser {
 		name = &temp
 	}
 	gql := &gql.CurrentUser{
-		ID:         strconv.Itoa(u.ID),
-		AuthUserID: strconv.Itoa(u.AuthUserID),
+		ID:         strconv.FormatInt(u.ID, 10),
+		AuthUserID: strconv.FormatInt(u.AuthUserID, 10),
 		Name:       name,
 	}
 	return gql

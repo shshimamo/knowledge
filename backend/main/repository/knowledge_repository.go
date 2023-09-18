@@ -3,8 +3,6 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/shshimamo/knowledge/main/utils"
-
 	"github.com/shshimamo/knowledge/main/db"
 	"github.com/shshimamo/knowledge/main/model"
 	"github.com/shshimamo/knowledge/main/repository/errs"
@@ -29,8 +27,8 @@ func NewKnowledgeRepository(exec boil.ContextExecutor) KnowledgeRepository {
 }
 
 type GetKnowledgeCommand struct {
-	ID       int
-	UserID   int
+	ID       int64
+	UserID   int64
 	IsPublic bool
 }
 
@@ -62,8 +60,8 @@ func (r *knowledgeRepository) GetKnowledge(ctx context.Context, cmd *GetKnowledg
 }
 
 type GetKnowledgeListCommand struct {
-	IDs     []int
-	UserIDs []int
+	IDs     []int64
+	UserIDs []int64
 }
 
 func (r *knowledgeRepository) GetKnowledgeList(ctx context.Context, cmd *GetKnowledgeListCommand) ([]*model.Knowledge, error) {
@@ -74,13 +72,11 @@ func (r *knowledgeRepository) GetKnowledgeList(ctx context.Context, cmd *GetKnow
 	queryMods := make([]qm.QueryMod, 0)
 
 	if len(cmd.IDs) > 0 {
-		ids := utils.IntSliceToInt64Slice(cmd.IDs)
-		queryMods = append(queryMods, db.KnowledgeWhere.ID.IN(ids))
+		queryMods = append(queryMods, db.KnowledgeWhere.ID.IN(cmd.IDs))
 	}
 
 	if len(cmd.UserIDs) > 0 {
-		uids := utils.IntSliceToInt64Slice(cmd.UserIDs)
-		queryMods = append(queryMods, db.KnowledgeWhere.UserID.IN(uids))
+		queryMods = append(queryMods, db.KnowledgeWhere.UserID.IN(cmd.UserIDs))
 	}
 
 	dblist, err := db.Knowledges(queryMods...).All(ctx, r.exec)
@@ -99,7 +95,7 @@ func (r *knowledgeRepository) CreateKnowledge(ctx context.Context, k *model.Know
 		return nil, errs.ConvertSqlError(err)
 	}
 
-	k.ID = int(dbk.ID)
+	k.ID = dbk.ID
 
 	return k, nil
 }

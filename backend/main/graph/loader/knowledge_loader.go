@@ -23,7 +23,7 @@ func (u *knowledgeBatch) BatchGetKnowledgeList(ctx context.Context, userIDs []st
 		}
 	}
 
-	uids, err := utils.StringSliceToIntSlice(userIDs)
+	uids, err := utils.StringSliceToInt64Slice(userIDs)
 	if err != nil {
 		return results
 	}
