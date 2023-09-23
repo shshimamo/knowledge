@@ -9,6 +9,8 @@ import (
 	"github.com/shshimamo/knowledge/main/repository"
 )
 
+var _ UserService = (*userService)(nil)
+
 type UserService interface {
 	CreateUser(ctx context.Context, input *gql.NewUser) (*gql.User, error)
 	GetUser(ctx context.Context, id int64) (*gql.User, error)

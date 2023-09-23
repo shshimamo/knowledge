@@ -4,6 +4,8 @@ import (
 	"github.com/shshimamo/knowledge/main/repository"
 )
 
+var _ AllService = (*allService)(nil)
+
 type AllService interface {
 	UserService
 	KnowledgeService

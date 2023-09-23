@@ -9,6 +9,8 @@ import (
 	"strconv"
 )
 
+var _ KnowledgeService = (*knowledgeService)(nil)
+
 type KnowledgeService interface {
 	CreateKnowledge(ctx context.Context, input *gql.CreateKnowledgeInput) (*gql.Knowledge, error)
 	GetKnowledge(ctx context.Context, id int64) (*gql.Knowledge, error)
