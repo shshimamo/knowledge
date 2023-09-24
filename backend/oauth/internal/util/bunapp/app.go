@@ -125,11 +125,6 @@ func (app *App) APIRouter() *bunrouter.Group {
 func (app *App) DB() *bun.DB {
 	app.dbOnce.Do(func() {
 		sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(app.cfg.DB.DSN)))
-
-		if err != nil {
-			panic(err)
-		}
-
 		db := bun.NewDB(sqldb, pgdialect.New())
 		db.AddQueryHook(bundebug.NewQueryHook(
 			bundebug.WithEnabled(false),
