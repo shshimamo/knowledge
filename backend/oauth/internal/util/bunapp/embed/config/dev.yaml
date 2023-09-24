@@ -1,4 +1,5 @@
 debug: true
 
 db:
-  dsn: file:dev.s3db?cache=shared
+  dsn: postgres://postgres:password@localhost:5432/knowledge-oauth-develop?sslmode=disable
+

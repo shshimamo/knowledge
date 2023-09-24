@@ -3,6 +3,8 @@ package bunapp
 import (
 	"context"
 	"database/sql"
+	"github.com/uptrace/bun/dialect/pgdialect"
+	"github.com/uptrace/bun/driver/pgdriver"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -13,8 +15,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/sqlitedialect"
-	"github.com/uptrace/bun/driver/sqliteshim"
 	"github.com/uptrace/bun/extra/bundebug"
 	"github.com/uptrace/bunrouter"
 	"github.com/urfave/cli/v2"
@@ -124,12 +124,13 @@ func (app *App) APIRouter() *bunrouter.Group {
 
 func (app *App) DB() *bun.DB {
 	app.dbOnce.Do(func() {
-		sqldb, err := sql.Open(sqliteshim.ShimName, app.cfg.DB.DSN)
+		sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(app.cfg.DB.DSN)))
+
 		if err != nil {
 			panic(err)
 		}
 
-		db := bun.NewDB(sqldb, sqlitedialect.New())
+		db := bun.NewDB(sqldb, pgdialect.New())
 		db.AddQueryHook(bundebug.NewQueryHook(
 			bundebug.WithEnabled(false),
 			bundebug.FromEnv(""),

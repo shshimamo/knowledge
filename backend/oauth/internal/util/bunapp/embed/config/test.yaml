@@ -1,4 +1,4 @@
 debug: true
 
 db:
-  dsn: file:test.s3db?cache=shared
+  dsn: postgres://postgres:password@localhost:5432/knowledge-oauth-test?sslmode=disable
