@@ -1,0 +1,5 @@
+debug: true
+
+db:
+  dsn: postgres://postgres:password@localhost:5432/knowledge-oauth-develop?sslmode=disable
+
