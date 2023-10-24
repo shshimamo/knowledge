@@ -32,7 +32,7 @@ func setupUserRepository(t *testing.T) UserRepository {
 	return repo
 }
 
-func TestCreateUser(t *testing.T) {
+func TestUserRepository_CreateUser(t *testing.T) {
 	type args struct {
 		ctx  context.Context
 		user *model.User
@@ -67,7 +67,7 @@ func TestCreateUser(t *testing.T) {
 	}
 }
 
-func TestGetUserByToken(t *testing.T) {
+func TestUserRepository_GetUserByToken(t *testing.T) {
 	type args struct {
 		ctx   context.Context
 		token *model.Token

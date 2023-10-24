@@ -15,7 +15,7 @@ import (
 	gql "github.com/shshimamo/knowledge/main/graph/model"
 )
 
-func TestCreateUser(t *testing.T) {
+func TestUserService_CreateUser(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		gqlNew *gql.NewUser
@@ -81,7 +81,7 @@ func TestCreateUser(t *testing.T) {
 	}
 }
 
-func TestCreateUserNoMock(t *testing.T) {
+func TestUserService_CreateUser_NoMock(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		gqlNew *gql.NewUser
