@@ -7,7 +7,7 @@ endef
 
 .PHONY: test
 test:
-	go test -v $(go list ./... | grep -v ./db)
+	go test -v $(shell go list ./... | grep -v ./db)
 
 .PHONY: test-db
 test-db:
