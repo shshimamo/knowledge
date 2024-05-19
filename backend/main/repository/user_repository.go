@@ -13,6 +13,8 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
+var _ UserRepository = (*userRepository)(nil)
+
 type UserRepository interface {
 	CreateUser(ctx context.Context, user *model.User) (*model.User, error)
 	GetUserByToken(ctx context.Context, token *model.Token) (*model.User, error)

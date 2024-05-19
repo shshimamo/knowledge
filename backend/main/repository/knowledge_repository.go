@@ -10,6 +10,8 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
+var _ KnowledgeRepository = (*knowledgeRepository)(nil)
+
 type KnowledgeRepository interface {
 	GetKnowledge(ctx context.Context, cmd *GetKnowledgeCommand) (*model.Knowledge, error)
 	GetKnowledgeList(ctx context.Context, cmd *GetKnowledgeListCommand) ([]*model.Knowledge, error)
