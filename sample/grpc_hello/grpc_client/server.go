@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/shshimamo/knowledge/sample/grpc_hello/grpc_client/model"
-	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/shshimamo/knowledge/sample/grpc_hello/grpc_client/model"
+	"google.golang.org/grpc/credentials/insecure"
 
 	pb_example "github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go"
 
@@ -88,7 +89,12 @@ func sendGRPCRequest(w http.ResponseWriter, r *http.Request) {
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	var header, trailer metadata.MD
-	res, err := client.GetServerResponse(ctx, req, grpc.Header(&header), grpc.Trailer(&trailer))
+	//res, err := client.GetServerResponse(ctx, req, grpc.Header(&header), grpc.Trailer(&trailer))
+	res, err := client.Optional(ctx, req, grpc.Header(&header), grpc.Trailer(&trailer))
+
+	if res.GetMessage() == nil {
+		fmt.Printf("%#v\n", res.GetMessage())
+	}
 
 	var message string
 	if err != nil {

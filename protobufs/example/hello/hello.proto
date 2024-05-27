@@ -6,6 +6,8 @@ option go_package = "github.com/shshimamo/knowledge/protobufs/example/hello/gen/
 
 service helloService{
  rpc GetServerResponse(Message) returns (MessageResponse) {}
+ rpc Optional(Message) returns (OptionalResponse) {}
+ rpc OptionalOneOf(Message) returns (OptionalOneOfResponse) {}
 }
 
 message Message{
@@ -15,4 +17,16 @@ message Message{
 message MessageResponse{
  string message = 1;
  bool received = 2;
+}
+
+message OptionalResponse{
+   Message message = 1;
+   string  messageStr = 2;
+}
+
+message OptionalOneOfResponse{
+ oneof messageOneOf {
+  Message message = 1;
+ }
+ string  messageStr = 2;
 }

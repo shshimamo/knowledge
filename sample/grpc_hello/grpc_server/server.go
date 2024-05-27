@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
-	"google.golang.org/grpc/codes"
 	"log"
 	"net"
 	"os"
+
+	"google.golang.org/grpc/codes"
 
 	pb_example "github.com/shshimamo/knowledge/protobufs/example/hello/gen/pb_go"
 
@@ -79,4 +80,9 @@ func (s *myServer) GetServerResponse(ctx context.Context, message *pb_example.Me
 
 	result := "Thanks for talking to gRPC server!!! Welcome to hello world. Received message is: " + message.Message
 	return &pb_example.MessageResponse{Message: result, Received: true}, nil
+}
+
+func (s *myServer) Optional(ctx context.Context, message *pb_example.Message) (*pb_example.OptionalResponse, error) {
+	//m := &pb_example.Message{Message: "hoge"}
+	return &pb_example.OptionalResponse{MessageStr: "hoge"}, nil
 }
