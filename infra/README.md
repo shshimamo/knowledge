@@ -16,8 +16,9 @@ $ DB_PASSWORD=xxx make rds-cdk-deploy
 ## EKS: Namespace, ConfigMap, Secret 作成
 ```sh
 $ cd infra/eks
-$ export DB_PASSWORD=password
-$ export DB_HOST=host
+$ export DB_PASSWORD=xxx
+# rds-cdk-deploy で作成した RDS のエンドポイント
+$ export DB_HOST=xxx.ap-northeast-1.rds.amazonaws.com
 
 # Namespace 作成
 $ make create-namespace-app-ns
