@@ -3,7 +3,7 @@
 #
 .PHONY: create-oidc-provider
 create-oidc-provider:
-	eksctl utils associate-iam-oidc-provider --cluster knowledge-cluster --approve
+	eksctl utils associate-iam-oidc-provider --cluster KnowledgeCluster --approve
 
 #
 # Policy
@@ -21,7 +21,7 @@ create-ingress-controller-policy:
 create-iamserviceaccount:
 	export AWS_ACCOUNT_ID=$$(aws sts get-caller-identity --query Account --output text); \
 	eksctl create iamserviceaccount \
-		--cluster=knowledge-cluster \
+		--cluster=KnowledgeCluster \
 		--namespace=kube-system \
 		--name=aws-load-balancer-controller \
 		--role-name AmazonEKSLoadBalancerControllerRole \
@@ -45,7 +45,7 @@ install-ingress-controller:
 	helm repo update; \
 	helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 		-n kube-system \
-		--set clusterName=knowledge-cluster \
+		--set clusterName=KnowledgeCluster \
 		--set serviceAccount.create=false \
 		--set serviceAccount.name=aws-load-balancer-controller
 

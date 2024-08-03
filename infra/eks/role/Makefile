@@ -23,7 +23,7 @@ create-iamidentitymapping:
 	AWS_ACCOUNT_ID=$(shell aws sts get-caller-identity --query Account --output text) ;\
 	echo "AWS_ACCOUNT_ID: $$AWS_ACCOUNT_ID" ;\
 	eksctl create iamidentitymapping \
-	--cluster knowledge-cluster \
+	--cluster KnowledgeCluster \
 	--region=ap-northeast-1 \
     --arn arn:aws:iam::$$AWS_ACCOUNT_ID:role/github-oidc \
     --username github-actions  \
@@ -34,12 +34,12 @@ create-iamidentitymapping:
 delete-iamidentitymapping:
 	AWS_ACCOUNT_ID=$(shell aws sts get-caller-identity --query Account --output text) ;\
 	echo "AWS_ACCOUNT_ID: $$AWS_ACCOUNT_ID" ;\
-	eksctl delete iamidentitymapping --cluster knowledge-cluster --arn arn:aws:iam::$$AWS_ACCOUNT_ID:role/github-oidc
+	eksctl delete iamidentitymapping --cluster KnowledgeCluster --arn arn:aws:iam::$$AWS_ACCOUNT_ID:role/github-oidc
 
 
 .PHONY: check-iamidentitymapping
 check-iamidentitymapping:
-	eksctl get iamidentitymapping --cluster knowledge-cluster --region=ap-northeast-1
+	eksctl get iamidentitymapping --cluster KnowledgeCluster --region=ap-northeast-1
 
 .PHONY: check-iamidentitymapping-with-configmap
 check-iamidentitymapping-with-configmap:

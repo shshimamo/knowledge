@@ -5,7 +5,7 @@ on:
 
 env:
   REPOSITORY_NAME: knowledge-backend-main
-  CLUSTER_NAME: knowledge-cluster
+  CLUSTER_NAME: KnowledgeCluster
   DEPLOYMENT_YAML: backend/main/k8s/deployment.yaml
 
 jobs:

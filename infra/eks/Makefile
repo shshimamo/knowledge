@@ -44,5 +44,5 @@ check-db-configmap:
 #
 .PHONY: update-kubeconfig
 update-kubeconfig:
-	aws eks --region ap-northeast-1 update-kubeconfig --name knowledge-cluster
+	aws eks --region ap-northeast-1 update-kubeconfig --name KnowledgeCluster
 

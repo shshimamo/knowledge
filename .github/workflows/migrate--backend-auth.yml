@@ -5,7 +5,7 @@ on:
 
 env:
   REPOSITORY_NAME: knowledge-backend-auth-migration
-  CLUSTER_NAME: knowledge-cluster
+  CLUSTER_NAME: KnowledgeCluster
 
 jobs:
   deploy:
