@@ -7,6 +7,7 @@ $ make create-cluster
 ```
 
 ## RDS作成
+* 注意: デフォルトパラメータグループの rds.force_ssl が 1 になっているとEKSから接続エラーになるのでアプリ対応するまでは 0 にしておく
 ```sh
 # eksctl で作成した VPC など利用
 $ cd infra/rds
