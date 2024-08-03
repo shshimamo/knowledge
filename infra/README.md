@@ -26,6 +26,8 @@ $ make create-namespace-app-ns
 $ make create-db-secret
 # ConfigMap 作成
 $ make create-db-configmap
+$ export APP_ENV=production
+$ make create-application-configmap
 ```
 
 ## EKS: Service 作成
