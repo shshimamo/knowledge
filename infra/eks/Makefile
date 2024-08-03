@@ -7,7 +7,7 @@ create-cluster:
 
 .PHONY: delete-cluster
 delete-cluster:
-	eksctl delete cluster -f eksctl-config.yaml
+	eksctl delete cluster -f eksctl-config.yaml --wait --disable-nodegroup-eviction
 
 #
 # Namespace
