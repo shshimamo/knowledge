@@ -56,7 +56,7 @@ $ make create-iamserviceaccount
 # Ingress Controller インストール
 $ make install-ingress-controller
 
-# Ingress 作成
+# Ingress 作成(少しIngress Controllerインストールを待つ必要があるかも)
 $ make apply-ingress
 ```
 
