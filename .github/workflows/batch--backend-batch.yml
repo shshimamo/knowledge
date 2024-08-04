@@ -74,5 +74,6 @@ jobs:
           echo "Input Command: ${{ github.event.inputs.command }}"
           sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./backend/batch/k8s/exec-batch-job.yaml > /tmp/exec-batch-job.yaml
           sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/exec-batch-job.yaml
-          sed -i 's/__COMMAND__/${{ github.event.inputs.command }}/g' /tmp/exec-batch-job.yaml
+          # command にスラッシュが含まれるのでデリミタを#にする
+          sed -i 's#__COMMAND__#${{ github.event.inputs.command }}#g' /tmp/exec-batch-job.yaml
           kubectl apply -f /tmp/exec-batch-job.yaml -n app-ns
