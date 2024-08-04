@@ -3,12 +3,9 @@ name: Batch | Backend Batch
 on:
   workflow_dispatch:
     inputs:
-      command_name:
+      command:
         description: '実行コマンド名'
         required: true
-      command_args:
-        description: '実行コマンド引数'
-        required: false
 
 env:
   REPOSITORY_NAME: knowledge-backend-batch
@@ -74,8 +71,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
         run: |
+          echo "Input Command: ${{ github.event.inputs.command }}"
           sed 's/__IMAGE_TAG__/${{ env.IMAGE_TAG }}/g' ./backend/batch/k8s/exec-batch-job.yaml > /tmp/exec-batch-job.yaml
           sed -i 's/__REGISTRY__/${{ env.ECR_REGISTRY }}/g' /tmp/exec-batch-job.yaml
-          sed -i 's/__COMMAND_NAME__/${{ env.COMMAND_NAME }}/g' /tmp/exec-batch-job.yaml
-          sed -i 's/__COMMAND_ARGS__/${{ env.COMMAND_ARGS }}/g' /tmp/exec-batch-job.yaml
+          sed -i 's/__COMMAND__/${{ github.event.inputs.command }}/g' /tmp/exec-batch-job.yaml
           kubectl apply -f /tmp/exec-batch-job.yaml -n app-ns

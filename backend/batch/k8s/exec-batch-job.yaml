@@ -10,7 +10,7 @@ spec:
       containers:
         - name: exec-batch-container
           image: __REGISTRY__/knowledge-backend-batch:__IMAGE_TAG__
-          args: ["__COMMAND_NAME__", "__COMMAND_ARGS__"]
+          args: ["__COMMAND__"]
           env:
             - name: DB_HOST
               valueFrom:
