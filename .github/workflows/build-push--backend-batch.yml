@@ -1,0 +1,54 @@
+name: Build Push | Backend Batch
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [build-push-backend-batch, build-push-all]
+
+env:
+  REPOSITORY_NAME: knowledge-backend-batch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: 'ap-northeast-1'
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-oidc
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v5
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      with:
+        images: |
+          ${{ env.ECR_REGISTRY }}/${{ env.REPOSITORY_NAME }}
+        tags: |
+          type=sha
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        context: ./backend/main
+        file: ./backend/main/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        provenance: false
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
