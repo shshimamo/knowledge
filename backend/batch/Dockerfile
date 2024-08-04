@@ -29,3 +29,4 @@ RUN chmod +x /entrypoint.sh
 
 # What the container should run when it is started.
 ENTRYPOINT [ "/entrypoint.sh" ]
+CMD ["/go/bin/echo HelloWorld!"]

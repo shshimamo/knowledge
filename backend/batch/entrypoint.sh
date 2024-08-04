@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# 実行例: docker run -it knowledge-batch "/go/bin/echo hoge"
 # The first argument is the command
 CMD=$1
 
@@ -9,14 +10,14 @@ if [ -z "$CMD" ]; then
   exit 1
 fi
 
-# Shift all the arguments
-shift
-
-# Check if the command exists
-if [ ! -f "/go/bin/$CMD" ]; then
-  echo "Unknown command: $CMD"
+# Check if CMD_NAME starts with /go/bin/
+if [ "${CMD#"/go/bin/"}" = "$CMD" ]; then
+  # プレフィックス /go/bin/ を取り除いた結果が同じなら、/go/bin/ で始まっていない
+  echo "Command must start with /go/bin/"
   exit 1
 fi
 
+echo "Executing command: $CMD"
+
 # Execute the command
-/go/bin/$CMD "$@"
+$CMD
