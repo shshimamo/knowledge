@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: exec-batch
+  namespace: app-ns
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      containers:
+        - name: exec-batch-container
+          image: __REGISTRY__/knowledge-backend-batch:__IMAGE_TAG__
+          args: ["__COMMAND_NAME__", "__COMMAND_ARGS__"]
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config
+                  key: DB_HOST
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_PASSWORD
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: application-config
+                  key: APP_ENV
+      restartPolicy: OnFailure
