@@ -11,20 +11,20 @@ spec:
         - name: exec-batch-container
           image: __REGISTRY__/knowledge-backend-batch:__IMAGE_TAG__
 #          args: ["__COMMAND__"] # 一旦引数なしで動作確認
-          env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: db-config
-                  key: DB_HOST
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: DB_PASSWORD
-            - name: APP_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: application-config
-                  key: APP_ENV
+#          env:
+#            - name: DB_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: db-config
+#                  key: DB_HOST
+#            - name: DB_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: db-credentials
+#                  key: DB_PASSWORD
+#            - name: APP_ENV
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: application-config
+#                  key: APP_ENV
       restartPolicy: OnFailure
