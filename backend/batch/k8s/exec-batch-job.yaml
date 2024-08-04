@@ -10,7 +10,7 @@ spec:
       containers:
         - name: exec-batch-container
           image: __REGISTRY__/knowledge-backend-batch:__IMAGE_TAG__
-#          args: ["__COMMAND__"] # 一旦引数なしで動作確認
+          args: ["__COMMAND__"]
           env:
             - name: DB_HOST
               valueFrom:
