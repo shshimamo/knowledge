@@ -12,3 +12,8 @@ nodeGroups:
   - name: EksctlNodegroups1
     instanceType: t3.small
     desiredCapacity: 1
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["*"]
+    logRetentionInDays: 2
