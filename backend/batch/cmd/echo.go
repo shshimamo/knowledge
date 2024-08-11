@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	fmt.Println(os.Args[1])
+	fmt.Printf("Called echo.go with arg: %s\n", os.Args[1])
 }
