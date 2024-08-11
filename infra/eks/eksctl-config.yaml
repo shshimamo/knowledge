@@ -16,4 +16,4 @@ nodeGroups:
 cloudWatch:
   clusterLogging:
     enableTypes: ["*"]
-    logRetentionInDays: 2
+    logRetentionInDays: 1
