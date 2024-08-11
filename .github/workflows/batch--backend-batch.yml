@@ -6,14 +6,20 @@ on:
       command:
         description: '実行コマンド名'
         required: true
+      environment-name:
+        type: environment # Environmentsを切り替え
+        default: test
+        required: false
+        description: Environment name
 
 env:
   REPOSITORY_NAME: knowledge-backend-batch
   CLUSTER_NAME: KnowledgeCluster
 
 jobs:
-  deploy:
+  batch:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment-name }} # 利用するEnvironmentsを指定
     permissions:
       id-token: write
       contents: read
