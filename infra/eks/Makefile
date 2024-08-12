@@ -1,13 +1,37 @@
+AWS_ACCOUNT_ID = $(shell aws sts get-caller-identity --query Account --output text)
+
+define check_var
+  @if [ -z "$(1)" ]; then \
+    echo "$(2) is not set"; \
+    exit 1; \
+  fi
+endef
+
 #
 # EKS Cluster
 #
 .PHONY: create-cluster
 create-cluster:
-	eksctl create cluster -f eksctl-config.yaml
+	sed "s/__AWS_ACCOUNT_ID__/${AWS_ACCOUNT_ID}/g" ./eksctl-config.yaml | eksctl create cluster -f -
+
+.PHONY: dry-run-create-cluster
+dry-run-create-cluster:
+	sed "s/__AWS_ACCOUNT_ID__/${AWS_ACCOUNT_ID}/g" ./eksctl-config.yaml | eksctl create cluster --dry-run -f -
 
 .PHONY: delete-cluster
 delete-cluster:
 	eksctl delete cluster -f eksctl-config.yaml --wait --disable-nodegroup-eviction
+
+#
+# Access Entry
+#
+.PHONY: create-accessentry
+create-accessentry:
+	eksctl create accessentry -f eksctl-config.yaml
+
+.PHONY: delete-accessentry
+delete-accessentry:
+	eksctl delete accessentry --cluster KnowledgeCluster --principal-arn arn:aws:iam::$${AWS_ACCOUNT_ID}:role/github-oidc
 
 #
 # Namespace

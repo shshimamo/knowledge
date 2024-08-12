@@ -1,5 +1,22 @@
 # 環境構築
 
+## IAM: GitHub Actions 用のIDプロバイダ、ロール作成(最初だけ)
+
+* OpenID Connect Provider 作成(コンソール)
+* IAM Role(name: github-oidc) 作成(コンソール)
+  * ポリシー: ECRプッシュ権限、EKS(eks:DescribeCluster)
+
+## ECR(最初だけ)
+
+手動作成
+```
+knowledge-backend-auth
+knowledge-backend-auth-migration
+knowledge-backend-main
+knowledge-backend-main-migration
+knowledge-frontend-main
+```
+
 ## EKSクラスター作成
 ```sh
 $ cd infra/eks
@@ -63,30 +80,6 @@ $ make install-ingress-controller
 $ make apply-ingress
 ```
 
-## IAM: GitHub Actions 用のIDプロバイダ、ロール
-
-* TODO: 自動化
-
-## EKS: RBAC
-```sh
-$ cd infra/eks/role
-# ClusterRole, RoleBinding 作成
-$ make apply-role
-# GHA が使う IAM ロールをk8s内のユーザー、グループに紐付ける
-$ make create-iamidentitymapping
-```
-
-## ECR
-
-手動作成
-```
-knowledge-backend-auth
-knowledge-backend-auth-migration
-knowledge-backend-main
-knowledge-backend-main-migration
-knowledge-frontend-main
-```
-
 # デプロイ
 
 ## バックエンドデプロイ(Main)
@@ -127,4 +120,16 @@ $ make rds-cdk-destroy
 ```sh
 $ cd infra/eks
 $ make delete-cluster
+```
+
+# 参考
+
+## EKS: aws-auth ConfigMap 作成
+* Access Entry を使う前の手順
+```sh
+$ cd infra/eks/role
+# ClusterRole, RoleBinding 作成
+$ make apply-role
+# GHA が使う IAM ロールをk8s内のユーザー、グループに紐付ける
+$ make create-iamidentitymapping
 ```

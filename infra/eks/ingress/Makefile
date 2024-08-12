@@ -1,9 +1,15 @@
 #
 # OIDC Provider
+# [クラスターの IAM OIDC プロバイダーを作成する](https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/enable-iam-roles-for-service-accounts.html)
 #
 .PHONY: create-oidc-provider
 create-oidc-provider:
 	eksctl utils associate-iam-oidc-provider --cluster KnowledgeCluster --approve
+
+.PHONY: check-oidc-provider
+check-oidc-provider:
+	oidc_id=$(shell aws eks describe-cluster --name KnowledgeCluster --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5);\
+	aws iam list-open-id-connect-providers | grep $${oidc_id} | cut -d "/" -f4
 
 #
 # Policy
