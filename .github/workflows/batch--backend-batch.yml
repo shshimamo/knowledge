@@ -18,6 +18,7 @@ env:
 
 jobs:
   batch:
+    name: ${{ inputs.environment-name }} | ${{ github.event.inputs.command }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment-name }} # 利用するEnvironmentsを指定
     permissions:
