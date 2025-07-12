@@ -12,6 +12,7 @@ type Knowledge struct {
 	Title    string
 	Text     string
 	IsPublic bool
+	Tags     []*Tag
 }
 
 func MapKnowledgeDBToModel(dbk *db.Knowledge) *Knowledge {
@@ -59,6 +60,7 @@ func MapKnowledgeModelToGql(k *Knowledge) *gql.Knowledge {
 		Title:    k.Title,
 		Text:     k.Text,
 		IsPublic: k.IsPublic,
+		Tags:     MapTagListModelToGql(k.Tags),
 	}
 	return gql
 }

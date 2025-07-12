@@ -22,10 +22,11 @@ type KnowledgeService interface {
 
 type knowledgeService struct {
 	knowRepo repository.KnowledgeRepository
+	tagRepo  repository.TagRepository
 }
 
-func newKnowledgeService(knowRepo repository.KnowledgeRepository) *knowledgeService {
-	return &knowledgeService{knowRepo: knowRepo}
+func newKnowledgeService(knowRepo repository.KnowledgeRepository, tagRepo repository.TagRepository) *knowledgeService {
+	return &knowledgeService{knowRepo: knowRepo, tagRepo: tagRepo}
 }
 
 func (s *knowledgeService) GetKnowledge(ctx context.Context, id int64) (*gql.Knowledge, error) {
@@ -87,6 +88,21 @@ func (s *knowledgeService) CreateKnowledge(ctx context.Context, input *gql.Creat
 		return nil, err
 	}
 
+	// タグを設定
+	if len(input.TagNames) > 0 {
+		err = s.tagRepo.SetKnowledgeTags(ctx, newk.ID, input.TagNames)
+		if err != nil {
+			return nil, err
+		}
+
+		// タグを取得してモデルに設定
+		tags, err := s.tagRepo.GetTagsByKnowledgeID(ctx, newk.ID)
+		if err != nil {
+			return nil, err
+		}
+		newk.Tags = tags
+	}
+
 	gqlk := model.MapKnowledgeModelToGql(newk)
 
 	return gqlk, nil
@@ -111,6 +127,19 @@ func (s *knowledgeService) UpdateKnowledge(ctx context.Context, id int64, gqlupd
 	if err != nil {
 		return nil, err
 	}
+
+	// タグを更新
+	err = s.tagRepo.SetKnowledgeTags(ctx, k2.ID, gqlupdate.TagNames)
+	if err != nil {
+		return nil, err
+	}
+
+	// タグを取得してモデルに設定
+	tags, err := s.tagRepo.GetTagsByKnowledgeID(ctx, k2.ID)
+	if err != nil {
+		return nil, err
+	}
+	k2.Tags = tags
 
 	gqlk := model.MapKnowledgeModelToGql(k2)
 	return gqlk, nil

@@ -52,9 +52,11 @@ func getPort() string {
 
 func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 	userRepo := repository.NewUserRepository(exec)
+	tagRepo := repository.NewTagRepository(exec)
 	allService := service.NewAllService(
 		userRepo,
-		repository.NewKnowledgeRepository(exec),
+		repository.NewKnowledgeRepository(exec, tagRepo),
+		tagRepo,
 	)
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{

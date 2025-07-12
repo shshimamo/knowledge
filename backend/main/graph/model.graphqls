@@ -19,4 +19,10 @@ type Knowledge {
     text: String!
     isPublic: Boolean!
     publishedAt: String!
+    tags: [Tag!]!
+}
+
+type Tag {
+    id: ID!
+    name: String!
 }

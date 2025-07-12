@@ -72,6 +72,11 @@ func (r *queryResolver) Knowledge(ctx context.Context, id string) (*model.Knowle
 	return r.AllService.GetKnowledge(ctx, i)
 }
 
+// Tags is the resolver for the tags field.
+func (r *queryResolver) Tags(ctx context.Context) ([]*model.Tag, error) {
+	return r.AllService.GetAllTags(ctx)
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 

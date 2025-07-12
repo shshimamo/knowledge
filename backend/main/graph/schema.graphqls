@@ -11,6 +11,7 @@ type Query {
     currentUser: CurrentUser! @isAuthenticated
     user(id: ID!): User!
     knowledge(id: ID!): Knowledge!
+    tags: [Tag!]!
 }
 
 ### Input types ###
@@ -22,12 +23,14 @@ input CreateKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
+  tagNames: [String!]!
 }
 
 input UpdateKnowledgeInput {
   title: String!
   text: String!
   isPublic: Boolean!
+  tagNames: [String!]!
 }
 
 ### Mutations ###

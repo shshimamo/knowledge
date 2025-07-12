@@ -21,11 +21,12 @@ type KnowledgeRepository interface {
 }
 
 type knowledgeRepository struct {
-	exec boil.ContextExecutor
+	exec    boil.ContextExecutor
+	tagRepo TagRepository
 }
 
-func NewKnowledgeRepository(exec boil.ContextExecutor) KnowledgeRepository {
-	return &knowledgeRepository{exec: exec}
+func NewKnowledgeRepository(exec boil.ContextExecutor, tagRepo TagRepository) KnowledgeRepository {
+	return &knowledgeRepository{exec: exec, tagRepo: tagRepo}
 }
 
 type GetKnowledgeCommand struct {
@@ -58,6 +59,13 @@ func (r *knowledgeRepository) GetKnowledge(ctx context.Context, cmd *GetKnowledg
 
 	k := model.MapKnowledgeDBToModel(dbk)
 
+	// タグを取得
+	tags, err := r.tagRepo.GetTagsByKnowledgeID(ctx, k.ID)
+	if err != nil {
+		return nil, err
+	}
+	k.Tags = tags
+
 	return k, nil
 }
 
@@ -86,7 +94,18 @@ func (r *knowledgeRepository) GetKnowledgeList(ctx context.Context, cmd *GetKnow
 		return nil, errs.ConvertSqlError(err)
 	}
 
-	return model.MapKnowledgeListDBToModel(dblist), nil
+	klist := model.MapKnowledgeListDBToModel(dblist)
+
+	// 各ナレッジのタグを取得
+	for _, k := range klist {
+		tags, err := r.tagRepo.GetTagsByKnowledgeID(ctx, k.ID)
+		if err != nil {
+			return nil, err
+		}
+		k.Tags = tags
+	}
+
+	return klist, nil
 }
 
 func (r *knowledgeRepository) CreateKnowledge(ctx context.Context, k *model.Knowledge) (*model.Knowledge, error) {
