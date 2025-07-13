@@ -14,8 +14,12 @@ test-db:
 	cd ./db ;\
 	go test -v -test.config=../sqlboiler.test.toml ./db/...
 
+.PHONY: install-goose
+install-goose:
+	@which goose > /dev/null || go install github.com/pressly/goose/v3/cmd/goose@latest
+
 .PHONY: migration
-migration:
+migration: install-goose
 	$(call check_var,${DB_HOST},DB_HOST)
 	$(call check_var,${DB_PASSWORD},DB_PASSWORD)
 	$(call check_var,${APP_ENV},APP_ENV)
