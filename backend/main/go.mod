@@ -1,6 +1,6 @@
 module github.com/shshimamo/knowledge/main
 
-go 1.21.1
+go 1.24.5
 
 require (
 	github.com/99designs/gqlgen v0.17.37
