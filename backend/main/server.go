@@ -17,7 +17,7 @@ import (
 	"github.com/shshimamo/knowledge/main/graph/generated"
 	hand "github.com/shshimamo/knowledge/main/handler"
 	"github.com/shshimamo/knowledge/main/service"
-	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/aarondl/sqlboiler/v4/boil"
 )
 
 func main() {
