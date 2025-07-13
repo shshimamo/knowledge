@@ -15,11 +15,10 @@ require (
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
 	github.com/lib/pq v1.10.9
 	github.com/pressly/goose v2.7.0+incompatible
-	github.com/rs/cors v1.10.0
+	github.com/rs/cors v1.11.0
 	github.com/shibukawa/uuid62/v2 v2.0.2
 	github.com/spf13/viper v1.12.0
 	github.com/vektah/gqlparser/v2 v2.5.30
-	github.com/volatiletech/null/v8 v8.1.2
 	go.uber.org/mock v0.2.0
 )
 
@@ -56,9 +55,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/urfave/cli/v2 v2.27.7 // indirect
-	github.com/volatiletech/inflect v0.0.1 // indirect
-	github.com/volatiletech/randomize v0.0.1 // indirect
-	github.com/volatiletech/strmangle v0.0.5 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
