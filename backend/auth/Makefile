@@ -22,3 +22,11 @@ database-create:
 	DB_NAME="knowledge-auth-$${APP_ENV}" ;\
 	echo "Start create database: $${DB_NAME}" ;\
 	PGPASSWORD=$${DB_PASSWORD} psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"$${DB_NAME}\";" ;\
+
+.PHONY: database-create-develop
+database-create-develop:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-create
+
+.PHONY: migration-develop
+migration-develop:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make migration
