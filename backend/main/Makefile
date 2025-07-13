@@ -23,6 +23,10 @@ install-sqlboiler:
 	@which sqlboiler > /dev/null || go install github.com/aarondl/sqlboiler/v4@latest
 	@which sqlboiler-psql > /dev/null || go install github.com/aarondl/sqlboiler/v4/drivers/sqlboiler-psql@latest
 
+.PHONY: install-golangci-lint
+install-golangci-lint:
+	@which golangci-lint > /dev/null || go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
 .PHONY: migration
 migration: install-goose
 	$(call check_var,${DB_HOST},DB_HOST)
@@ -64,4 +68,8 @@ migration-develop:
 .PHONY: migration-test
 migration-test:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make migration
+
+.PHONY: lint
+lint: install-golangci-lint
+	golangci-lint run
 
