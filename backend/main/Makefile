@@ -35,3 +35,11 @@ database-create:
 .PHONY: gqlgen-generate
 gqlgen-generate:
 	go run github.com/99designs/gqlgen generate
+
+.PHONY: database-create-develop
+database-create-develop:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-create
+
+.PHONY: migration-develop
+migration-develop:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make migration
