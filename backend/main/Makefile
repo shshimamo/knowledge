@@ -40,6 +40,15 @@ gqlgen-generate:
 database-create-develop:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-create
 
+.PHONY: database-create-test
+database-create-test:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make database-create
+
 .PHONY: migration-develop
 migration-develop:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make migration
+
+.PHONY: migration-test
+migration-test:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make migration
+
