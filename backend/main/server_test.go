@@ -52,12 +52,14 @@ func gqlRequest(t *testing.T, query string, handler http.Handler) map[string]int
 
 	// Response
 	resp := rec.Result()
-	if resp.StatusCode != http.StatusOK {
-		t.Errorf("want: http.StatusOK, got: %v", resp.StatusCode)
-	}
-
+	
 	var responseBody map[string]interface{}
 	_ = json.NewDecoder(resp.Body).Decode(&responseBody)
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("want: http.StatusOK, got: %v", resp.StatusCode)
+		t.Errorf("Failed to cast response body: %v", responseBody)
+	}
 
 	data, ok := responseBody["data"].(map[string]interface{})
 	if !ok {

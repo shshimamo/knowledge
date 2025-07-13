@@ -3,11 +3,12 @@ package repository
 import (
 	"context"
 	"errors"
+
+	"github.com/aarondl/sqlboiler/v4/boil"
+	"github.com/aarondl/sqlboiler/v4/queries/qm"
 	"github.com/shshimamo/knowledge/main/db"
 	"github.com/shshimamo/knowledge/main/model"
 	"github.com/shshimamo/knowledge/main/repository/errs"
-	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 var _ KnowledgeRepository = (*knowledgeRepository)(nil)

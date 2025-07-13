@@ -14,8 +14,25 @@ test-db:
 	cd ./db ;\
 	go test -v -test.config=../sqlboiler.test.toml ./db/...
 
+.PHONY: install-goose
+install-goose:
+	@which goose > /dev/null || go install github.com/pressly/goose/v3/cmd/goose@latest
+
+.PHONY: install-sqlboiler
+install-sqlboiler:
+	@which sqlboiler > /dev/null || go install github.com/aarondl/sqlboiler/v4@latest
+	@which sqlboiler-psql > /dev/null || go install github.com/aarondl/sqlboiler/v4/drivers/sqlboiler-psql@latest
+
+.PHONY: install-golangci-lint
+install-golangci-lint:
+	@which golangci-lint > /dev/null || go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+.PHONY: install-govulncheck
+install-govulncheck:
+	@which govulncheck > /dev/null || go install golang.org/x/vuln/cmd/govulncheck@latest
+
 .PHONY: migration
-migration:
+migration: install-goose
 	$(call check_var,${DB_HOST},DB_HOST)
 	$(call check_var,${DB_PASSWORD},DB_PASSWORD)
 	$(call check_var,${APP_ENV},APP_ENV)
@@ -36,6 +53,10 @@ database-create:
 gqlgen-generate:
 	go run github.com/99designs/gqlgen generate
 
+.PHONY: sqlboiler-generate
+sqlboiler-generate: install-sqlboiler
+	sqlboiler psql
+
 .PHONY: database-create-develop
 database-create-develop:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-create
@@ -51,4 +72,12 @@ migration-develop:
 .PHONY: migration-test
 migration-test:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make migration
+
+.PHONY: lint
+lint: install-golangci-lint
+	golangci-lint run
+
+.PHONY: vulncheck
+vulncheck: install-govulncheck
+	govulncheck ./...
 
