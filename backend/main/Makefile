@@ -27,6 +27,10 @@ install-sqlboiler:
 install-golangci-lint:
 	@which golangci-lint > /dev/null || go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
+.PHONY: install-govulncheck
+install-govulncheck:
+	@which govulncheck > /dev/null || go install golang.org/x/vuln/cmd/govulncheck@latest
+
 .PHONY: migration
 migration: install-goose
 	$(call check_var,${DB_HOST},DB_HOST)
@@ -72,4 +76,8 @@ migration-test:
 .PHONY: lint
 lint: install-golangci-lint
 	golangci-lint run
+
+.PHONY: vulncheck
+vulncheck: install-govulncheck
+	govulncheck ./...
 
