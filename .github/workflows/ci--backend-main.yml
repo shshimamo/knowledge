@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:14
+        image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
@@ -30,10 +30,10 @@ jobs:
         working-directory: backend/main
     steps:
       - name: Check out
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         id: setup-go
         with:
           go-version: ${{ matrix.go }}
@@ -50,7 +50,7 @@ jobs:
           go mod verify
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v6
         with:
           version: latest
           working-directory: backend/main
@@ -61,7 +61,7 @@ jobs:
           DB_PASSWORD: password
           APP_ENV: test
         run: |
-          go install github.com/pressly/goose/v3/cmd/goose@v3.11.2
+          go install github.com/pressly/goose/v3/cmd/goose@latest
           make migration
 
       - name: Run test
