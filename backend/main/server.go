@@ -56,7 +56,7 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 		userRepo,
 		repository.NewKnowledgeRepository(exec),
 	)
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
+	srv := handler.New(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
 			AllService: allService,
 			Loaders:    loader.NewLoaders(allService),

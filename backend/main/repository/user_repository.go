@@ -8,7 +8,7 @@ import (
 	"github.com/shshimamo/knowledge/main/db"
 	"github.com/shshimamo/knowledge/main/model"
 	"github.com/shshimamo/knowledge/main/repository/errs"
-	"github.com/volatiletech/null/v8"
+	"github.com/aarondl/null/v8"
 	"github.com/aarondl/sqlboiler/v4/boil"
 	"github.com/aarondl/sqlboiler/v4/queries/qm"
 )
