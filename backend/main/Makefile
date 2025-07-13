@@ -49,10 +49,6 @@ gqlgen-generate:
 sqlboiler-generate: install-sqlboiler
 	sqlboiler psql
 
-.PHONY: sqlboiler-generate-test
-sqlboiler-generate-test: install-sqlboiler
-	sqlboiler psql --config sqlboiler.test.toml
-
 .PHONY: database-create-develop
 database-create-develop:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-create
