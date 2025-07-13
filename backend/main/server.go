@@ -16,7 +16,7 @@ import (
 	"github.com/shshimamo/knowledge/main/graph"
 	"github.com/shshimamo/knowledge/main/graph/generated"
 	hand "github.com/shshimamo/knowledge/main/handler"
-	"github.com/shshimamo/knowledge/main/service"
+	"github.com/shshimamo/knowledge/main/usecase"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
@@ -52,14 +52,14 @@ func getPort() string {
 
 func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 	userRepo := repository.NewUserRepository(exec)
-	allService := service.NewAllService(
+	allUseCase := usecase.NewAllUseCase(
 		userRepo,
 		repository.NewKnowledgeRepository(exec),
 	)
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
-			AllService: allService,
-			Loaders:    loader.NewLoaders(allService),
+			AllUseCase: allUseCase,
+			Loaders:    loader.NewLoaders(allUseCase),
 		},
 		Directives: graph.Directive,
 	}))

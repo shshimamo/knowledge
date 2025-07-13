@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"github.com/shshimamo/knowledge/main/service"
+	"github.com/shshimamo/knowledge/main/usecase"
 
 	"github.com/graph-gophers/dataloader/v7"
 	gql "github.com/shshimamo/knowledge/main/graph/model"
@@ -11,8 +11,8 @@ type Loaders struct {
 	KnowledgeLoader dataloader.Interface[string, []*gql.Knowledge]
 }
 
-func NewLoaders(Srv service.AllService) *Loaders {
-	kb := &knowledgeBatch{Srv: Srv}
+func NewLoaders(useCase usecase.AllUseCase) *Loaders {
+	kb := &knowledgeBatch{UseCase: useCase}
 
 	return &Loaders{
 		KnowledgeLoader: dataloader.NewBatchedLoader[string, []*gql.Knowledge](
