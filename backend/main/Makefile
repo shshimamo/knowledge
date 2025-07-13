@@ -18,6 +18,11 @@ test-db:
 install-goose:
 	@which goose > /dev/null || go install github.com/pressly/goose/v3/cmd/goose@latest
 
+.PHONY: install-sqlboiler
+install-sqlboiler:
+	@which sqlboiler > /dev/null || go install github.com/aarondl/sqlboiler/v4@latest
+	@which sqlboiler-psql > /dev/null || go install github.com/aarondl/sqlboiler/v4/drivers/sqlboiler-psql@latest
+
 .PHONY: migration
 migration: install-goose
 	$(call check_var,${DB_HOST},DB_HOST)
@@ -39,6 +44,14 @@ database-create:
 .PHONY: gqlgen-generate
 gqlgen-generate:
 	go run github.com/99designs/gqlgen generate
+
+.PHONY: sqlboiler-generate
+sqlboiler-generate: install-sqlboiler
+	sqlboiler psql
+
+.PHONY: sqlboiler-generate-test
+sqlboiler-generate-test: install-sqlboiler
+	sqlboiler psql --config sqlboiler.test.toml
 
 .PHONY: database-create-develop
 database-create-develop:
