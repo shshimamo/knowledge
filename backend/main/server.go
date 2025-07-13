@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge/main/graph"
@@ -56,13 +57,15 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 		userRepo,
 		repository.NewKnowledgeRepository(exec),
 	)
-	srv := handler.New(generated.NewExecutableSchema(generated.Config{
+	schema := generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
 			AllService: allService,
 			Loaders:    loader.NewLoaders(allService),
 		},
 		Directives: graph.Directive,
-	}))
+	})
+	srv := handler.New(schema)
+	srv.AddTransport(transport.POST{})
 	//gqlMiddleware(srv)
 
 	mux := http.NewServeMux()
