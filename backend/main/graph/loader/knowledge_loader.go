@@ -5,12 +5,12 @@ import (
 	"errors"
 	"github.com/graph-gophers/dataloader/v7"
 	gql "github.com/shshimamo/knowledge/main/graph/model"
-	"github.com/shshimamo/knowledge/main/service"
+	"github.com/shshimamo/knowledge/main/usecase"
 	"github.com/shshimamo/knowledge/main/utils"
 )
 
 type knowledgeBatch struct {
-	Srv service.AllService
+	UseCase usecase.AllUseCase
 }
 
 func (u *knowledgeBatch) BatchGetKnowledgeList(ctx context.Context, userIDs []string) []*dataloader.Result[[]*gql.Knowledge] {
@@ -28,7 +28,7 @@ func (u *knowledgeBatch) BatchGetKnowledgeList(ctx context.Context, userIDs []st
 		return results
 	}
 
-	klist, err := u.Srv.GetKnowledgeList(ctx, nil, uids)
+	klist, err := u.UseCase.GetKnowledgeList(ctx, nil, uids)
 	if err != nil {
 		for i := range results {
 			results[i] = &dataloader.Result[[]*gql.Knowledge]{Error: err}
