@@ -5,7 +5,7 @@ import (
 	gql "github.com/shshimamo/knowledge/main/graph/model"
 	"github.com/shshimamo/knowledge/main/model"
 	"github.com/shshimamo/knowledge/main/repository"
-	"github.com/shshimamo/knowledge/main/service/util"
+	"github.com/shshimamo/knowledge/main/shared/util"
 	"strconv"
 )
 

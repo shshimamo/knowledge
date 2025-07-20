@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/shshimamo/knowledge/main/model"
-	"github.com/shshimamo/knowledge/main/service/util"
+	"github.com/shshimamo/knowledge/main/shared/util"
 )
 
 type KnowledgeDomainService interface {
