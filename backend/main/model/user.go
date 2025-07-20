@@ -4,7 +4,7 @@ import (
 	"github.com/shshimamo/knowledge/main/db"
 	gql "github.com/shshimamo/knowledge/main/graph/model"
 	"github.com/shshimamo/knowledge/main/model/errs"
-	"github.com/volatiletech/null/v8"
+	"github.com/aarondl/null/v8"
 	"strconv"
 )
 
