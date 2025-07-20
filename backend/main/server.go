@@ -1,23 +1,25 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/shshimamo/knowledge/main/graph/loader"
 	"github.com/shshimamo/knowledge/main/middlewares"
 	"github.com/shshimamo/knowledge/main/model"
 	"github.com/shshimamo/knowledge/main/repository"
 	"github.com/shshimamo/knowledge/main/utils"
-	"log"
-	"net/http"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/aarondl/sqlboiler/v4/boil"
 	"github.com/rs/cors"
 	"github.com/shshimamo/knowledge/main/graph"
 	"github.com/shshimamo/knowledge/main/graph/generated"
 	hand "github.com/shshimamo/knowledge/main/handler"
 	"github.com/shshimamo/knowledge/main/usecase"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func main() {
@@ -56,13 +58,15 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 		userRepo,
 		repository.NewKnowledgeRepository(exec),
 	)
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{
+	schema := generated.NewExecutableSchema(generated.Config{
 		Resolvers: &graph.Resolver{
 			AllUseCase: allUseCase,
 			Loaders:    loader.NewLoaders(allUseCase),
 		},
 		Directives: graph.Directive,
-	}))
+	})
+	srv := handler.New(schema)
+	srv.AddTransport(transport.POST{})
 	//gqlMiddleware(srv)
 
 	mux := http.NewServeMux()
