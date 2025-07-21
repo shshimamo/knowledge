@@ -1,28 +1,6 @@
-# E2Eテスト関連のコマンド
-
-# E2Eテストを実行（デフォルト）
-test-e2e:
-	cd frontend/main && npm run test:e2e
-
-# E2Eテストを実行（UI表示）
-test-e2e-ui:
-	cd frontend/main && npm run test:e2e:ui
-
-# E2Eテストを実行（ブラウザ表示）
-test-e2e-headed:
-	cd frontend/main && npm run test:e2e:headed
-
-# E2Eテストの依存関係をインストール
-install-e2e:
-	cd frontend/main && npm install
-
-# 開発サーバーとE2Eテストを同時実行
-dev-with-e2e:
-	cd frontend/main && npm run dev &
-	sleep 5
-	cd frontend/main && npm run test:e2e:ui
-
+#
 # CI環境関連のコマンド
+#
 
 # CI環境でのセットアップ（データベース作成とマイグレーション）
 setup-ci:
@@ -47,12 +25,23 @@ test-e2e-ci: setup-ci start-ci
 	cd frontend/main && CI=true npm run test:e2e
 	docker-compose -f docker-compose.ci.yml down
 
+# CI環境停止
+stop-ci:
+	@echo "CI環境を停止中..."
+	docker-compose -f docker-compose.ci.yml stop
+
 # CI環境のクリーンアップ
 clean-ci:
 	docker-compose -f docker-compose.ci.yml down -v
 	docker system prune -f
 
+clean-and-rmi-ci:
+	docker-compose -f docker-compose.ci.yml down -v --rmi all || true
+	docker system prune -f
+
+#
 # ローカル開発用コマンド
+#
 
 # CI環境が既に起動しているかチェック
 check-ci-running:
@@ -84,10 +73,43 @@ dev-restart-ci:
 	make stop-ci || true
 	make clean-ci || true
 	make dev-start-ci
-	@echo "サービスの起動を待機中（60秒）..."
-	sleep 60
+	@echo "サービスの起動を待機中（30秒）..."
+	sleep 30
 	@echo "サービス状態を確認します..."
 	make check-ci-services
+
+# CI環境を強制的に再起動（既存環境を停止してから起動）
+# 使用例: make dev-restart-and-rmi-ci SERVICES="frontend"
+# 使用例: make dev-restart-and-rmi-ci SERVICES="frontend backend-main backend-auth"
+# 使用例: make dev-restart-and-rmi-ci （全サービス）
+dev-restart-and-rmi-ci:
+	@echo "CI環境を再起動中..."
+	make stop-ci || true
+	@echo "SERVICES: ${SERVICES}"
+	@if [ "${SERVICES}" ]; then \
+		echo "指定されたサービスイメージを削除"; \
+		for service in ${SERVICES}; do \
+			IMAGE_ID=$$(docker-compose -f docker-compose.ci.yml images -q $${service} 2>/dev/null); \
+			if [ "$${IMAGE_ID}" ]; then \
+				echo "コンテナを削除中: $${service}"; \
+				docker-compose -f docker-compose.ci.yml rm -f $${service} || true; \
+				echo "イメージを削除中: $${service}/$${IMAGE_ID}"; \
+				docker rmi $${IMAGE_ID} || true; \
+			fi; \
+		done; \
+	else \
+		echo "全てのサービスイメージを削除"; \
+		make clean-and-rmi-ci || true; \
+	fi
+	make dev-start-ci
+	@echo "サービスの起動を待機中（30秒）..."
+	sleep 30
+	@echo "サービス状態を確認します..."
+	make check-ci-services
+
+#
+# E2Eテスト実行
+#
 
 # 起動中のCI環境でE2Eテストのみ実行
 run-e2e-only:
@@ -104,7 +126,9 @@ run-e2e-headed:
 	@echo "E2Eテストをヘッドモードで実行中..."
 	cd frontend/main && npm run test:e2e:headed
 
+#
 # CI環境のサービス状態確認
+#
 check-ci-services:
 	@echo "CI環境のサービス状態を確認中..."
 	@docker-compose -f docker-compose.ci.yml ps
@@ -148,16 +172,12 @@ check-ci-services-detail:
 	@echo "Frontend:"
 	@docker-compose -f docker-compose.ci.yml logs --tail=10 frontend || echo "  ログを取得できませんでした"
 
-# CI環境停止
-stop-ci:
-	@echo "CI環境を停止中..."
-	docker-compose -f docker-compose.ci.yml stop
-
+#
 # CI環境のログ表示
+#
 logs-ci:
 	docker-compose -f docker-compose.ci.yml logs -f
 
-# CI環境のログ表示（特定サービス）
 logs-ci-frontend:
 	docker-compose -f docker-compose.ci.yml logs -f frontend
 
@@ -169,27 +189,3 @@ logs-ci-backend-auth:
 
 logs-ci-db:
 	docker-compose -f docker-compose.ci.yml logs -f db
-
-# actツール関連のコマンド
-
-# actのインストール確認
-check-act:
-	@which act > /dev/null || (echo "actがインストールされていません。brew install act でインストールしてください" && exit 1)
-
-# actを使ってローカルでE2Eテストワークフローを実行
-test-e2e-local: check-act
-	act -W .github/workflows/e2e-test.yml --env-file .env.act
-
-# actを使ってローカルでE2Eテストワークフローを実行（ドライラン）
-test-e2e-local-dry: check-act
-	act -W .github/workflows/e2e-test.yml --env-file .env.act --dry-run
-
-# actを使ってローカルでE2Eテストワークフローを実行（詳細ログ）
-test-e2e-local-verbose: check-act
-	act -W .github/workflows/e2e-test.yml --env-file .env.act --verbose
-
-# actのワークフロー一覧表示
-list-workflows: check-act
-	act -l
-
-.PHONY: test-e2e test-e2e-ui test-e2e-headed install-e2e dev-with-e2e setup-ci start-ci test-e2e-ci clean-ci check-ci-running dev-start-ci dev-restart-ci run-e2e-only run-e2e-ui run-e2e-headed check-ci-services check-ci-services-detail stop-ci logs-ci logs-ci-frontend logs-ci-backend-main logs-ci-backend-auth logs-ci-db check-act test-e2e-local test-e2e-local-dry test-e2e-local-verbose list-workflows
