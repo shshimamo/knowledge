@@ -45,7 +45,7 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker-compose -f docker-compose.ci.yml build --parallel
+          docker compose -f docker-compose.ci.yml build --parallel
 
       - name: Start PostgreSQL and setup databases
         run: |
