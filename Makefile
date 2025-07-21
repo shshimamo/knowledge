@@ -23,7 +23,6 @@ start-ci:
 test-e2e-ci: setup-ci start-ci
 	sleep 30
 	cd frontend/main && CI=true npm run test:e2e
-	docker-compose -f docker-compose.ci.yml down
 
 # CI環境停止
 stop-ci:
