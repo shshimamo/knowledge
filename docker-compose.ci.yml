@@ -1,0 +1,71 @@
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14
+    restart: always
+    user: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend Main Service
+  backend-main:
+    build:
+      context: ./backend/main
+      dockerfile: Dockerfile.ci
+      target: final
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=password
+      - APP_ENV=test
+
+  # Backend Auth Service
+  backend-auth:
+    build:
+      context: ./backend/auth
+      dockerfile: Dockerfile.ci
+      target: final
+    ports:
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=password
+      - APP_ENV=test
+
+  # Frontend Service  
+  frontend:
+    build:
+      context: ./frontend/main
+      dockerfile: Dockerfile.ci
+      args:
+        - NEXT_PUBLIC_AUTH_API_URL=http://localhost:8081
+        - NEXT_PUBLIC_MAIN_GQL_URL=http://localhost:8080/query
+        - NEXT_PUBLIC_MAIN_API_URL=http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - backend-main
+      - backend-auth
+
+volumes:
+  postgres_data:
