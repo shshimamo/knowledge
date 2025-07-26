@@ -46,7 +46,7 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
           <p>Published At: {knowledge.publishedAt}</p>
         </div>
         <br />
-        <Link href={`/knowledge/${knowledge.id}/edit`} className={styles.button}>
+        <Link href={`/knowledge/${knowledge.id}/edit`} className={`${styles.button} e2e-model-knowledge-detail-edit-button`}>
           Edit
         </Link>
       </div>

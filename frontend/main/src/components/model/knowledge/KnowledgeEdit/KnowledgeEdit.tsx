@@ -78,10 +78,10 @@ export const KnowledgeEdit: React.FC<KnowledgeEditProps> = (props) => {
         </label>
         <br />
         <div className='flex items-center justify-between'>
-          <Link href={`/knowledge/${knowledge.id}`} className={styles.link}>
+          <Link href={`/knowledge/${knowledge.id}`} className={`${styles.link} e2e-model-knowledge-edit-back-button`}>
             Back
           </Link>
-          <button type='submit' className={styles.button}>
+          <button type='submit' className={`${styles.button} e2e-model-knowledge-edit-save-button`}>
             Save
           </button>
         </div>
