@@ -11,7 +11,7 @@ import (
 	"github.com/aarondl/sqlboiler/v4/boil"
 	"github.com/rs/cors"
 
-	"github.com/shshimamo/knowledge/main/app/application"
+	"github.com/shshimamo/knowledge/main/app/usecase"
 	"github.com/shshimamo/knowledge/main/app/config"
 	infraRepo "github.com/shshimamo/knowledge/main/app/infrastructure/repository"
 	"github.com/shshimamo/knowledge/main/graph"
@@ -51,7 +51,7 @@ func setupHandler(exec boil.ContextExecutor, appEnv model.AppEnv) http.Handler {
 	userDomainRepo := infraRepo.NewUserRepository(exec)
 	userRepoAdapter := infraRepo.NewUserRepositoryAdapter(userDomainRepo, exec)
 	
-	allUseCase := application.NewAllUseCase(
+	allUseCase := usecase.NewAllUseCase(
 		userDomainRepo,
 		infraRepo.NewKnowledgeRepository(exec),
 	)

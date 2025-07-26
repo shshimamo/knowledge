@@ -1,8 +1,8 @@
-package application
+package usecase
 
 import (
-	"github.com/shshimamo/knowledge/main/app/application/knowledge"
-	"github.com/shshimamo/knowledge/main/app/application/user"
+	"github.com/shshimamo/knowledge/main/app/usecase/knowledge"
+	"github.com/shshimamo/knowledge/main/app/usecase/user"
 	knowledgeDomain "github.com/shshimamo/knowledge/main/app/domain/knowledge"
 	userDomain "github.com/shshimamo/knowledge/main/app/domain/user"
 )
