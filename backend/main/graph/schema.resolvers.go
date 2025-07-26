@@ -17,12 +17,12 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUser) (*model.User, error) {
-	return r.AllService.CreateUser(ctx, &input)
+	return r.AllUseCase.CreateUser(ctx, &input)
 }
 
 // CreateKnowledge is the resolver for the createKnowledge field.
 func (r *mutationResolver) CreateKnowledge(ctx context.Context, input *model.CreateKnowledgeInput) (*model.Knowledge, error) {
-	return r.AllService.CreateKnowledge(ctx, input)
+	return r.AllUseCase.CreateKnowledge(ctx, input)
 }
 
 // UpdateKnowledge is the resolver for the updateKnowledge field.
@@ -31,7 +31,7 @@ func (r *mutationResolver) UpdateKnowledge(ctx context.Context, id string, input
 	if err != nil {
 		return nil, err
 	}
-	return r.AllService.UpdateKnowledge(ctx, i, input)
+	return r.AllUseCase.UpdateKnowledge(ctx, i, input)
 }
 
 // DeleteKnowledge is the resolver for the deleteKnowledge field.
@@ -40,7 +40,7 @@ func (r *mutationResolver) DeleteKnowledge(ctx context.Context, id string) (*mod
 	if err != nil {
 		return nil, err
 	}
-	return r.AllService.DeleteKnowledge(ctx, i)
+	return r.AllUseCase.DeleteKnowledge(ctx, i)
 }
 
 // CurrentUser is the resolver for the currentUser field.
@@ -60,7 +60,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 	if err != nil {
 		return nil, err
 	}
-	return r.AllService.GetUser(ctx, i)
+	return r.AllUseCase.GetUser(ctx, i)
 }
 
 // Knowledge is the resolver for the knowledge field.
@@ -69,7 +69,7 @@ func (r *queryResolver) Knowledge(ctx context.Context, id string) (*model.Knowle
 	if err != nil {
 		return nil, err
 	}
-	return r.AllService.GetKnowledge(ctx, i)
+	return r.AllUseCase.GetKnowledge(ctx, i)
 }
 
 // Mutation returns generated.MutationResolver implementation.
