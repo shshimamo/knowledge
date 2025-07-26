@@ -48,17 +48,17 @@ export const KnowledgeListItem: React.FC<KnowledgeListItemProps> = (props) => {
   }
 
   return (
-    <div className={styles.knowledgeItem}>
-      <h3 className={styles.knowledgeTitle}>{knowledge.title}</h3>
-      <p className={styles.knowledgeText}>{knowledge.text}</p>
+    <div className={`${styles.knowledgeItem} e2e-model-knowledge-list-item`}>
+      <h3 className={`${styles.knowledgeTitle} e2e-model-knowledge-list-item-title`}>{knowledge.title}</h3>
+      <p className={`${styles.knowledgeText} e2e-model-knowledge-list-item-text`}>{knowledge.text}</p>
       <div className={styles.buttons}>
-        <span className={knowledge.isPublic ? styles.publicButton : styles.privateButton}>
+        <span className={`${knowledge.isPublic ? styles.publicButton : styles.privateButton} e2e-model-knowledge-list-item-public`}>
           {knowledge.isPublic ? 'Public' : 'Private'}
         </span>
-        <button className={styles.editButton} onClick={handleEdit}>
+        <button className={`${styles.editButton} e2e-model-knowledge-list-item-show-button`} onClick={handleEdit}>
           Show
         </button>
-        <button className={styles.deleteButton} onClick={showDeleteModal}>
+        <button className={`${styles.deleteButton} e2e-model-knowledge-list-item-delete-button`} onClick={showDeleteModal}>
           Delete
         </button>
         {isDeleteModalOpen && (

@@ -49,6 +49,15 @@ database-create:
 	echo "Start create database: $${DB_NAME}" ;\
 	PGPASSWORD=$${DB_PASSWORD} psql -h ${DB_HOST} -p 5432 -U postgres -c "CREATE DATABASE \"$${DB_NAME}\";" || echo "Database $${DB_NAME} already exists or failed to create (continuing...)" ;\
 
+.PHONY: database-drop
+database-drop:
+	$(call check_var,${DB_HOST},DB_HOST)
+	$(call check_var,${DB_PASSWORD},DB_PASSWORD)
+	$(call check_var,${APP_ENV},APP_ENV)
+	DB_NAME="knowledge-main-$${APP_ENV}" ;\
+	echo "Start create database: $${DB_NAME}" ;\
+	PGPASSWORD=$${DB_PASSWORD} psql -h ${DB_HOST} -p 5432 -U postgres -c "DROP DATABASE \"$${DB_NAME}\";" || echo "failed drop database $${DB_NAME} (continuing...)" ;\
+
 .PHONY: gqlgen-generate
 gqlgen-generate:
 	go run github.com/99designs/gqlgen generate
@@ -64,6 +73,10 @@ database-create-develop:
 .PHONY: database-create-test
 database-create-test:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make database-create
+
+.PHONY: database-drop-develop
+database-drop-develop:
+	DB_HOST=localhost DB_PASSWORD=password APP_ENV=develop make database-drop
 
 .PHONY: migration-develop
 migration-develop:
