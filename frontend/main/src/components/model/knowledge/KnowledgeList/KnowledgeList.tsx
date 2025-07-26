@@ -40,9 +40,11 @@ export const KnowledgeList: React.FC<KnowledgeListProps> = (props) => {
   }
 
   return (
-    <div className={styles.knowledgeList}>
+    <div className={`${styles.knowledgeList} e2e-model-knowledge-list-all`}>
       <div className={styles.header}>
-        <button className={styles.newKnowledgeButton} onClick={handleNewKnowledgeClick}>
+        <button
+          className={`${styles.newKnowledgeButton} e2e-model-knowledge-list-create-button`}
+          onClick={handleNewKnowledgeClick}>
           New Knowledge
         </button>
       </div>

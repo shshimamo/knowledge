@@ -42,7 +42,7 @@ export const Signup = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className={styles.inputField}
+          className={`${styles.inputField} e2e-page-signup-input-name`}
         />
       </div>
 
@@ -56,7 +56,7 @@ export const Signup = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className={styles.inputField}
+          className={`${styles.inputField} e2e-page-signup-input-email`}
         />
       </div>
 
@@ -70,7 +70,7 @@ export const Signup = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className={styles.inputField}
+          className={`${styles.inputField} e2e-page-signup-input-password`}
         />
       </div>
 

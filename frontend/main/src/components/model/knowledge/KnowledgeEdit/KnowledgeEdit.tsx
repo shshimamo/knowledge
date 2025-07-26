@@ -56,13 +56,13 @@ export const KnowledgeEdit: React.FC<KnowledgeEditProps> = (props) => {
         <input
           type='text'
           value={title}
-          className={styles.customText}
+          className={`${styles.customText} e2e-model-knowledge-edit-input-title`}
           onChange={(e) => setTitle(e.target.value)}
         />
         <br />
         <label className={styles.customLabel}>Text:</label>
         <textarea
-          className={styles.customTextarea}
+          className={`${styles.customTextarea} e2e-model-knowledge-edit-input-text`}
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -73,6 +73,7 @@ export const KnowledgeEdit: React.FC<KnowledgeEditProps> = (props) => {
             type='checkbox'
             checked={isPublic}
             onChange={(e) => setIsPublic(e.target.checked)}
+            className='e2e-model-knowledge-edit-input-public'
           />
         </label>
         <br />

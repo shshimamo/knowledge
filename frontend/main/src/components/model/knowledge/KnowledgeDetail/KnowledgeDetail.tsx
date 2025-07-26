@@ -31,10 +31,17 @@ export const KnowledgeDetail: React.FC<KnowledgeDetailProps> = (props) => {
       </Link>
 
       <div className={styles.flame}>
-        <h2 className={styles.title}>{knowledge.title}</h2>
-        <p className={styles.text}>{knowledge.text}</p>
+        <h2
+          className={`${styles.title} e2e-model-knowledge-detail-title`}>
+          {knowledge.title}
+        </h2>
+        <p
+          className={`${styles.text} e2e-model-knowledge-detail-text`}>
+          {knowledge.text}
+        </p>
         <br />
-        <div className={styles.info}>
+        <div
+          className={`${styles.info} e2e-model-knowledge-detail-public`}>
           <p>Public: {knowledge.isPublic ? 'Yes' : 'No'}</p>
           <p>Published At: {knowledge.publishedAt}</p>
         </div>
