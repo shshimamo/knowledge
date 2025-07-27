@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	gql "github.com/shshimamo/knowledge/main/graph/model"
-	"github.com/shshimamo/knowledge/main/middlewares"
+	"github.com/shshimamo/knowledge/main/app/presentation/middleware"
 	"github.com/shshimamo/knowledge/main/app/domain/user"
 )
 
@@ -23,11 +23,11 @@ func NewUserUseCase(userRepo user.UserRepository) UserUseCase {
 }
 
 func (u *userUseCase) CreateUser(ctx context.Context, gqlNew *gql.NewUser) (*gql.User, error) {
-	token, ok := middlewares.GetCurrentToken(ctx)
+	token, ok := middleware.GetCurrentToken(ctx)
 	if !ok {
 		return nil, errors.New("not authenticated")
 	}
-	_, ok = middlewares.GetCurrentUser(ctx)
+	_, ok = middleware.GetCurrentUser(ctx)
 	if ok {
 		return nil, errors.New("Already registered")
 	}
