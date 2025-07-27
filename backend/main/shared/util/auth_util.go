@@ -2,12 +2,12 @@ package util
 
 import (
 	"context"
-	"github.com/shshimamo/knowledge/main/middlewares"
+	"github.com/shshimamo/knowledge/main/app/presentation/middleware"
 	"github.com/shshimamo/knowledge/main/model"
 )
 
 func CheckAuth(ctx context.Context) (*model.User, error) {
-	user, ok := middlewares.GetCurrentUser(ctx)
+	user, ok := middleware.GetCurrentUser(ctx)
 	if !ok {
 		return nil, ErrUnauthorized
 	}
