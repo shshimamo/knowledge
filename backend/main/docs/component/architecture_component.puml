@@ -1,0 +1,50 @@
+@startuml architecture_component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram - Knowledge Management System (Backend/Main)
+
+Container_Boundary(app, "Knowledge Management Application") {
+    ' Presentation Layer
+    Component(graphql_handler, "GraphQL Handler", "GraphQL", "GraphQLリクエストを処理")
+    Component(auth_middleware, "Auth Middleware", "Go", "認証・認可処理")
+    Component(logging_middleware, "Logging Middleware", "Go", "ログ出力")
+    
+    ' UseCase Layer
+    Component(user_usecase, "User UseCase", "Go", "ユーザー関連のビジネスロジック")
+    Component(knowledge_usecase, "Knowledge UseCase", "Go", "ナレッジ関連のビジネスロジック")
+    
+    ' Domain Layer
+    Component(user_entity, "User Entity", "Go", "ユーザードメインモデル")
+    Component(knowledge_entity, "Knowledge Entity", "Go", "ナレッジドメインモデル")
+    Component(user_repo_interface, "User Repository Interface", "Go", "ユーザーリポジトリインターフェース")
+    Component(knowledge_repo_interface, "Knowledge Repository Interface", "Go", "ナレッジリポジトリインターフェース")
+    
+    ' Infrastructure Layer
+    Component(user_repo_impl, "User Repository Implementation", "Go", "ユーザーリポジトリ実装")
+    Component(knowledge_repo_impl, "Knowledge Repository Implementation", "Go", "ナレッジリポジトリ実装")
+    Component(mysql_adapter, "MySQL Adapter", "SQLBoiler", "MySQLデータベースアダプター")
+}
+
+ContainerDb_Ext(database, "MySQL Database", "MySQL", "ユーザーとナレッジデータを保存")
+System_Ext(auth_service, "Authentication Service", "外部認証サービス")
+
+' Relations
+Rel(graphql_handler, auth_middleware, "認証チェック")
+Rel(graphql_handler, logging_middleware, "ログ出力")
+Rel(graphql_handler, user_usecase, "ユーザー操作")
+Rel(graphql_handler, knowledge_usecase, "ナレッジ操作")
+
+Rel(user_usecase, user_entity, "使用")
+Rel(user_usecase, user_repo_interface, "依存")
+Rel(knowledge_usecase, knowledge_entity, "使用")
+Rel(knowledge_usecase, knowledge_repo_interface, "依存")
+
+Rel(user_repo_impl, user_repo_interface, "実装")
+Rel(knowledge_repo_impl, knowledge_repo_interface, "実装")
+Rel(user_repo_impl, mysql_adapter, "使用")
+Rel(knowledge_repo_impl, mysql_adapter, "使用")
+
+Rel(mysql_adapter, database, "SQL接続")
+Rel(auth_middleware, auth_service, "認証確認")
+
+@enduml

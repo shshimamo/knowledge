@@ -1,0 +1,32 @@
+@startuml UpdateKnowledge
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "AuthUtil" as Util
+participant "Knowledgeドメイン" as Domain
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: UpdateKnowledge mutation(id, input)
+Handler -> UseCase: UpdateKnowledge(ctx, id, input)
+
+UseCase -> Util: CheckAuth(ctx)
+Util --> UseCase: 認証済みユーザー情報
+
+UseCase -> Repo: GetKnowledge(ctx, command)
+Repo -> DB: SELECT FROM knowledges WHERE id = ? AND user_id = ?
+DB --> Repo: ナレッジ情報
+Repo --> UseCase: knowledgeModel
+
+note over UseCase: ナレッジの属性を更新\nTitle, Text, IsPublic
+
+UseCase -> Repo: UpdateKnowledge(ctx, knowledgeModel)
+Repo -> DB: UPDATE knowledges SET ...
+DB --> Repo: 更新されたナレッジ
+Repo --> UseCase: updatedKnowledge
+
+UseCase -> Domain: MapKnowledgeModelToGql(updatedKnowledge)
+Domain --> UseCase: gqlKnowledge
+UseCase --> Handler: gqlKnowledge
+Handler --> Client: 更新されたKnowledge情報
+@enduml

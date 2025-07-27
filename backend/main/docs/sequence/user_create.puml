@@ -1,0 +1,40 @@
+@startuml CreateUser
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "認証ミドルウェア" as Middleware
+participant "UserUseCase" as UseCase
+participant "Userドメイン" as Domain
+participant "UserRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: CreateUser mutation
+Handler -> Middleware: 認証トークン確認
+Middleware --> Handler: トークン情報取得
+
+Handler -> UseCase: CreateUser(ctx, input)
+UseCase -> Middleware: GetCurrentToken(ctx)
+Middleware --> UseCase: token情報
+
+UseCase -> Middleware: GetCurrentUser(ctx)
+Middleware --> UseCase: ユーザー情報(既存チェック)
+
+alt ユーザーが既に存在する場合
+    UseCase --> Handler: error("Already registered")
+else 新規ユーザーの場合
+    UseCase -> Domain: MapUserGqlNewToModel(gqlNew)
+    Domain --> UseCase: userModel
+    UseCase -> Domain: userModel.Validate()
+    Domain --> UseCase: validation結果
+    
+    UseCase -> Repo: CreateUser(ctx, userModel)
+    Repo -> DB: INSERT INTO users
+    DB --> Repo: 作成されたユーザー
+    Repo --> UseCase: newUser
+    
+    UseCase -> Domain: MapUserModelToGql(newUser)
+    Domain --> UseCase: gqlUser
+    UseCase --> Handler: gqlUser
+end
+
+Handler --> Client: User情報 or エラー
+@enduml

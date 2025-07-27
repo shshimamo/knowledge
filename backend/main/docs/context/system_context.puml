@@ -1,0 +1,22 @@
+@startuml system_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram - Knowledge Management System
+
+Person(user, "User", "ナレッジを管理するユーザー")
+Person(admin, "Administrator", "システム管理者")
+
+System(knowledge_app, "Knowledge Management System", "ナレッジの作成、更新、検索、削除を行うWebアプリケーション")
+
+System_Ext(auth_system, "Authentication Service", "ユーザー認証・認可サービス")
+System_Ext(database, "Database", "ユーザー情報とナレッジデータを保存")
+System_Ext(web_browser, "Web Browser", "ユーザーインターフェース")
+
+Rel(user, knowledge_app, "ナレッジの作成・閲覧・更新・削除", "HTTPS")
+Rel(admin, knowledge_app, "システム管理・監視", "HTTPS")
+Rel(knowledge_app, auth_system, "ユーザー認証・認可", "HTTP/gRPC")
+Rel(knowledge_app, database, "データの読み書き", "SQL")
+Rel(user, web_browser, "操作")
+Rel(web_browser, knowledge_app, "API呼び出し", "HTTPS/GraphQL")
+
+@enduml

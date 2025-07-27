@@ -1,0 +1,25 @@
+@startuml GetMyKnowledge
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "AuthUtil" as Util
+participant "Knowledgeドメイン" as Domain
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: GetMyKnowledge query(id)
+Handler -> UseCase: GetMyKnowledge(ctx, id)
+
+UseCase -> Util: CheckAuth(ctx)
+Util --> UseCase: 認証済みユーザー情報
+
+UseCase -> Repo: GetKnowledge(ctx, command)
+Repo -> DB: SELECT FROM knowledges WHERE id = ? AND user_id = ?
+DB --> Repo: ナレッジ情報
+Repo --> UseCase: knowledgeModel
+
+UseCase -> Domain: MapKnowledgeModelToGql(knowledgeModel)
+Domain --> UseCase: gqlKnowledge
+UseCase --> Handler: gqlKnowledge
+Handler --> Client: Knowledge情報
+@enduml

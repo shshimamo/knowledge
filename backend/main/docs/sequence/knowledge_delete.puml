@@ -1,0 +1,27 @@
+@startuml DeleteKnowledge
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "AuthUtil" as Util
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: DeleteKnowledge mutation(id)
+Handler -> UseCase: DeleteKnowledge(ctx, id)
+
+UseCase -> Util: CheckAuth(ctx)
+Util --> UseCase: 認証済みユーザー情報
+
+UseCase -> Repo: GetKnowledge(ctx, command)
+Repo -> DB: SELECT FROM knowledges WHERE id = ? AND user_id = ?
+DB --> Repo: ナレッジ情報
+Repo --> UseCase: knowledgeModel
+
+UseCase -> Repo: DeleteKnowledge(ctx, knowledgeModel)
+Repo -> DB: DELETE FROM knowledges WHERE id = ?
+DB --> Repo: 削除完了
+Repo --> UseCase: 削除完了
+
+UseCase --> Handler: DeleteKnowledgeResult
+Handler --> Client: 削除結果
+@enduml

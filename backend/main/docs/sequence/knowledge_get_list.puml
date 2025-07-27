@@ -1,0 +1,21 @@
+@startuml GetKnowledgeList
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "Knowledgeドメイン" as Domain
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: GetKnowledgeList query(ids, uids)
+Handler -> UseCase: GetKnowledgeList(ctx, ids, uids)
+
+UseCase -> Repo: GetKnowledgeList(ctx, command)
+Repo -> DB: SELECT FROM knowledges WHERE id IN (?) OR user_id IN (?)
+DB --> Repo: ナレッジリスト
+Repo --> UseCase: knowledgeList
+
+UseCase -> Domain: MapKnowledgeListModelToGql(knowledgeList)
+Domain --> UseCase: gqlKnowledgeList
+UseCase --> Handler: gqlKnowledgeList
+Handler --> Client: Knowledge配列
+@enduml

@@ -1,0 +1,36 @@
+@startuml GetKnowledge
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "AuthUtil" as Util
+participant "Knowledgeドメイン" as Domain
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: GetKnowledge query(id)
+Handler -> UseCase: GetKnowledge(ctx, id)
+
+UseCase -> Repo: GetKnowledge(ctx, command)
+Repo -> DB: SELECT FROM knowledges WHERE id = ?
+DB --> Repo: ナレッジ情報
+Repo --> UseCase: knowledgeModel
+
+alt ナレッジが公開の場合
+    UseCase -> Domain: MapKnowledgeModelToGql(knowledgeModel)
+    Domain --> UseCase: gqlKnowledge
+    UseCase --> Handler: gqlKnowledge
+else ナレッジが非公開の場合
+    UseCase -> Util: CheckAuth(ctx)
+    Util --> UseCase: ユーザー情報
+    
+    alt 所有者と一致する場合
+        UseCase -> Domain: MapKnowledgeModelToGql(knowledgeModel)
+        Domain --> UseCase: gqlKnowledge
+        UseCase --> Handler: gqlKnowledge
+    else 所有者でない場合
+        UseCase --> Handler: ErrForbidden
+    end
+end
+
+Handler --> Client: Knowledge情報 or エラー
+@enduml

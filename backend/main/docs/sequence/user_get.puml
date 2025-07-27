@@ -1,0 +1,21 @@
+@startuml GetUser
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "UserUseCase" as UseCase
+participant "Userドメイン" as Domain
+participant "UserRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: GetUser query(id)
+Handler -> UseCase: GetUser(ctx, id)
+
+UseCase -> Repo: GetUserByID(ctx, id)
+Repo -> DB: SELECT FROM users WHERE id = ?
+DB --> Repo: ユーザー情報
+Repo --> UseCase: userModel
+
+UseCase -> Domain: MapUserModelToGql(userModel)
+Domain --> UseCase: gqlUser
+UseCase --> Handler: gqlUser
+Handler --> Client: User情報
+@enduml

@@ -1,0 +1,53 @@
+@startuml knowledge_usecase
+left to right direction
+
+actor "ユーザー" as user
+actor "システム管理者" as admin
+
+package "Knowledge Management System" {
+  usecase "ユーザー登録" as UC001
+  usecase "ログイン" as UC002
+  usecase "ログアウト" as UC003
+  usecase "ナレッジ作成" as UC004
+  usecase "ナレッジ一覧表示" as UC005
+  usecase "ナレッジ詳細表示" as UC006
+  usecase "ナレッジ更新" as UC007
+  usecase "ナレッジ削除" as UC008
+  usecase "自分のナレッジ一覧表示" as UC009
+  usecase "ユーザー情報取得" as UC010
+  usecase "ユーザー管理" as UC011
+  usecase "システム監視" as UC012
+}
+
+' ユーザーの関連
+user --> UC001
+user --> UC002
+user --> UC003
+user --> UC004
+user --> UC005
+user --> UC006
+user --> UC007
+user --> UC008
+user --> UC009
+user --> UC010
+
+' 管理者の関連
+admin --> UC011
+admin --> UC012
+admin --> UC002
+admin --> UC003
+
+' 拡張関係
+UC004 ..> UC002 : <<include>>
+UC005 ..> UC002 : <<include>>
+UC006 ..> UC002 : <<include>>
+UC007 ..> UC002 : <<include>>
+UC008 ..> UC002 : <<include>>
+UC009 ..> UC002 : <<include>>
+UC010 ..> UC002 : <<include>>
+
+' 制約関係
+note right of UC007 : 自分が作成したナレッジのみ更新可能
+note right of UC008 : 自分が作成したナレッジのみ削除可能
+
+@enduml

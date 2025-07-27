@@ -1,0 +1,28 @@
+@startuml CreateKnowledge
+participant "GraphQLクライアント" as Client
+participant "GraphQLハンドラー" as Handler
+participant "KnowledgeUseCase" as UseCase
+participant "AuthUtil" as Util
+participant "Knowledgeドメイン" as Domain
+participant "KnowledgeRepository" as Repo
+participant "データベース" as DB
+
+Client -> Handler: CreateKnowledge mutation(input)
+Handler -> UseCase: CreateKnowledge(ctx, input)
+
+UseCase -> Util: CheckAuth(ctx)
+Util --> UseCase: 認証済みユーザー情報
+
+UseCase -> Domain: MapKnowledgeGqlCreateInputToModel(input)
+Domain --> UseCase: knowledgeModel
+
+UseCase -> Repo: CreateKnowledge(ctx, knowledgeModel)
+Repo -> DB: INSERT INTO knowledges
+DB --> Repo: 作成されたナレッジ
+Repo --> UseCase: newKnowledge
+
+UseCase -> Domain: MapKnowledgeModelToGql(newKnowledge)
+Domain --> UseCase: gqlKnowledge
+UseCase --> Handler: gqlKnowledge
+Handler --> Client: Knowledge情報
+@enduml

@@ -1,0 +1,39 @@
+@startuml user_status
+[*] --> Unregistered : 初期状態
+
+state "未登録" as Unregistered {
+  Unregistered : - アカウント未作成
+  Unregistered : - アクセス制限
+}
+
+state "登録済み" as Registered {
+  Registered : - アカウント作成完了
+  Registered : - ログイン可能
+  Registered : - ナレッジ機能利用可能
+}
+
+state "一時停止" as Suspended {
+  Suspended : - ログイン不可
+  Suspended : - 既存データは保持
+  Suspended : - 管理者により設定
+}
+
+state "削除済み" as Deleted {
+  Deleted : - ログイン不可
+  Deleted : - データ削除済み
+  Deleted : - 復元不可
+}
+
+Unregistered --> Registered : ユーザー登録
+Registered --> Suspended : 管理者による一時停止
+Registered --> Deleted : アカウント削除
+Suspended --> Registered : 管理者による復旧
+Suspended --> Deleted : アカウント削除
+Deleted --> [*] : 物理削除完了
+
+note right of Unregistered : 初期状態\nシステム利用不可
+note right of Registered : 通常利用状態\n全機能利用可能
+note right of Suspended : 一時停止状態\n管理者による制限
+note right of Deleted : 削除状態\n復元不可
+
+@enduml

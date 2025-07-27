@@ -1,0 +1,41 @@
+@startuml OverallArchitecture
+package "Presentation Layer" {
+    [GraphQLハンドラー] as Handler
+    [認証ミドルウェア] as Middleware
+}
+
+package "UseCase Layer" {
+    [UserUseCase] as UserUC
+    [KnowledgeUseCase] as KnowledgeUC
+    [AllUseCase] as AllUC
+}
+
+package "Domain Layer" {
+    [User Entity] as UserEntity
+    [Knowledge Entity] as KnowledgeEntity
+    [User Repository Interface] as UserRepoInterface
+    [Knowledge Repository Interface] as KnowledgeRepoInterface
+}
+
+package "Infrastructure Layer" {
+    [User Repository Implementation] as UserRepo
+    [Knowledge Repository Implementation] as KnowledgeRepo
+    [MySQL Database] as DB
+}
+
+Handler --> Middleware
+Handler --> AllUC
+AllUC --> UserUC
+AllUC --> KnowledgeUC
+
+UserUC --> UserEntity
+UserUC --> UserRepoInterface
+KnowledgeUC --> KnowledgeEntity
+KnowledgeUC --> KnowledgeRepoInterface
+
+UserRepoInterface <|.. UserRepo
+KnowledgeRepoInterface <|.. KnowledgeRepo
+
+UserRepo --> DB
+KnowledgeRepo --> DB
+@enduml

@@ -1,0 +1,47 @@
+@startuml knowledge_status
+[*] --> Draft : ナレッジ作成開始
+
+state "下書き" as Draft {
+  Draft : - 編集可能
+  Draft : - 作成者のみ表示
+  Draft : - 保存・更新可能
+}
+
+state "公開中" as Published {
+  Published : - 全ユーザーが閲覧可能
+  Published : - 作成者は編集可能
+  Published : - 検索対象
+}
+
+state "非公開" as Private {
+  Private : - 作成者のみ表示
+  Private : - 編集可能
+  Private : - 検索対象外
+}
+
+state "削除済み" as Deleted {
+  Deleted : - 論理削除状態
+  Deleted : - 表示不可
+  Deleted : - 検索対象外
+}
+
+Draft --> Published : 公開操作
+Draft --> Private : 非公開設定
+Draft --> Deleted : 削除操作
+
+Published --> Private : 非公開操作
+Published --> Draft : 下書きに戻す
+Published --> Deleted : 削除操作
+
+Private --> Published : 公開操作
+Private --> Draft : 下書きに戻す
+Private --> Deleted : 削除操作
+
+Deleted --> [*] : 物理削除（バッチ処理）
+
+note right of Draft : 初期状態\n作成者のみアクセス可能
+note right of Published : 公開状態\n全ユーザーがアクセス可能
+note right of Private : 非公開状態\n作成者のみアクセス可能
+note right of Deleted : 削除状態\n復元不可
+
+@enduml
