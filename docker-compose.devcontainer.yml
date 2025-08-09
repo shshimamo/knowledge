@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/workspaces/knowledge:cached
-      - /var/run/docker.sock:/var/run/docker-host.sock
+      - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /workspaces/knowledge
     command: sleep infinity
     depends_on:
