@@ -108,6 +108,7 @@ dev-restart-and-rmi-ci:
 
 #
 # E2Eテスト実行
+#   参照: frontend/main/tests/e2e/README.md
 #
 
 # 起動中のCI環境でE2Eテストのみ実行
