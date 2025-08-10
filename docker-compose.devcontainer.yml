@@ -1,32 +1,31 @@
 services:
   # Docker socket権限設定用のinitコンテナ
-  init-docker-permissions:
-    image: alpine:latest
-    user: root
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: |
-      sh -c "
-        echo '🐳 Docker socket権限の設定を開始...'
-        chgrp 1 /var/run/docker.sock
-        echo '✅ Docker socketの権限をdaemonグループ(GID=1)に設定しました'
-      "
+#  init-docker-permissions:
+#    image: alpine:latest
+#    user: root
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    command: |
+#      sh -c "
+#        echo '🐳 Docker socket権限の設定を開始...'
+#        chgrp 1 /var/run/docker.sock
+#        echo '✅ Docker socketの権限をdaemonグループ(GID=1)に設定しました'
+#      "
 
   # Dev Container - 開発環境用のメインコンテナ
   devcontainer:
     build:
       context: .devcontainer
       dockerfile: Dockerfile
-    user: "1000:1000"  # vscode user
     volumes:
       - .:/workspaces/knowledge:cached
       - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /workspaces/knowledge
     command: sleep infinity
     group_add:
-      - "1"  # daemon group (GID=1) for docker.sock access
+      - "1"  # for docker.sock access
     depends_on:
-      - init-docker-permissions
+#      - init-docker-permissions
       - db
     environment:
       - DB_HOST=db
