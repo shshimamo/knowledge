@@ -54,11 +54,8 @@ RUN mkdir -p /workspaces && chown -R vscode:vscode /workspaces
 RUN mkdir -p /go && chown -R vscode:vscode /go
 
 # dockerグループを作成し、vscode ユーザーをdockerグループに追加
-# daemonグループ（GID=1）を作成し、vscode ユーザーをdaemonグループに追加
 RUN groupadd docker || true \
-    && usermod -aG docker vscode \
-    && groupadd -g 1 daemon || true \
-    && usermod -aG daemon vscode
+    && usermod -aG docker vscode
 
 # Claude Code のインストール（NPM版）
 RUN npm install -g @anthropic-ai/claude-code
