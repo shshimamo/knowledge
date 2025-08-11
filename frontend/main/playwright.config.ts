@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  timeout: 30000,
+  timeout: 5000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:3000',
+    // baseURL: 'http://knowledge-frontend-1:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -21,12 +22,12 @@ export default defineConfig({
     },
   ],
 
-  // 開発サーバーとバックエンドサーバーの起動設定
-  webServer: [
-    {
-      command: 'npm run dev',
-      port: 3000,
-      reuseExistingServer: true,
-    },
-  ],
+  // Docker Composeで起動されたサーバーを使用するため、webServerは無効化
+  // webServer: [
+  //   {
+  //     command: 'npm run dev',
+  //     port: 3000,
+  //     reuseExistingServer: true,
+  //   },
+  // ],
 });
