@@ -44,8 +44,9 @@ clean-and-rmi-ci:
 
 # CI環境が既に起動しているかチェック
 check-ci-running:
-	@if docker compose -f docker-compose.ci.yml ps --services --filter "status=running" | grep -q .; then \
-		echo "⚠️  CI環境は既に起動しています"; \
+	@RUNNING_SERVICES=$$(docker compose -f docker-compose.ci.yml ps --services --filter "status=running" | grep -E '^(db|backend-main|backend-auth|frontend)$$' | tr '\n' ' '); \
+	if [ ! -z "$$RUNNING_SERVICES" ]; then \
+		echo "⚠️  CI環境のサービスが既に起動しています: $$RUNNING_SERVICES"; \
 		echo "サービス状態: make check-ci-services"; \
 		echo "停止する場合: make stop-ci"; \
 		exit 1; \
