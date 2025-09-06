@@ -68,6 +68,6 @@
     "sudo /usr/local/bin/init-firewall.sh",
     "sudo usermod -aG docker node",
     "sudo chmod 666 /var/run/docker.sock",
-    "cd frontend/main && npm ci && npx playwright install --with-deps"
+    "cd frontend/main && npx playwright install --with-deps"
   ]
 }
