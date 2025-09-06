@@ -1,76 +1,67 @@
 {
-  "name": "Knowledge App Development",
-  "dockerComposeFile": "../docker-compose.devcontainer.yml",
-  "service": "devcontainer",
-  "workspaceFolder": "/workspaces/knowledge",
-  "forwardPorts": [3000, 8000, 8080, 8081, 5432],
-  "portsAttributes": {
-    "3000": {
-      "label": "Frontend (Next.js)",
-      "onAutoForward": "notify"
-    },
-    "8000": {
-      "label": "Backend Main API",
-      "onAutoForward": "notify"
-    },
-    "8080": {
-      "label": "Backend Main GraphQL",
-      "onAutoForward": "notify"
-    },
-    "8081": {
-      "label": "Backend Auth API",
-      "onAutoForward": "notify"
-    },
-    "5432": {
-      "label": "PostgreSQL Database",
-      "onAutoForward": "silent"
+  "name": "Knowledge Development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "TZ": "${localEnv:TZ:Asia/Tokyo}",
+      "CLAUDE_CODE_VERSION": "latest",
+      "GO_VERSION": "1.24.5",
+      "GIT_DELTA_VERSION": "0.18.2",
+      "ZSH_IN_DOCKER_VERSION": "1.2.0"
     }
   },
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--cap-add=NET_RAW"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
-        "golang.go",
-        "ms-vscode.vscode-typescript-next",
-        "bradlc.vscode-tailwindcss",
-        "ms-playwright.playwright",
-        "ms-vscode.vscode-json",
-        "redhat.vscode-yaml",
-        "ms-azuretools.vscode-docker",
-        "GraphQL.vscode-graphql",
-        "GraphQL.vscode-graphql-syntax",
-        "ms-vscode.test-adapter-converter",
-        "hbenl.vscode-test-explorer",
-        "ms-vscode.vscode-eslint",
+        "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "ms-vscode.vscode-jest",
-        "formulahendry.auto-rename-tag"
+        "eamodio.gitlens",
+        "golang.go",
+        "GraphQL.vscode-graphql",
+        "ms-vscode.vscode-typescript-next"
       ],
       "settings": {
-        "go.toolsManagement.checkForUpdates": "local",
-        "go.useLanguageServer": true,
-        "go.gopath": "/go",
-        "go.goroot": "/usr/local/go",
-        "typescript.preferences.includePackageJsonAutoImports": "on",
         "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": "explicit",
-          "source.organizeImports": "explicit"
-        },
-        "eslint.workingDirectories": ["frontend/main"],
-        "typescript.preferences.importModuleSpecifier": "relative",
         "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "go.formatTool": "goimports",
+        "go.lintTool": "golangci-lint",
         "[go]": {
-          "editor.defaultFormatter": "golang.go"
+          "editor.formatOnSave": true
         },
-        "[typescript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[typescriptreact]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
         }
       }
     }
   },
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "remoteUser": "vscode"
+  "remoteUser": "node",
+  "mounts": [
+    "source=claude-code-bashhistory-${devcontainerId},target=/commandhistory,type=volume",
+    "source=claude-code-config-${devcontainerId},target=/home/node/.claude,type=volume"
+  ],
+  "containerEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true",
+    "GOPATH": "/go",
+    "GOCACHE": "/go/cache",
+    "GO111MODULE": "on"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "sudo /usr/local/bin/init-firewall.sh"
 }
