@@ -1,140 +1,122 @@
-# Dev Container セットアップガイド
+# Knowledge Development Container
 
-このプロジェクトでは VS Code の Dev Container 機能を使用して一貫した開発環境を提供しています。
+このディレクトリには、Dev Container設定が含まれています。
 
-## 必要な要件
+## 概要
 
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [Dev Containers 拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+Dev Containerは、Dockerコンテナ内で標準化された開発環境を提供し、以下のメリットがあります：
 
-## セットアップ手順
+- **環境の一貫性**: チーム全体で同じ開発環境を共有
+- **依存関係の管理**: 必要なツールやライブラリを自動的にインストール
+- **セキュリティ**: 厳格なファイアウォール設定によるネットワーク制限
+- **即座に開発開始**: リポジトリをクローンするだけで開発環境が整う
 
-1. このリポジトリをクローンします：
-   ```bash
-   git clone <repository-url>
-   cd knowledge
-   ```
+### 設定ファイル詳細
 
-2. VS Code でプロジェクトを開きます：
-   ```bash
-   code .
-   ```
+- `devcontainer.json`: Dev Container全体設定
+- `Dockerfile`: コンテナ環境構築
+- `init-firewall.sh`: ファイアウォール設定スクリプト
 
-3. VS Code の右下に表示される「Reopen in Container」をクリックするか、
-   コマンドパレット（Cmd/Ctrl + Shift + P）を開いて以下を実行：
-   ```
-   Dev Containers: Reopen in Container
-   ```
+## 開発開始手順
 
-4. 初回起動時は Docker イメージのビルドに数分かかります。
-   完了後、自動的に開発環境がセットアップされます。
+### 1. VS Codeでの開発
+1. VS CodeでプロジェクトフォルダーをOpen
+2. "Reopen in Container"を選択
+3. 初回はコンテナビルド（数分かかります）
+4. 自動的にファイアウォール設定が適用される
 
-## 含まれている開発ツール
+### 2. GoLandでの開発
+1. GoLandでプロジェクトフォルダーをOpen
+2. Services(⌘8) で Show Dev Containers を選択
+  - Rebuild か Start を選択
 
-### 言語・ランタイム
-- Go 1.24.5
-- Node.js 18
-- PostgreSQL クライアント
+## 技術スタック
 
-### 開発ツール
-- Go 言語サーバー (gopls)
-- golangci-lint
-- Delve デバッガー
-- Claude Code CLI
-- GitHub CLI
-- Docker & Docker Compose
-- Playwright テストブラウザ
+### 開発環境
+- **Node.js**: 20 (Next.js フロントエンド用)
+- **Go**: 1.24.5 (バックエンド用)
+- **PostgreSQL Client**: データベース接続用
+- **Claude Code**: AI支援開発ツール
 
-### VS Code 拡張機能
-- Go 拡張機能
-- TypeScript サポート
-- Tailwind CSS IntelliSense
-- Playwright テストランナー
-- GraphQL サポート
-- ESLint & Prettier
-- Jest テストランナー
+### VS Code拡張機能
+- **ESLint**: JavaScriptコード品質チェック
+- **Prettier**: コードフォーマッター
+- **Go**: Go言語サポート
+- **GraphQL**: GraphQL構文サポート
+- **GitLens**: Git履歴可視化
 
-## サービス起動
-
-Dev Container 内で以下のコマンドでサービスを起動できます：
-
-### データベース
-```bash
-# データベースは自動的に起動されます
-# 接続情報: localhost:5432, user: postgres, password: password
-```
-
-### バックエンドサービス
-```bash
-# メインAPI (GraphQL)
-cd backend/main
-make run
-
-# 認証API
-cd backend/auth
-make run
-```
-
-### フロントエンド
-```bash
-cd frontend/main
-npm run dev
-```
-
-## 利用可能なポート
-
-- **3000**: フロントエンド (Next.js)
-- **8000**: バックエンド メインAPI
-- **8080**: GraphQL エンドポイント  
-- **8081**: 認証API
-- **5432**: PostgreSQL データベース
-
-## Claude Code の使用
-
-Dev Container 内で Claude Code を使用できます：
-
-```bash
-# Claude Code の起動
-claude
-
-# プロジェクト固有の設定は CLAUDE.md を参照
-```
-
-## トラブルシューティング
-
-### コンテナが起動しない場合
-1. Docker Desktop が起動していることを確認
-2. メモリ不足の場合は Docker Desktop の設定でメモリを増やす
-3. `Dev Containers: Rebuild Container` を実行
-
-### データベースに接続できない場合
-```bash
-# データベースの状態確認
-pg_isready -h db -p 5432 -U postgres
-
-# マイグレーション実行
-cd backend/main && make migrate-up
-cd backend/auth && make migrate-up
-```
-
-### Node.js 依存関係の問題
-```bash
-cd frontend/main
-rm -rf node_modules package-lock.json
-npm install
-```
+### セキュリティ機能
+- **iptables/ipset**: 厳格なファイアウォール設定
+- **許可ドメイン**: GitHub、npm、Anthropic API、Go modulesのみアクセス許可
+- **非rootユーザー**: nodeユーザーでの安全な実行
 
 ## 開発ワークフロー
 
-1. VS Code で Dev Container を開く
-2. 各サービスを必要に応じて起動
-3. ブラウザで http://localhost:3000 にアクセス
-4. コードの変更は自動的にホストマシンと同期
-5. テストとデバッグを Dev Container 内で実行
+### ローカルでの作業
 
-## 注意事項
+- (TODO)
 
-- Dev Container 内でのファイル変更はホストマシンと自動同期されます
-- データベースのデータは Docker ボリュームに永続化されます
-- 初回セットアップ時のみ時間がかかります（2回目以降は高速）
+### Dev Container での作業
+
+- Claude Codeを利用したAI支援開発
+- E2Eテスト実行
+  - (TODO) E2E テストでは playwright.config.ts をベタガキで書き換えている
+    - baseURL を http://host.docker.internal:3000
+    - launchOptions を設定
+
+```bash
+# E2Eテスト実行（Docker-in-Docker）
+make dev-start-ci-devcontainer # CI環境起動
+make run-e2e-only              # E2Eテスト実行
+
+# Docker環境管理
+make ci-devcontainer-compose-ps   # 実行中コンテナ確認
+make health-check-ci-devcontainer # サービス状態確認
+make ci-devcontainer-compose-stop # CI環境停止
+make ci-devcontainer-compose-down # CI環境クリーンアップ
+```
+
+## ネットワーク設定
+
+### 許可されているドメイン
+- **GitHub**: リポジトリアクセス
+- **npmjs.org**: Node.jsパッケージ
+- **golang.org**: Go modules
+- **anthropic.com**: Claude API
+- **ローカルホスト**: Docker内部通信
+
+### ブロックされるアクセス
+- 上記以外の全外部通信
+- example.comなどのテスト用ドメイン
+
+## 更新・メンテナンス
+
+### ツールバージョン更新
+- (TODO)
+
+### セキュリティ設定追加
+- .devcontainer/init-firewall.sh に新しいドメインを追加
+- domain listに追加
+
+## トラブルシューティング
+
+### よくある問題
+
+**1. Go modulesのダウンロードが失敗する**
+```bash
+# ファイアウォール設定を確認
+sudo iptables -L -n
+# proxy.golang.org, sum.golang.orgが許可されているか確認
+```
+
+**2. npm installが失敗する**
+```bash
+# registry.npmjs.orgへの接続を確認
+curl https://registry.npmjs.org
+```
+
+## 参考資料
+
+- [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [iptables Tutorial](https://netfilter.org/documentation/)

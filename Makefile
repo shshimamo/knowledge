@@ -2,8 +2,22 @@
 # CI環境関連のコマンド
 #
 
-# CI環境でのセットアップ（データベース作成とマイグレーション）
-setup-ci:
+# CI環境が既に起動しているかチェック
+ci-compose-ps:
+	@RUNNING_SERVICES=$$(docker compose -f docker-compose.ci.yml ps --services --filter "status=running" | grep -E '^(db|backend-main|backend-auth|frontend)$$' | tr '\n' ' '); \
+	if [ ! -z "$$RUNNING_SERVICES" ]; then \
+		echo "⚠️  CI環境のサービスが既に起動しています: $$RUNNING_SERVICES"; \
+		echo "サービス状態: make health-check-ci"; \
+		echo "停止する場合: make ci-compose-stop"; \
+		exit 1; \
+	fi
+
+# CI環境での全サービス起動
+ci-compose-up:
+	docker compose -f docker-compose.ci.yml up -d
+
+# データベース作成とマイグレーション
+ci-database-setup:
 	@echo "CI環境をセットアップ中..."
 	docker compose -f docker-compose.ci.yml up -d db
 	@echo "PostgreSQLの起動を待機中..."
@@ -15,26 +29,23 @@ setup-ci:
 	DB_HOST=localhost DB_PASSWORD=password APP_ENV=test make -C backend/auth migration
 	@echo "CI環境のセットアップが完了しました"
 
-# CI環境での全サービス起動
-start-ci:
-	docker compose -f docker-compose.ci.yml up -d
-
-# CI環境でのE2Eテスト実行（自動でstart-ciも実行）
-test-e2e-ci: setup-ci start-ci
+# CI環境でのE2Eテスト実行
+test-e2e-ci: ci-database-setup ci-compose-up
 	sleep 30
+	@echo "E2Eテストを実行中..."
 	cd frontend/main && CI=true npm run test:e2e
 
 # CI環境停止
-stop-ci:
+ci-compose-stop:
 	@echo "CI環境を停止中..."
 	docker compose -f docker-compose.ci.yml stop
 
 # CI環境のクリーンアップ
-clean-ci:
+ci-compose-down-and-prune:
 	docker compose -f docker-compose.ci.yml down -v
 	docker system prune -f
 
-clean-and-rmi-ci:
+ci-compose-down-rmi-and-prune:
 	docker compose -f docker-compose.ci.yml down -v --rmi all || true
 	docker system prune -f
 
@@ -42,18 +53,8 @@ clean-and-rmi-ci:
 # ローカル開発用コマンド
 #
 
-# CI環境が既に起動しているかチェック
-check-ci-running:
-	@RUNNING_SERVICES=$$(docker compose -f docker-compose.ci.yml ps --services --filter "status=running" | grep -E '^(db|backend-main|backend-auth|frontend)$$' | tr '\n' ' '); \
-	if [ ! -z "$$RUNNING_SERVICES" ]; then \
-		echo "⚠️  CI環境のサービスが既に起動しています: $$RUNNING_SERVICES"; \
-		echo "サービス状態: make check-ci-services"; \
-		echo "停止する場合: make stop-ci"; \
-		exit 1; \
-	fi
-
-# CI環境を起動してバックグラウンドで実行（開発用）
-dev-start-ci: check-ci-running setup-ci start-ci
+# CI環境を起動（開発用）
+dev-start-ci: ci-compose-ps ci-database-setup ci-compose-up
 	@echo "==============================================="
 	@echo "✅ CI環境が起動しました！"
 	@echo "フロントエンド: http://localhost:3000"
@@ -62,21 +63,21 @@ dev-start-ci: check-ci-running setup-ci start-ci
 	@echo "PostgreSQL: localhost:5432"
 	@echo ""
 	@echo "📋 利用可能なコマンド:"
-	@echo "  サービス確認: make check-ci-services"
+	@echo "  サービス確認: make health-check-ci"
 	@echo "  E2Eテスト実行: make run-e2e-only"
-	@echo "  環境停止: make stop-ci"
+	@echo "  環境停止: make ci-compose-stop"
 	@echo "==============================================="
 
-# CI環境を強制的に再起動（既存環境を停止してから起動）
+# CI環境を再起動（既存環境を停止してから起動）
 dev-restart-ci:
 	@echo "CI環境を再起動中..."
-	make stop-ci || true
-	make clean-ci || true
+	make ci-compose-stop || true
+	make ci-compose-down-and-prune || true
 	make dev-start-ci
 	@echo "サービスの起動を待機中（30秒）..."
 	sleep 30
 	@echo "サービス状態を確認します..."
-	make check-ci-services
+	make health-check-ci
 
 # CI環境を強制的に再起動（既存環境を停止してから起動）
 # 使用例: make dev-restart-and-rmi-ci SERVICES="frontend"
@@ -84,7 +85,7 @@ dev-restart-ci:
 # 使用例: make dev-restart-and-rmi-ci （全サービス）
 dev-restart-and-rmi-ci:
 	@echo "CI環境を再起動中..."
-	make stop-ci || true
+	make ci-compose-stop || true
 	@echo "SERVICES: ${SERVICES}"
 	@if [ "${SERVICES}" ]; then \
 		echo "指定されたサービスイメージを削除"; \
@@ -99,13 +100,13 @@ dev-restart-and-rmi-ci:
 		done; \
 	else \
 		echo "全てのサービスイメージを削除"; \
-		make clean-and-rmi-ci || true; \
+		make ci-compose-down-rmi-and-prune || true; \
 	fi
 	make dev-start-ci
 	@echo "サービスの起動を待機中（30秒）..."
 	sleep 30
 	@echo "サービス状態を確認します..."
-	make check-ci-services
+	make health-check-ci
 
 #
 # E2Eテスト実行
@@ -130,7 +131,7 @@ run-e2e-headed:
 #
 # CI環境のサービス状態確認
 #
-check-ci-services:
+health-check-ci:
 	@echo "CI環境のサービス状態を確認中..."
 	@docker compose -f docker-compose.ci.yml ps
 	@echo ""
@@ -145,7 +146,7 @@ check-ci-services:
 	@if curl -f -s http://localhost:3000 > /dev/null 2>&1; then echo "✅ OK"; else echo "❌ NG"; fi
 
 # CI環境のサービス状態確認（詳細版）
-check-ci-services-detail:
+health-check-ci-detail:
 	@echo "CI環境の詳細状態を確認中..."
 	@echo "======================================"
 	@echo "Docker Compose Services:"
@@ -190,3 +191,58 @@ logs-ci-backend-auth:
 
 logs-ci-db:
 	docker compose -f docker-compose.ci.yml logs -f db
+
+#
+# Dev Container 用 (docker-compose.ci.devcontainer.yml)
+#
+
+# compose ps (devcontainer用)
+ci-devcontainer-compose-ps:
+	docker compose -f docker-compose.ci.devcontainer.yml ps
+
+# compose up (devcontainer用)
+ci-devcontainer-compose-up:
+	docker compose -f docker-compose.ci.devcontainer.yml up -d
+
+# compose stop (devcontainer用)
+ci-devcontainer-compose-stop:
+	@echo "Dev Container E2E環境を停止中..."
+	docker compose -f docker-compose.ci.devcontainer.yml stop
+
+# compose down (devcontainer用)
+ci-devcontainer-compose-down:
+	docker compose -f docker-compose.ci.devcontainer.yml down -v
+
+# データベース作成とマイグレーション (devcontainer用)
+ci-devcontainer-database-setup:
+	@echo "Dev Container内でCI環境をセットアップ中..."
+	docker compose -f docker-compose.ci.devcontainer.yml up -d db
+	@echo "PostgreSQLの起動を待機中..."
+	sleep 10
+	@echo "データベースとマイグレーションを実行中..."
+	DB_HOST=host.docker.internal DB_PASSWORD=password APP_ENV=test make -C backend/main database-create
+	DB_HOST=host.docker.internal DB_PASSWORD=password APP_ENV=test make -C backend/main migration
+	DB_HOST=host.docker.internal DB_PASSWORD=password APP_ENV=test make -C backend/auth database-create
+	DB_HOST=host.docker.internal DB_PASSWORD=password APP_ENV=test make -C backend/auth migration
+	@echo "Dev Container内CI環境のセットアップが完了しました"
+
+# CI環境を起動 (devcontainer用)
+dev-start-ci-devcontainer: ci-compose-ps ci-devcontainer-database-setup ci-devcontainer-compose-up
+	@echo "==============================================="
+	@echo "✅ CI環境が起動しました！"
+	@echo "==============================================="
+
+# ヘルスチェック (dev container用)
+health-check-ci-devcontainer:
+	@echo "CI環境のサービス状態を確認中..."
+	@docker compose -f docker-compose.ci.devcontainer.yml ps
+	@echo ""
+	@echo "サービスヘルスチェック:"
+	@echo -n "PostgreSQL: "
+	@if docker compose -f docker-compose.ci.devcontainer.yml exec -T db pg_isready -U postgres > /dev/null 2>&1; then echo "✅ OK"; else echo "❌ NG"; fi
+	@echo -n "Backend Main: "
+	@if curl -f -s http://host.docker.internal:8080 > /dev/null 2>&1; then echo "✅ OK"; else echo "❌ NG"; fi
+	@echo -n "Backend Auth: "
+	@if curl -f -s http://host.docker.internal:8081 > /dev/null 2>&1; then echo "✅ OK"; else echo "❌ NG"; fi
+	@echo -n "Frontend: "
+	@if curl -f -s http://host.docker.internal:3000 > /dev/null 2>&1; then echo "✅ OK"; else echo "❌ NG"; fi

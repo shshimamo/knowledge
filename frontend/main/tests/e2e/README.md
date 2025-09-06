@@ -8,10 +8,10 @@ E2Eテストを実行する前に、以下のサービスが起動している�
 
 ```bash
 # データベース作成、マイグレーション、サービス起動
-make dev-start-ci
+make dev-start-ci # dev container内では dev-start-ci-devcontainer
 
 # サービス起動確認
-make check-ci-services
+make health-check-ci # dev container内では health-check-ci-devcontainer
 
 # E2Eテスト実行
 make run-e2e-only
