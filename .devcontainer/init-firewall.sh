@@ -71,7 +71,11 @@ for domain in \
     "statsig.anthropic.com" \
     "statsig.com" \
     "proxy.golang.org" \
-    "sum.golang.org"; do
+    "sum.golang.org" \
+    "download.docker.com" \
+    "registry-1.docker.io" \
+    "auth.docker.io" \
+    "production.cloudflare.docker.com"; do
     echo "Resolving $domain..."
     ips=$(dig +short A "$domain")
     if [ -z "$ips" ]; then

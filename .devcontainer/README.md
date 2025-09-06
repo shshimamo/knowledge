@@ -43,24 +43,24 @@ Dev Containerは、Dockerコンテナ内で標準化された開発環境を提�
 
 ### Dev Container での作業
 ```bash
-# Dev Container起動
-docker-compose -f docker-compose.devcontainer.yml up -d
+# 基本的な開発作業
+cd frontend/main && npm run dev  # フロントエンド開発サーバー
+cd backend/main && go run .      # バックエンド実行
+cd backend/main && go mod tidy   # Go modules管理
 
-# コンテナに接続
-docker-compose -f docker-compose.devcontainer.yml exec devcontainer bash
+# E2Eテスト実行（Docker-in-Docker）
+make setup-ci     # CI環境セットアップ
+make start-ci     # 全サービス起動
+make test-e2e-ci  # E2Eテスト実行
 
-# フロントエンド開発サーバー起動
-cd frontend/main && npm run dev
-
-# バックエンド実行
-cd backend/main && go run .
-
-# E2Eテスト実行
+# または個別実行
 cd frontend/main && npm run test:e2e
 
-# Go modules管理
-cd backend/main && go mod download
-cd backend/main && go mod tidy
+# Docker環境管理
+docker ps                    # 実行中コンテナ確認
+make check-ci-services      # サービス状態確認
+make stop-ci                # CI環境停止
+make clean-ci               # CI環境クリーンアップ
 ```
 
 ## 開発開始手順
