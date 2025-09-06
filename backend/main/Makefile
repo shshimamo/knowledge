@@ -16,7 +16,7 @@ test-db:
 
 .PHONY: install-goose
 install-goose:
-	@which goose > /dev/null || go install github.com/pressly/goose/v3/cmd/goose@latest
+	@which goose > /dev/null || CGO_ENABLED=0 go install github.com/pressly/goose/v3/cmd/goose@latest
 
 .PHONY: install-sqlboiler
 install-sqlboiler:

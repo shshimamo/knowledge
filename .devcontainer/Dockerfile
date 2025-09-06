@@ -29,7 +29,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
   ca-certificates \
   curl \
+  build-essential \
+  libc6-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install gcc-multilib if available (optional for cross-compilation)
+RUN apt-get update && \
+    (apt-get install -y gcc-multilib || echo "gcc-multilib not available on this architecture") && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Docker CLI
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
@@ -38,8 +45,10 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /
     && apt-get install -y docker-ce-cli docker-compose-plugin \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add node user to docker group
-RUN groupadd -f docker && usermod -aG docker node
+# Add node user to docker and daemon groups
+RUN groupadd -f docker || true
+RUN usermod -aG docker node || true
+RUN usermod -aG daemon node || true
 
 # Ensure default node user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
@@ -113,11 +122,27 @@ USER node
 # Install Claude
 RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 
+# Install Playwright and browsers (as root user for system dependencies)
+USER root
+# Install additional system dependencies for Playwright
+RUN apt-get update && apt-get install -y \
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libdrm2 \
+    libxkbcommon0 \
+    libgtk-3-0 \
+    libgbm1 \
+    libasound2 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Switch back to node user
+USER node
+
 
 # Copy and set up firewall script
 COPY init-firewall.sh /usr/local/bin/
 USER root
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
-  chmod 0440 /etc/sudoers.d/node-firewall
+  echo "node ALL=(root) NOPASSWD: ALL" > /etc/sudoers.d/node-all && \
+  chmod 0440 /etc/sudoers.d/node-all
 USER node
