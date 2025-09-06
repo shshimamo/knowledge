@@ -1,6 +1,6 @@
 # Knowledge Development Container
 
-このディレクトリには、knowledgeプロジェクトのDev Container設定が含まれています。
+このディレクトリには、Dev Container設定が含まれています。
 
 ## 概要
 
@@ -10,6 +10,25 @@ Dev Containerは、Dockerコンテナ内で標準化された開発環境を提�
 - **依存関係の管理**: 必要なツールやライブラリを自動的にインストール
 - **セキュリティ**: 厳格なファイアウォール設定によるネットワーク制限
 - **即座に開発開始**: リポジトリをクローンするだけで開発環境が整う
+
+### 設定ファイル詳細
+
+- `devcontainer.json`: Dev Container全体設定
+- `Dockerfile`: コンテナ環境構築
+- `init-firewall.sh`: ファイアウォール設定スクリプト
+
+## 開発開始手順
+
+### 1. VS Codeでの開発
+1. VS CodeでプロジェクトフォルダーをOpen
+2. "Reopen in Container"を選択
+3. 初回はコンテナビルド（数分かかります）
+4. 自動的にファイアウォール設定が適用される
+
+### 2. GoLandでの開発
+1. GoLandでプロジェクトフォルダーをOpen
+2. Services(⌘8) で Show Dev Containers を選択
+  - Rebuild か Start を選択
 
 ## 技術スタック
 
@@ -31,53 +50,30 @@ Dev Containerは、Dockerコンテナ内で標準化された開発環境を提�
 - **許可ドメイン**: GitHub、npm、Anthropic API、Go modulesのみアクセス許可
 - **非rootユーザー**: nodeユーザーでの安全な実行
 
-## ハイブリッド開発ワークフロー
+## 開発ワークフロー
 
-### GoLand（ローカル）での作業
-```
-- Go コード編集・リファクタリング
-- デバッグ・プロファイリング  
-- ファイル管理・Git操作
-- プロジェクト構造把握
-```
+### ローカルでの作業
+
+- (TODO)
 
 ### Dev Container での作業
+
+- Claude Codeを利用したAI支援開発
+- E2Eテスト実行
+  - (TODO) E2E テストでは playwright.config.ts をベタガキで書き換えている
+    - baseURL を http://host.docker.internal:3000
+    - launchOptions を設定
+
 ```bash
-# 基本的な開発作業
-cd frontend/main && npm run dev  # フロントエンド開発サーバー
-cd backend/main && go run .      # バックエンド実行
-cd backend/main && go mod tidy   # Go modules管理
-
 # E2Eテスト実行（Docker-in-Docker）
-make setup-ci     # CI環境セットアップ
-make start-ci     # 全サービス起動
-make test-e2e-ci  # E2Eテスト実行
-
-# または個別実行
-cd frontend/main && npm run test:e2e
+make dev-start-ci-devcontainer # CI環境起動
+make run-e2e-only              # E2Eテスト実行
 
 # Docker環境管理
-docker ps                    # 実行中コンテナ確認
-make check-ci-services      # サービス状態確認
-make stop-ci                # CI環境停止
-make clean-ci               # CI環境クリーンアップ
-```
-
-## 開発開始手順
-
-### 1. VS Codeでの開発（推奨）
-1. VS CodeでプロジェクトフォルダーをOpen
-2. "Reopen in Container"を選択
-3. 初回はコンテナビルド（数分かかります）
-4. 自動的にファイアウォール設定が適用される
-
-### 2. ハイブリッド開発
-```bash
-# Dev Container起動
-make devcontainer-up
-
-# GoLandでローカル開発
-# GoLand → Settings → Go → GOROOT を Dev Container内のGoに設定
+make ci-devcontainer-compose-ps   # 実行中コンテナ確認
+make health-check-ci-devcontainer # サービス状態確認
+make ci-devcontainer-compose-stop # CI環境停止
+make ci-devcontainer-compose-down # CI環境クリーンアップ
 ```
 
 ## ネットワーク設定
@@ -92,6 +88,15 @@ make devcontainer-up
 ### ブロックされるアクセス
 - 上記以外の全外部通信
 - example.comなどのテスト用ドメイン
+
+## 更新・メンテナンス
+
+### ツールバージョン更新
+- (TODO)
+
+### セキュリティ設定追加
+- .devcontainer/init-firewall.sh に新しいドメインを追加
+- domain listに追加
 
 ## トラブルシューティング
 
@@ -108,37 +113,6 @@ sudo iptables -L -n
 ```bash
 # registry.npmjs.orgへの接続を確認
 curl https://registry.npmjs.org
-```
-
-**3. PostgreSQL接続エラー**
-```bash
-# ローカルホスト通信が許可されているか確認
-# docker-compose.devcontainer.ymlでDBサービスを有効化
-```
-
-### 設定ファイル詳細
-
-- `devcontainer.json`: Dev Container全体設定
-- `Dockerfile`: コンテナ環境構築
-- `init-firewall.sh`: ファイアウォール設定スクリプト
-
-## 更新・メンテナンス
-
-### ツールバージョン更新
-```bash
-# Go version更新
-vim .devcontainer/devcontainer.json
-# GO_VERSION を更新
-
-# コンテナ再ビルド
-docker-compose -f docker-compose.devcontainer.yml build --no-cache
-```
-
-### セキュリティ設定追加
-```bash
-# 新しい許可ドメイン追加
-vim .devcontainer/init-firewall.sh
-# domain listに追加
 ```
 
 ## 参考資料

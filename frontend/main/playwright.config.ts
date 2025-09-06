@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: 'html',
   use: {
     // baseURL: 'http://localhost:3000',
+    // Dev container 用
     baseURL: 'http://host.docker.internal:3000',
     // baseURL: 'http://frontend:3000',
     trace: 'on-first-retry',

@@ -196,6 +196,10 @@ logs-ci-db:
 # Dev Container 用 (docker-compose.ci.devcontainer.yml)
 #
 
+# compose ps (devcontainer用)
+ci-devcontainer-compose-ps:
+	docker compose -f docker-compose.ci.devcontainer.yml ps
+
 # compose up (devcontainer用)
 ci-devcontainer-compose-up:
 	docker compose -f docker-compose.ci.devcontainer.yml up -d
