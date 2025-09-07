@@ -60,9 +60,6 @@ Dev Containerは、Dockerコンテナ内で標準化された開発環境を提�
 
 - Claude Codeを利用したAI支援開発
 - E2Eテスト実行
-  - (TODO) E2E テストでは playwright.config.ts をベタガキで書き換えている
-    - baseURL を http://host.docker.internal:3000
-    - launchOptions を設定
   - (TODO) dev container postCreateCommand の playwright インストールがうまくいってないかも？
 
 ```bash

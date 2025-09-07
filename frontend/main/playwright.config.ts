@@ -9,16 +9,15 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    // baseURL: 'http://localhost:3000',
-    // Dev container 用
-    baseURL: 'http://host.docker.internal:3000',
-    // baseURL: 'http://frontend:3000',
+    baseURL: process.env.DEVCONTAINER ? 'http://host.docker.internal:3000' : 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    // Dev container environment: Allow Chromium to access host.docker.internal
-    launchOptions: {
-      args: ['--disable-web-security', '--disable-features=VizDisplayCompositor'],
-    },
+    ...(process.env.DEVCONTAINER && {
+      launchOptions: {
+        // devcontainer では Chromium から host.docker.internal にアクセスできるようにする
+        args: ['--disable-web-security', '--disable-features=VizDisplayCompositor'],
+      },
+    }),
   },
 
   projects: [
